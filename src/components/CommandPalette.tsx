@@ -206,20 +206,20 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-start justify-center pt-16 sm:pt-24 p-4 animate-in fade-in duration-100">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-start justify-center pt-16 sm:pt-24 p-4 animate-in fade-in duration-100">
       <div 
         className={`w-full max-w-2xl border rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh] ring-1 ${
           isDark 
-            ? 'bg-slate-900 border-slate-700/80 ring-slate-700/50 text-slate-100' 
-            : 'bg-white border-slate-300 ring-slate-200 text-slate-900'
+            ? 'bg-zinc-900 border-zinc-700/80 ring-zinc-700/50 text-zinc-100' 
+            : 'bg-white border-zinc-300 ring-zinc-200 text-zinc-900'
         }`}
         onClick={e => e.stopPropagation()}
       >
         {/* Search Input Bar */}
         <div className={`flex items-center gap-3 px-4 py-3.5 border-b ${
-          isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-slate-50'
+          isDark ? 'border-zinc-800 bg-zinc-950/70' : 'border-zinc-200 bg-zinc-50'
         }`}>
-          <Search className="w-5 h-5 text-teal-500 shrink-0" />
+          <Search className="w-5 h-5 text-emerald-500 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -230,14 +230,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               setSelectedIndex(0);
             }}
             className={`w-full bg-transparent text-sm focus:outline-none font-medium ${
-              isDark ? 'text-slate-100 placeholder-slate-500' : 'text-slate-900 placeholder-slate-400'
+              isDark ? 'text-zinc-100 placeholder-zinc-500' : 'text-zinc-900 placeholder-zinc-400'
             }`}
           />
           {query && (
             <button 
               onClick={() => setQuery('')}
               className={`text-xs px-1.5 py-0.5 rounded cursor-pointer ${
-                isDark ? 'text-slate-400 hover:text-slate-200 bg-slate-800' : 'text-slate-600 hover:text-slate-900 bg-slate-200'
+                isDark ? 'text-zinc-400 hover:text-zinc-200 bg-zinc-800' : 'text-zinc-600 hover:text-zinc-900 bg-zinc-200'
               }`}
             >
               Clear
@@ -246,7 +246,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           <button 
             onClick={onClose}
             className={`p-1 rounded-lg cursor-pointer ${
-              isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200'
+              isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200'
             }`}
           >
             <X className="w-4 h-4" />
@@ -255,7 +255,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
         {/* Suggested Quick Filter Chips */}
         <div className={`flex items-center gap-1.5 px-4 py-2 border-b overflow-x-auto text-[11px] ${
-          isDark ? 'bg-slate-950/40 border-slate-800/80 text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-600'
+          isDark ? 'bg-zinc-950/40 border-zinc-800/80 text-zinc-400' : 'bg-zinc-100 border-zinc-200 text-zinc-600'
         }`}>
           <span className="font-bold shrink-0">Suggestions:</span>
           {['Orphan Annie', 'PTU vs MMI', 'Thyroid Storm', 'Bethesda FNAC', 'EBSLN vs RLN', 'Wolff-Chaikoff'].map(s => (
@@ -264,8 +264,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               onClick={() => setQuery(s)}
               className={`px-2.5 py-0.5 rounded-full transition-colors whitespace-nowrap cursor-pointer border ${
                 isDark 
-                  ? 'bg-slate-800/80 hover:bg-teal-500/20 hover:text-teal-300 text-slate-300 border-slate-700/60' 
-                  : 'bg-white hover:bg-teal-50 hover:text-teal-800 text-slate-700 border-slate-300 shadow-sm'
+                  ? 'bg-zinc-800 hover:bg-emerald-500/20 hover:text-emerald-300 text-zinc-300 border-zinc-700/60' 
+                  : 'bg-white hover:bg-emerald-50 hover:text-emerald-800 text-zinc-700 border-zinc-300 shadow-sm'
               }`}
             >
               {s}
@@ -277,11 +277,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         <div 
           ref={listRef}
           className={`flex-1 overflow-y-auto p-2 divide-y ${
-            isDark ? 'divide-slate-800/40' : 'divide-slate-200'
+            isDark ? 'divide-zinc-800/40' : 'divide-zinc-200'
           }`}
         >
           {results.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs">
+            <div className="p-8 text-center text-zinc-400 text-xs">
               No matching medical concepts, cuts, or questions found for "{query}".
             </div>
           ) : (
@@ -301,39 +301,39 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
                     isSelected 
                       ? isDark 
-                        ? 'bg-slate-800 text-white border border-teal-500/40 shadow-sm' 
-                        : 'bg-teal-50 text-teal-950 border border-teal-300 shadow-sm'
+                        ? 'bg-zinc-800 text-white border border-emerald-500/40 shadow-sm' 
+                        : 'bg-emerald-50 text-emerald-950 border border-emerald-300 shadow-sm'
                       : isDark
-                        ? 'hover:bg-slate-800/50 text-slate-300'
-                        : 'hover:bg-slate-100 text-slate-700'
+                        ? 'hover:bg-zinc-800/50 text-zinc-300'
+                        : 'hover:bg-zinc-100 text-zinc-700'
                   }`}
                 >
                   <div className="flex items-center gap-3 overflow-hidden">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                       isSelected 
-                        ? 'bg-teal-500 text-slate-950 font-bold' 
-                        : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
+                        ? 'bg-emerald-500 text-zinc-950 font-bold' 
+                        : isDark ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'
                     }`}>
                       <CategoryIcon className="w-4 h-4" />
                     </div>
                     <div className="flex flex-col overflow-hidden">
                       <div className="flex items-center gap-2">
                         <span className={`text-xs font-bold truncate ${
-                          isDark ? 'text-slate-100' : 'text-slate-900'
+                          isDark ? 'text-zinc-100' : 'text-zinc-900'
                         }`}>{item.title}</span>
                         <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded border shrink-0 ${
-                          isDark ? 'bg-slate-950/80 text-teal-400 border-slate-700' : 'bg-slate-100 text-teal-700 border-slate-300'
+                          isDark ? 'bg-zinc-950 text-emerald-400 border-zinc-800' : 'bg-zinc-100 text-emerald-700 border-zinc-300'
                         }`}>
                           {item.badge}
                         </span>
                       </div>
-                      <span className="text-[11px] text-slate-400 truncate mt-0.5">{item.subtitle}</span>
+                      <span className="text-[11px] text-zinc-400 truncate mt-0.5">{item.subtitle}</span>
                     </div>
                   </div>
 
                   {isSelected && (
-                    <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400 shrink-0 ml-2">
-                      <CornerDownLeft className="w-3.5 h-3.5 text-teal-500" />
+                    <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-400 shrink-0 ml-2">
+                      <CornerDownLeft className="w-3.5 h-3.5 text-emerald-500" />
                     </div>
                   )}
                 </div>
@@ -344,32 +344,32 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
         {/* Bottom Hotkey Help Bar */}
         <div className={`px-4 py-2.5 border-t flex items-center justify-between text-[11px] ${
-          isDark ? 'bg-slate-950 border-slate-800 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-600'
+          isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-400' : 'bg-zinc-50 border-zinc-200 text-zinc-600'
         }`}>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
               <kbd className={`px-1.5 py-0.5 rounded font-mono text-[10px] border ${
-                isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-white text-slate-700 border-slate-300'
+                isDark ? 'bg-zinc-800 text-zinc-300 border-zinc-700' : 'bg-white text-zinc-700 border-zinc-300'
               }`}>↑</kbd>
               <kbd className={`px-1.5 py-0.5 rounded font-mono text-[10px] border ${
-                isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-white text-slate-700 border-slate-300'
+                isDark ? 'bg-zinc-800 text-zinc-300 border-zinc-700' : 'bg-white text-zinc-700 border-zinc-300'
               }`}>↓</kbd>
               to navigate
             </span>
             <span className="flex items-center gap-1">
               <kbd className={`px-1.5 py-0.5 rounded font-mono text-[10px] border ${
-                isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-white text-slate-700 border-slate-300'
+                isDark ? 'bg-zinc-800 text-zinc-300 border-zinc-700' : 'bg-white text-zinc-700 border-zinc-300'
               }`}>Enter</kbd>
               to select
             </span>
             <span className="flex items-center gap-1">
               <kbd className={`px-1.5 py-0.5 rounded font-mono text-[10px] border ${
-                isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-white text-slate-700 border-slate-300'
+                isDark ? 'bg-zinc-800 text-zinc-300 border-zinc-700' : 'bg-white text-zinc-700 border-zinc-300'
               }`}>Esc</kbd>
               to close
             </span>
           </div>
-          <span className="hidden sm:inline text-teal-600 dark:text-teal-400 font-mono font-semibold">
+          <span className="hidden sm:inline text-emerald-500 font-mono font-semibold">
             {results.length} results
           </span>
         </div>

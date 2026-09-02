@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type Theme = 'obsidian' | 'nordic';
+type Theme = 'carbon' | 'nordic';
 
 interface ThemeContextType {
   theme: Theme;
@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('medtutor-theme');
-    return (saved === 'nordic' ? 'nordic' : 'obsidian') as Theme;
+    return (saved === 'nordic' ? 'nordic' : 'carbon') as Theme;
   });
 
   useEffect(() => {
@@ -28,11 +28,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => (prev === 'obsidian' ? 'nordic' : 'obsidian'));
+    setTheme(prev => (prev === 'carbon' ? 'nordic' : 'carbon'));
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, isDark: theme === 'obsidian', toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, isDark: theme === 'carbon', toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

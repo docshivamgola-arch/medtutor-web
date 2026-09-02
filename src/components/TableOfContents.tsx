@@ -46,9 +46,9 @@ export const TableOfContents: React.FC = () => {
   return (
     <aside className="hidden xl:block w-64 sticky top-[75px] h-[calc(100vh-140px)] overflow-y-auto p-4 shrink-0">
       <div className={`flex items-center gap-2 mb-3 pb-2 border-b text-xs font-bold uppercase tracking-widest ${
-        isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'
+        isDark ? 'border-zinc-800 text-zinc-400' : 'border-zinc-200 text-zinc-600'
       }`}>
-        <AlignLeft className="w-3.5 h-3.5 text-teal-500" />
+        <AlignLeft className="w-3.5 h-3.5 text-emerald-500" />
         <span>On This Page</span>
       </div>
 
@@ -62,16 +62,16 @@ export const TableOfContents: React.FC = () => {
               className={`w-full flex items-center justify-between p-2 rounded-lg text-left transition-all cursor-pointer ${
                 isActive 
                   ? isDark
-                    ? 'bg-teal-500/10 text-teal-300 font-bold border-l-2 border-teal-400 pl-2.5 shadow-sm' 
-                    : 'bg-teal-50 text-teal-800 font-bold border-l-2 border-teal-600 pl-2.5 shadow-sm'
+                    ? 'bg-emerald-500/10 text-emerald-400 font-bold border-l-2 border-emerald-500 pl-2.5 shadow-sm' 
+                    : 'bg-emerald-50 text-emerald-800 font-bold border-l-2 border-emerald-600 pl-2.5 shadow-sm'
                   : isDark
-                    ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60'
+                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
               }`}
             >
               <span className="truncate pr-1">{item.label}</span>
               {isActive && (
-                <ChevronRight className="w-3.5 h-3.5 text-teal-500 shrink-0" />
+                <ChevronRight className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               )}
             </button>
           );
@@ -81,10 +81,10 @@ export const TableOfContents: React.FC = () => {
       {/* Quick Jump Callout */}
       <div className={`mt-6 p-3 rounded-xl border text-[11px] space-y-2 ${
         isDark 
-          ? 'bg-slate-900/80 border-slate-800 text-slate-400' 
-          : 'bg-white border-slate-200 text-slate-600 shadow-sm'
+          ? 'bg-zinc-900/90 border-zinc-800 text-zinc-400' 
+          : 'bg-white border-zinc-200 text-zinc-600 shadow-sm'
       }`}>
-        <span className={`font-bold block ${isDark ? 'text-slate-300' : 'text-slate-800'}`}>
+        <span className={`font-bold block ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
           Amboss Smart Nodes
         </span>
         <p className="leading-snug">
