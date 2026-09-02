@@ -48,7 +48,7 @@ export const TableOfContents: React.FC = () => {
       <div className={`flex items-center gap-2 mb-3 pb-2 border-b text-xs font-bold uppercase tracking-widest ${
         isDark ? 'border-zinc-800 text-zinc-400' : 'border-zinc-200 text-zinc-600'
       }`}>
-        <AlignLeft className="w-3.5 h-3.5 text-emerald-500" />
+        <AlignLeft className="w-3.5 h-3.5 text-blue-500" />
         <span>On This Page</span>
       </div>
 
@@ -62,8 +62,8 @@ export const TableOfContents: React.FC = () => {
               className={`w-full flex items-center justify-between p-2 rounded-lg text-left transition-all cursor-pointer ${
                 isActive 
                   ? isDark
-                    ? 'bg-emerald-500/10 text-emerald-400 font-bold border-l-2 border-emerald-500 pl-2.5 shadow-sm' 
-                    : 'bg-emerald-50 text-emerald-800 font-bold border-l-2 border-emerald-600 pl-2.5 shadow-sm'
+                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500 pl-2.5 shadow-sm' 
+                    : 'bg-blue-50 text-blue-900 font-bold border-l-2 border-blue-600 pl-2.5 shadow-sm'
                   : isDark
                     ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60'
                     : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
@@ -71,7 +71,7 @@ export const TableOfContents: React.FC = () => {
             >
               <span className="truncate pr-1">{item.label}</span>
               {isActive && (
-                <ChevronRight className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                <ChevronRight className="w-3.5 h-3.5 text-blue-500 shrink-0" />
               )}
             </button>
           );
@@ -81,7 +81,7 @@ export const TableOfContents: React.FC = () => {
       {/* Quick Jump Callout */}
       <div className={`mt-6 p-3 rounded-xl border text-[11px] space-y-2 ${
         isDark 
-          ? 'bg-zinc-900/90 border-zinc-800 text-zinc-400' 
+          ? 'bg-zinc-900 border-zinc-800 text-zinc-400' 
           : 'bg-white border-zinc-200 text-zinc-600 shadow-sm'
       }`}>
         <span className={`font-bold block ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>

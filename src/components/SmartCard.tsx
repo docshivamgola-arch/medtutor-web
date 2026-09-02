@@ -45,8 +45,8 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
         onClick={() => setIsOpen(!isOpen)}
         className={`cursor-pointer font-semibold underline decoration-dotted underline-offset-4 px-1 py-0.5 rounded transition-all ${
           isDark 
-            ? 'text-emerald-400 decoration-emerald-500/60 hover:text-emerald-300 hover:decoration-emerald-400 hover:bg-emerald-500/10'
-            : 'text-emerald-700 decoration-emerald-600/70 hover:text-emerald-900 hover:decoration-emerald-600 hover:bg-emerald-50'
+            ? 'text-blue-400 decoration-blue-500/60 hover:text-blue-300 hover:decoration-blue-400 hover:bg-blue-500/10'
+            : 'text-blue-700 decoration-blue-600/70 hover:text-blue-900 hover:decoration-blue-600 hover:bg-blue-50'
         }`}
         title="Click or hover for Amboss-style High-Yield Smart Card"
       >
@@ -57,9 +57,9 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
         <div
           ref={popoverRef}
           onMouseLeave={() => setIsOpen(false)}
-          className={`absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 z-50 w-80 sm:w-96 p-4 rounded-xl shadow-2xl backdrop-blur-md text-left animate-in fade-in zoom-in-95 duration-150 border ring-1 ${
+          className={`absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 z-50 w-80 sm:w-96 p-4 rounded-xl shadow-2xl text-left animate-in fade-in zoom-in-95 duration-150 border ring-1 ${
             isDark 
-              ? 'bg-zinc-900 border-zinc-700 shadow-black/90 ring-zinc-700/50 text-zinc-100'
+              ? 'bg-zinc-900 border-zinc-700 shadow-black ring-zinc-700/50 text-zinc-100'
               : 'bg-white border-zinc-300 shadow-zinc-400/40 ring-zinc-300/60 text-zinc-900'
           }`}
         >
@@ -79,7 +79,7 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
               </span>
             </div>
             <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${
-              isDark ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+              isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
             }`}>
               Cut #{concept.targetCutNumber}
             </span>
@@ -89,10 +89,10 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
           <div className={`text-sm font-black leading-tight mb-1 flex items-center gap-1.5 ${
             isDark ? 'text-white' : 'text-zinc-900'
           }`}>
-            <Sparkles className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+            <Sparkles className="w-3.5 h-3.5 text-blue-500 shrink-0" />
             <span>{concept.term}</span>
           </div>
-          <div className="text-[11px] font-semibold text-emerald-500 mb-2">
+          <div className="text-[11px] font-semibold text-blue-500 mb-2">
             {concept.headline}
           </div>
 
@@ -118,11 +118,7 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
                 onNavigateToCut(concept.targetCutNumber);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer group ${
-                isDark 
-                  ? 'bg-emerald-500/10 hover:bg-emerald-500 hover:text-zinc-950 text-emerald-400 border-emerald-500/30'
-                  : 'bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 border-emerald-300 shadow-sm'
-              }`}
+              className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all cursor-pointer group shadow-sm"
             >
               <span>Jump to Video Cut #{concept.targetCutNumber}</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />

@@ -50,17 +50,14 @@ export default function App() {
   // Global Keyboard Shortcuts (Ctrl+K, Ctrl+B, Alt+1..4)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      // Ctrl+K or Cmd+K
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsCommandPaletteOpen(prev => !prev);
       }
-      // Ctrl+B to toggle sidebar
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault();
         setIsSidebarOpen(prev => !prev);
       }
-      // Alt+1 to Alt+4 for rapid workspace switching
       if (e.altKey && e.key === '1') { e.preventDefault(); setActiveTab('visual'); }
       if (e.altKey && e.key === '2') { e.preventDefault(); setActiveTab('wiki'); }
       if (e.altKey && e.key === '3') { e.preventDefault(); setActiveTab('pyq'); }
@@ -89,7 +86,7 @@ export default function App() {
   }, [activeSubjectFilter]);
 
   const handleSelectOption = (questionId: string, optionIdx: number, correctIdx: number) => {
-    if (selectedAnswers[questionId] !== undefined) return; // already answered
+    if (selectedAnswers[questionId] !== undefined) return;
     setSelectedAnswers(prev => ({ ...prev, [questionId]: optionIdx }));
     setShowExplanations(prev => ({ ...prev, [questionId]: true }));
     if (optionIdx === correctIdx) {
@@ -124,16 +121,16 @@ export default function App() {
             {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
           </button>
 
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-            <Stethoscope className="w-4 h-4 text-zinc-950" />
+          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
+            <Stethoscope className="w-4 h-4 text-white" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-base tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+              <span className={`font-extrabold text-base tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
                 MedTutor
               </span>
               <span className={`text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.2 rounded border hidden sm:inline ${
-                isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                isDark ? 'bg-zinc-800 text-zinc-300 border-zinc-700' : 'bg-zinc-100 text-zinc-700 border-zinc-300'
               }`}>
                 19-Subject Integrated
               </span>
@@ -143,7 +140,7 @@ export default function App() {
 
         {/* Center & Right Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Global Command Palette Trigger Bar (Linear / Raycast Style) */}
+          {/* Global Command Palette Trigger Bar */}
           <button
             onClick={() => setIsCommandPaletteOpen(true)}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all shadow-inner w-36 sm:w-64 justify-between cursor-pointer ${
@@ -153,7 +150,7 @@ export default function App() {
             }`}
           >
             <div className="flex items-center gap-2 truncate">
-              <Search className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <Search className="w-3.5 h-3.5 text-blue-500 shrink-0" />
               <span className="truncate">Jump to organ, drug...</span>
             </div>
             <div className="flex items-center gap-1 shrink-0 hidden sm:flex">
@@ -166,25 +163,25 @@ export default function App() {
             </div>
           </button>
 
-          {/* ── 1-CLICK THEME SWITCHER (Neutral Carbon ↔ Nordic Paper) ── */}
+          {/* 1-Click Theme Switcher */}
           <button
             onClick={toggleTheme}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm ${
               isDark 
-                ? 'bg-zinc-800/90 hover:bg-zinc-700 text-zinc-200 border-zinc-700 hover:border-zinc-600' 
-                : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300 hover:border-zinc-400'
+                ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' 
+                : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
             }`}
-            title="Toggle Theme (Neutral Carbon ↔ Nordic Paper)"
+            title="Toggle Theme (Carbon Dark ↔ Nordic Paper)"
           >
             {isDark ? (
               <>
-                <Moon className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />
-                <span className="hidden md:inline">Carbon Dark</span>
+                <Moon className="w-3.5 h-3.5 text-blue-400" />
+                <span className="hidden md:inline">Dark</span>
               </>
             ) : (
               <>
-                <Sun className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
-                <span className="hidden md:inline">Nordic Paper</span>
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                <span className="hidden md:inline">Light</span>
               </>
             )}
           </button>
@@ -197,13 +194,13 @@ export default function App() {
                 : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
             }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-emerald-500" />
+            <UploadCloud className="w-3.5 h-3.5 text-blue-500" />
             <span>Contribute</span>
           </button>
 
           <button 
             onClick={() => setIsPatronModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-xs font-bold text-zinc-950 shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
           >
             <Heart className="w-3.5 h-3.5 fill-current" />
             <span className="hidden sm:inline">Support (₹99)</span>
@@ -211,7 +208,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── Main App Layout (Vercel-Style 3-Column Architecture) ── */}
+      {/* ── Main App Layout ── */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Column: Collapsible Systems Tree */}
         <SystemsSidebar 
@@ -234,7 +231,7 @@ export default function App() {
               <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Endocrine System</span>
               <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
               <span className={`font-semibold px-2 py-0.5 rounded border ${
-                isDark ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
               }`}>
                 Node: The Thyroid Gland
               </span>
@@ -252,20 +249,20 @@ export default function App() {
           <main className={`flex-1 pb-24 transition-colors duration-200 ${
             isDark ? 'bg-zinc-950' : 'bg-[#f8fafc]'
           }`}>
-            {/* ROOM 1: VISUAL CINEMA (Modular Video Engine + Osmosis Synced Transcript) */}
+            {/* ROOM 1: VISUAL CINEMA */}
             {activeTab === 'visual' && (
               <div className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Left: Video Player Cinema & Interactive Callouts */}
                 <div className="lg:col-span-8 flex flex-col gap-4">
-                  <div className={`relative aspect-video rounded-2xl border overflow-hidden shadow-2xl flex flex-col justify-between p-4 group ${
+                  <div className={`relative aspect-video rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between p-4 group ${
                     isDark ? 'bg-black border-zinc-800' : 'bg-zinc-900 border-zinc-700 text-white'
                   }`}>
                     {/* Visual Simulation Canvas */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-zinc-950/80 to-zinc-950 flex flex-col items-center justify-center p-6 text-center">
-                      <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-4 text-emerald-400 shadow-inner">
+                    <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center p-6 text-center">
+                      <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-blue-500 shadow-inner">
                         <Activity className="w-8 h-8 animate-pulse" />
                       </div>
-                      <span className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-1">
+                      <span className="text-xs uppercase tracking-widest text-blue-400 font-bold mb-1">
                         {selectedCut.subject} • Cut {selectedCut.cutNumber} of {THYROID_CUTS.length}
                       </span>
                       <h2 className="text-xl sm:text-2xl font-black text-white max-w-xl">
@@ -278,7 +275,7 @@ export default function App() {
 
                     {/* Video Top Controls */}
                     <div className="relative z-10 flex items-center justify-between">
-                      <span className="text-[11px] font-mono font-bold bg-zinc-900/90 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60 backdrop-blur-sm">
+                      <span className="text-[11px] font-mono font-bold bg-zinc-900 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60">
                         {selectedCut.timecode}
                       </span>
                       <div className="flex items-center gap-2">
@@ -288,8 +285,8 @@ export default function App() {
                             onClick={() => setPlaybackSpeed(speed)}
                             className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
                               playbackSpeed === speed 
-                                ? 'bg-emerald-500 text-zinc-950 shadow-sm shadow-emerald-500/30' 
-                                : 'bg-zinc-900/80 text-zinc-400 hover:text-zinc-200'
+                                ? 'bg-blue-600 text-white shadow-sm' 
+                                : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'
                             }`}
                           >
                             {speed}
@@ -302,7 +299,7 @@ export default function App() {
                     <div className="relative z-10 flex flex-col gap-2">
                       <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden cursor-pointer">
                         <div 
-                          className="h-full bg-gradient-to-r from-emerald-400 to-teal-400 transition-all duration-300"
+                          className="h-full bg-blue-600 transition-all duration-300"
                           style={{ width: `${(selectedCut.cutNumber / THYROID_CUTS.length) * 100}%` }}
                         />
                       </div>
@@ -321,7 +318,7 @@ export default function App() {
                           </button>
                           <button 
                             onClick={() => setIsPlaying(!isPlaying)}
-                            className="w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 flex items-center justify-center font-bold transition-transform active:scale-95 shadow-md shadow-emerald-500/30 cursor-pointer"
+                            className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center font-bold transition-transform active:scale-95 shadow-sm cursor-pointer"
                           >
                             {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
                           </button>
@@ -360,7 +357,7 @@ export default function App() {
                   }`}>
                     <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                       <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-emerald-500" />
+                        <Sparkles className="w-4 h-4 text-blue-500" />
                         <h3 className={`text-sm font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
                           Live High-Yield Micro-Card ({selectedCut.subject})
                         </h3>
@@ -377,9 +374,9 @@ export default function App() {
                     <div className="grid grid-cols-1 gap-2 pt-1">
                       {selectedCut.highYieldBullets.map((bullet, idx) => (
                         <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
-                          isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800 shadow-none'
+                          isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                         }`}>
-                          <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                          <CheckCircle className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
                           <span>{bullet}</span>
                         </div>
                       ))}
@@ -387,11 +384,11 @@ export default function App() {
 
                     {selectedCut.mnemonic && (
                       <div className={`flex items-start gap-2 border rounded-lg p-3 text-xs ${
-                        isDark ? 'bg-indigo-950/40 border-indigo-800/50 text-indigo-200' : 'bg-indigo-50 border-indigo-200 text-indigo-950'
+                        isDark ? 'bg-amber-950/20 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
                       }`}>
-                        <Lightbulb className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                        <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                         <div>
-                          <span className="font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 block mb-0.5">High-Yield Mnemonic</span>
+                          <span className="font-bold uppercase tracking-wider text-amber-500 block mb-0.5">High-Yield Mnemonic</span>
                           <span>{selectedCut.mnemonic}</span>
                         </div>
                       </div>
@@ -409,7 +406,7 @@ export default function App() {
                       <p className="text-[11px] text-zinc-400">20 Independent Cuts (19 Subjects)</p>
                     </div>
                     <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
-                      isDark ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                      isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
                     }`}>
                       {filteredCuts.length} Cuts
                     </span>
@@ -423,7 +420,7 @@ export default function App() {
                         onClick={() => setActiveSubjectFilter(subj)}
                         className={`px-2.5 py-1 rounded-md font-semibold whitespace-nowrap transition-all cursor-pointer ${
                           activeSubjectFilter === subj 
-                            ? isDark ? 'bg-zinc-700 text-white shadow-sm' : 'bg-zinc-800 text-white shadow-sm'
+                            ? 'bg-blue-600 text-white shadow-sm'
                             : isDark ? 'bg-zinc-900 text-zinc-400 hover:text-zinc-200' : 'bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900'
                         }`}
                       >
@@ -443,10 +440,10 @@ export default function App() {
                           className={`text-left p-3 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
                             isSelected 
                               ? isDark
-                                ? 'bg-zinc-900 border-emerald-500/60 shadow-lg ring-1 ring-emerald-500/30'
-                                : 'bg-emerald-50 border-emerald-500 shadow-md ring-1 ring-emerald-400/40'
+                                ? 'bg-zinc-900 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
+                                : 'bg-blue-50 border-blue-500 shadow-sm ring-1 ring-blue-400/40'
                               : isDark
-                                ? 'bg-zinc-950/70 border-zinc-800 hover:bg-zinc-900 hover:border-zinc-700'
+                                ? 'bg-zinc-950 border-zinc-800 hover:bg-zinc-900 hover:border-zinc-700'
                                 : 'bg-white border-zinc-200 hover:bg-zinc-50 hover:border-zinc-300 shadow-sm'
                           }`}
                         >
@@ -465,7 +462,7 @@ export default function App() {
                             </span>
                           </div>
                           <span className={`text-xs font-bold line-clamp-1 ${
-                            isSelected ? isDark ? 'text-emerald-400' : 'text-emerald-950' : isDark ? 'text-zinc-200' : 'text-zinc-800'
+                            isSelected ? isDark ? 'text-blue-400' : 'text-blue-950' : isDark ? 'text-zinc-200' : 'text-zinc-800'
                           }`}>
                             Cut {cut.cutNumber}. {cut.title}
                           </span>
@@ -480,7 +477,7 @@ export default function App() {
               </div>
             )}
 
-            {/* ROOM 2: INTEGRATED WIKI (with Vercel-Style TOC + Amboss Smart Cards) */}
+            {/* ROOM 2: INTEGRATED WIKI */}
             {activeTab === 'wiki' && (
               <div className="flex items-start justify-center p-4 md:p-6 gap-6">
                 <div className="flex-1 max-w-5xl flex flex-col gap-6">
@@ -494,7 +491,7 @@ export default function App() {
                           Integrated Knowledge Matrix: The Thyroid Gland
                         </h2>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                          isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'
                         }`}>
                           Amboss Smart Cards Active
                         </span>
@@ -508,7 +505,7 @@ export default function App() {
                           onClick={() => setWikiSubject(sub)}
                           className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                             wikiSubject === sub 
-                              ? 'bg-emerald-500 text-zinc-950 shadow-md shadow-emerald-500/20' 
+                              ? 'bg-blue-600 text-white shadow-sm' 
                               : isDark ? 'bg-zinc-800 text-zinc-400 hover:text-zinc-200' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
                           }`}
                         >
@@ -600,7 +597,7 @@ export default function App() {
                           </thead>
                           <tbody className={`divide-y ${isDark ? 'divide-zinc-800 text-zinc-300' : 'divide-zinc-200 text-zinc-700'}`}>
                             <tr>
-                              <td className="p-2.5 font-bold text-emerald-400">Hashimoto</td>
+                              <td className="p-2.5 font-bold text-blue-400">Hashimoto</td>
                               <td className="p-2.5">Autoimmune (Anti-TPO, Anti-Tg, HLA-DR3/5)</td>
                               <td className="p-2.5">
                                 <SmartCard conceptId="hurthle-cells" onNavigateToCut={handleNavigateToCut}>
@@ -612,14 +609,14 @@ export default function App() {
                               <td className="p-2.5 text-amber-500 font-semibold">Risk of B-cell MALToma</td>
                             </tr>
                             <tr>
-                              <td className="p-2.5 font-bold text-emerald-400">De Quervain's</td>
+                              <td className="p-2.5 font-bold text-blue-400">De Quervain's</td>
                               <td className="p-2.5">Post-viral URI (Coxsackie, Adenovirus)</td>
                               <td className="p-2.5">Multinucleated giant cells with non-caseating granulomas</td>
                               <td className="p-2.5">Painful tender thyroid, very high ESR</td>
                               <td className="p-2.5 text-amber-500 font-semibold">RAIU is suppressed (&lt; 2%)</td>
                             </tr>
                             <tr>
-                              <td className="p-2.5 font-bold text-emerald-400">Riedel's</td>
+                              <td className="p-2.5 font-bold text-blue-400">Riedel's</td>
                               <td className="p-2.5">IgG4-Related Systemic Sclerosis</td>
                               <td className="p-2.5">Dense fibrous replacement extending into neck structures</td>
                               <td className="p-2.5">"Woody" rock-hard fixed thyroid in young females</td>
@@ -645,7 +642,7 @@ export default function App() {
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
                           isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                         }`}>
-                          <span className="font-bold text-emerald-400 text-sm">Papillary Ca (~80%)</span>
+                          <span className="font-bold text-blue-400 text-sm">Papillary Ca (~80%)</span>
                           <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
                             • <strong>Histology:</strong>{' '}
                             <SmartCard conceptId="orphan-annie" onNavigateToCut={handleNavigateToCut}>
@@ -807,7 +804,7 @@ export default function App() {
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-zinc-400 block">Score</span>
-                    <span className="text-lg font-black text-emerald-500 font-mono">
+                    <span className="text-lg font-black text-blue-500 font-mono">
                       {score} / {THYROID_PYQS.length}
                     </span>
                   </div>
@@ -822,13 +819,13 @@ export default function App() {
                     return (
                       <div 
                         key={q.id}
-                        className={`border rounded-xl p-5 flex flex-col gap-4 shadow-lg transition-colors duration-200 ${
-                          isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                        className={`border rounded-xl p-5 flex flex-col gap-4 shadow-sm transition-colors duration-200 ${
+                          isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
                               {q.exam} {q.year}
                             </span>
                             <span className="text-xs text-zinc-400">{q.subjectTag}</span>
@@ -849,11 +846,11 @@ export default function App() {
                             if (isAnswered) {
                               if (optIdx === q.correctIndex) {
                                 btnStyle = isDark 
-                                  ? 'bg-emerald-950/70 border-emerald-500 text-emerald-300 font-semibold'
+                                  ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-semibold'
                                   : 'bg-emerald-50 border-emerald-500 text-emerald-900 font-semibold shadow-sm';
                               } else if (userAnswer === optIdx) {
                                 btnStyle = isDark
-                                  ? 'bg-rose-950/70 border-rose-500 text-rose-300 line-through'
+                                  ? 'bg-rose-950/50 border-rose-500 text-rose-300 line-through'
                                   : 'bg-rose-50 border-rose-400 text-rose-900 line-through';
                               } else {
                                 btnStyle = isDark 
@@ -888,7 +885,7 @@ export default function App() {
                                 {isCorrect ? '✓ Correct Answer!' : '✕ Incorrect'}
                               </span>
                               <span className="text-zinc-400">•</span>
-                              <span className="text-indigo-400 font-semibold">⚡ {q.buzzword}</span>
+                              <span className="text-blue-400 font-semibold">⚡ {q.buzzword}</span>
                             </div>
                             <p className={`leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
                               {q.explanation}
@@ -910,12 +907,12 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── DaVinci-Style Bottom Workspace Switcher Dock ── */}
+      {/* ── Bottom Workspace Switcher Dock ── */}
       <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
-        isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-lg'
+        isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
       }`}>
-        <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border shadow-2xl ${
-          isDark ? 'bg-zinc-950 border-zinc-800/80' : 'bg-zinc-100 border-zinc-300'
+        <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border ${
+          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-300'
         }`}>
           {[
             { id: 'visual', label: '1. Visual Cinema', icon: Play, shortcut: 'Alt+1' },
@@ -931,7 +928,7 @@ export default function App() {
                 onClick={() => setActiveTab(tab.id as WorkspaceTab)}
                 className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   isActive 
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-zinc-950 shadow-lg shadow-emerald-500/20 ring-1 ring-emerald-400/40' 
+                    ? 'bg-blue-600 text-white shadow-sm' 
                     : isDark ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
                 }`}
               >
@@ -957,7 +954,7 @@ export default function App() {
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500 mb-4">
+            <div className="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-500 mb-4">
               <Heart className="w-6 h-6 fill-current" />
             </div>
 
@@ -971,24 +968,24 @@ export default function App() {
             }`}>
               <div>
                 <span className="text-xs text-zinc-400 block">Monthly Supporter Pass</span>
-                <span className="text-2xl font-black text-emerald-500 font-mono">₹99 <span className="text-xs text-zinc-400">/ month</span></span>
+                <span className="text-2xl font-black text-blue-500 font-mono">₹99 <span className="text-xs text-zinc-400">/ month</span></span>
               </div>
-              <span className="text-[10px] uppercase tracking-wider font-bold bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded border border-emerald-500/20">
+              <span className="text-[10px] uppercase tracking-wider font-bold bg-blue-500/10 text-blue-400 px-2 py-1 rounded border border-blue-500/20">
                 Cancel Anytime
               </span>
             </div>
 
             <ul className={`text-xs space-y-2 mb-5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
               <li className="flex items-center gap-2">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
                 <span>Founding Supporter Badge on Community Profile</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
                 <span>Directly funds free server hosting & AI synthesis</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
                 <span>Vote on which organ system is released next</span>
               </li>
             </ul>
@@ -998,7 +995,7 @@ export default function App() {
                 alert('Thank you for supporting MedTutor! Payment gateway simulation complete.');
                 setIsPatronModalOpen(false);
               }}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all cursor-pointer"
+              className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
             >
               Support with ₹99 via UPI / Card
             </button>
@@ -1025,7 +1022,7 @@ export default function App() {
             {!caseSubmitted ? (
               <form onSubmit={(e) => { e.preventDefault(); setCaseSubmitted(true); }} className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <UploadCloud className="w-5 h-5 text-emerald-500" />
+                  <UploadCloud className="w-5 h-5 text-blue-500" />
                   <h3 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>Contribute Clinical Case / Image</h3>
                 </div>
 
@@ -1041,7 +1038,7 @@ export default function App() {
                   <input 
                     required 
                     placeholder="e.g., Toxic Multinodular Goiter with Retrosternal Extension" 
-                    className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 border ${
+                    className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-500 border ${
                       isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-200' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                     }`}
                   />
@@ -1053,7 +1050,7 @@ export default function App() {
                     <input 
                       required 
                       placeholder="e.g., 52 Female" 
-                      className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 border ${
+                      className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-500 border ${
                         isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-200' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                       }`}
                     />
@@ -1063,7 +1060,7 @@ export default function App() {
                     <input 
                       required 
                       placeholder="e.g., Surgery Resident, KGMU" 
-                      className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 border ${
+                      className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-500 border ${
                         isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-200' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                       }`}
                     />
@@ -1076,7 +1073,7 @@ export default function App() {
                     required 
                     rows={3} 
                     placeholder="Brief description of presentation, USG/FNAC findings, and surgical/medical management..." 
-                    className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 border ${
+                    className={`w-full rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-500 border ${
                       isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-200' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                     }`}
                   />
@@ -1084,7 +1081,7 @@ export default function App() {
 
                 <button 
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold transition-all shadow-md shadow-emerald-500/20 cursor-pointer"
+                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
                 >
                   Submit Case to Editorial Review Queue
                 </button>

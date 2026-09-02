@@ -2,7 +2,7 @@
 
 @layer base {
   body {
-    @apply antialiased selection:bg-emerald-500 selection:text-white font-sans transition-colors duration-200;
+    @apply antialiased selection:bg-blue-600 selection:text-white font-sans transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
@@ -11,7 +11,7 @@
 :root.light-theme body {
   color-scheme: light;
   background-color: #f8fafc;
-  color: #09090b;
+  color: #0f172a;
 }
 
 :root.dark-theme,
@@ -21,24 +21,24 @@
   color: #fafafa;
 }
 
-/* Custom scrollbars */
+/* Crisp Minimalist Scrollbars (Zero Gradients) */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 .dark-theme ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track {
-  background: rgba(18, 18, 20, 0.8);
+  background: #09090b;
 }
 .dark-theme ::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
-  background: rgba(45, 45, 50, 0.9);
-  border-radius: 9999px;
+  background: #27272a;
+  border-radius: 4px;
 }
 .light-theme ::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 0.9);
+  background: #f1f5f9;
 }
 .light-theme ::-webkit-scrollbar-thumb {
-  background: rgba(203, 213, 225, 0.9);
-  border-radius: 9999px;
+  background: #cbd5e1;
+  border-radius: 4px;
 }

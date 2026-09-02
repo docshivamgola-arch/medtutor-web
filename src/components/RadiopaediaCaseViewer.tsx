@@ -41,8 +41,8 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 flex flex-col gap-6">
       {/* Top Header Bar */}
-      <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-2xl shadow-xl transition-colors ${
-        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+      <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-2xl shadow-sm transition-colors ${
+        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
       }`}>
         <div>
           <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               Radiopaedia-Style Clinical & Histology Atlas
             </h2>
             <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${
-              isDark ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'
             }`}>
               Interactive Slide Viewer
             </span>
@@ -71,7 +71,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 selectedCase.id === c.id 
-                  ? 'bg-emerald-500 text-zinc-950 shadow-md shadow-emerald-500/20' 
+                  ? 'bg-blue-600 text-white shadow-sm' 
                   : isDark ? 'bg-zinc-800 text-zinc-400 hover:text-zinc-200' : 'bg-zinc-100 text-zinc-600 hover:text-zinc-900'
               }`}
             >
@@ -84,7 +84,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 border-zinc-300'
             }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-emerald-500" />
+            <UploadCloud className="w-3.5 h-3.5 text-blue-500" />
             <span className="hidden sm:inline">Upload</span>
           </button>
         </div>
@@ -93,15 +93,15 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
       {/* Main Split-Pane Canvas */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Pane: Interactive Deep Medical Image / Slide Viewer */}
-        <div className={`lg:col-span-7 border rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-colors ${
-          isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+        <div className={`lg:col-span-7 border rounded-2xl overflow-hidden shadow-sm flex flex-col transition-colors ${
+          isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
         }`}>
           {/* Image Toolbar */}
           <div className={`px-4 py-2.5 border-b flex items-center justify-between text-xs ${
             isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'
           }`}>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-bold text-emerald-500">
+              <span className="text-[11px] font-mono font-bold text-blue-500">
                 {selectedCase.ageGender}
               </span>
               <span className="text-zinc-400">|</span>
@@ -116,7 +116,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
                 onClick={() => setShowAnnotations(!showAnnotations)}
                 className={`px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                   showAnnotations 
-                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' 
                     : isDark ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'
                 }`}
                 title="Toggle High-Yield Hotspot Pins"
@@ -160,7 +160,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               <img 
                 src={selectedCase.imageUrl} 
                 alt={selectedCase.title}
-                className="max-h-[380px] w-auto object-contain rounded-lg shadow-2xl border border-zinc-800 select-none"
+                className="max-h-[380px] w-auto object-contain rounded-lg shadow-xl border border-zinc-800 select-none"
                 draggable={false}
               />
 
@@ -172,18 +172,18 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
                     <div className="w-6 h-6 rounded-full bg-rose-600 border-2 border-white flex items-center justify-center shadow-lg cursor-pointer text-[10px] font-black text-white relative z-10">
                       1
                     </div>
-                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[11px] p-2 rounded-lg shadow-2xl border border-rose-500/40 w-44 pointer-events-none opacity-0 group-hover/pin:opacity-100 transition-opacity z-20">
+                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[11px] p-2 rounded-lg shadow-xl border border-rose-500/40 w-44 pointer-events-none opacity-0 group-hover/pin:opacity-100 transition-opacity z-20">
                       <strong className="text-rose-400 block">Orphan Annie Eyes:</strong>
                       Ground-glass optical clearing of nuclei.
                     </div>
                   </div>
 
                   <div className="absolute top-[65%] left-[60%] -translate-x-1/2 -translate-y-1/2 group/pin2">
-                    <div className="w-6 h-6 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center shadow-lg cursor-pointer text-[10px] font-black text-white relative z-10">
+                    <div className="w-6 h-6 rounded-full bg-blue-600 border-2 border-white flex items-center justify-center shadow-lg cursor-pointer text-[10px] font-black text-white relative z-10">
                       2
                     </div>
-                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[11px] p-2 rounded-lg shadow-2xl border border-emerald-500/40 w-44 pointer-events-none opacity-0 group-hover/pin2:opacity-100 transition-opacity z-20">
-                      <strong className="text-emerald-400 block">Psammoma Body:</strong>
+                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 bg-zinc-900 text-white text-[11px] p-2 rounded-lg shadow-xl border border-blue-500/40 w-44 pointer-events-none opacity-0 group-hover/pin2:opacity-100 transition-opacity z-20">
+                      <strong className="text-blue-400 block">Psammoma Body:</strong>
                       Concentric calcospherite calcification.
                     </div>
                   </div>
@@ -193,19 +193,19 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
 
             {/* Bottom Caption Pill */}
             <div className="absolute bottom-3 inset-x-3 bg-zinc-950/90 border border-zinc-800 backdrop-blur-md p-2.5 rounded-xl text-xs text-zinc-300">
-              <span className="font-bold text-emerald-400">Microscopic Finding: </span>
+              <span className="font-bold text-blue-400">Microscopic Finding: </span>
               <span>{selectedCase.imageCaption}</span>
             </div>
           </div>
         </div>
 
         {/* Right Pane: Structured Clinical Accordion & Management */}
-        <div className={`lg:col-span-5 border rounded-2xl p-5 shadow-2xl flex flex-col gap-4 transition-colors ${
-          isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+        <div className={`lg:col-span-5 border rounded-2xl p-5 shadow-sm flex flex-col gap-4 transition-colors ${
+          isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
         }`}>
           {/* Navigation Tabs */}
           <div className={`flex items-center gap-1 p-1 rounded-xl border text-[11px] font-bold ${
-            isDark ? 'bg-zinc-950 border-zinc-800/80' : 'bg-zinc-100 border-zinc-200'
+            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'
           }`}>
             {(['presentation', 'investigations', 'management'] as const).map(tab => (
               <button
@@ -228,7 +228,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               <div className={`p-3.5 rounded-xl border space-y-1.5 ${
                 isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
               }`}>
-                <span className="font-bold text-emerald-500 block uppercase tracking-wider text-[10px]">Chief Complaint</span>
+                <span className="font-bold text-blue-500 block uppercase tracking-wider text-[10px]">Chief Complaint</span>
                 <p className={`leading-relaxed ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>{selectedCase.presentingComplaint}</p>
               </div>
 
@@ -255,19 +255,19 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
                 isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
               }`}>
                 <span className="text-zinc-400">Serum TSH:</span>
-                <span className="font-mono font-bold text-emerald-500">{selectedCase.investigations.tsh}</span>
+                <span className="font-mono font-bold text-blue-500">{selectedCase.investigations.tsh}</span>
               </div>
               <div className={`p-3 rounded-xl border flex items-center justify-between ${
                 isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
               }`}>
                 <span className="text-zinc-400">Free T4:</span>
-                <span className="font-mono font-bold text-emerald-500">{selectedCase.investigations.ft4}</span>
+                <span className="font-mono font-bold text-blue-500">{selectedCase.investigations.ft4}</span>
               </div>
               <div className={`p-3 rounded-xl border flex items-center justify-between ${
                 isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
               }`}>
                 <span className="text-zinc-400">24-hr RAIU Scintigraphy:</span>
-                <span className="font-mono font-bold text-emerald-500">{selectedCase.investigations.raiu}</span>
+                <span className="font-mono font-bold text-blue-500">{selectedCase.investigations.raiu}</span>
               </div>
               <div className={`p-3.5 rounded-xl border space-y-1 ${
                 isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
@@ -290,9 +290,9 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
           {activeTab === 'management' && (
             <div className="space-y-3 text-xs animate-in fade-in duration-150">
               <div className={`border p-3.5 rounded-xl ${
-                isDark ? 'bg-emerald-950/30 border-emerald-500/30' : 'bg-emerald-50 border-emerald-200'
+                isDark ? 'bg-blue-600/15 border-blue-500/30' : 'bg-blue-50 border-blue-200'
               }`}>
-                <span className="text-emerald-500 font-bold uppercase tracking-wider text-[10px] block mb-1">Final Confirmed Diagnosis</span>
+                <span className="text-blue-500 font-bold uppercase tracking-wider text-[10px] block mb-1">Final Confirmed Diagnosis</span>
                 <p className={`text-base font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>{selectedCase.finalDiagnosis}</p>
               </div>
 
@@ -302,7 +302,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
                   <div key={idx} className={`flex items-start gap-2 p-3 rounded-xl border ${
                     isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-200' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                   }`}>
-                    <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                     <span>{step}</span>
                   </div>
                 ))}
@@ -315,7 +315,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
             isDark ? 'border-zinc-800' : 'border-zinc-200'
           }`}>
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-600 text-zinc-950 font-bold flex items-center justify-center text-xs shadow-md">
+              <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow-sm">
                 DR
               </div>
               <div>
@@ -323,7 +323,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
                   <span className={`font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>{selectedCase.contributor.name}</span>
                   {selectedCase.contributor.verified && (
                     <span title="Verified Medical Editor">
-                      <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      <UserCheck className="w-3.5 h-3.5 text-blue-500" />
                     </span>
                   )}
                 </div>
@@ -335,7 +335,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               onClick={() => handleToggleUpvote(selectedCase.id)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
                 hasUpvoted[selectedCase.id]
-                  ? 'bg-emerald-500 text-zinc-950 font-bold border-emerald-400 shadow-md shadow-emerald-500/20'
+                  ? 'bg-blue-600 text-white font-bold border-blue-500 shadow-sm'
                   : isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-white' : 'bg-zinc-100 border-zinc-200 text-zinc-600 hover:text-zinc-900'
               }`}
             >

@@ -43,7 +43,7 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
         />
       )}
 
-      {/* Sidebar Container with Smooth Slide Animation & Pure Neutral Dark */}
+      {/* Sidebar Container with Smooth Slide Animation & Flat Minimalist Architecture */}
       <aside className={`
         fixed lg:relative top-0 lg:top-0 left-0 z-40 h-full lg:h-[calc(100vh-57px-48px)]
         flex flex-col transition-all duration-300 ease-in-out shrink-0 overflow-hidden
@@ -51,7 +51,7 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
           ? 'w-72 opacity-100 translate-x-0 border-r pointer-events-auto' 
           : 'w-0 -translate-x-full lg:translate-x-0 opacity-0 border-r-0 pointer-events-none'}
         ${isDark 
-          ? 'bg-zinc-950 border-zinc-800/80 text-zinc-100' 
+          ? 'bg-zinc-950 border-zinc-800 text-zinc-100' 
           : 'bg-white border-zinc-200 text-zinc-900 shadow-sm'}
       `}>
         {/* Inner container with fixed width to prevent text reflow during collapse animation */}
@@ -59,11 +59,11 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
           {/* Top Header */}
           <div className={`p-3.5 border-b flex items-center justify-between ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
             <div className="flex items-center gap-2">
-              <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-500">
+              <span className={`text-xs uppercase font-extrabold tracking-widest ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
                 Curriculum Tree
               </span>
               <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${
-                isDark ? 'bg-zinc-900 text-zinc-300 border-zinc-800' : 'bg-zinc-100 text-zinc-700 border-zinc-300'
+                isDark ? 'bg-zinc-900 text-zinc-400 border-zinc-800' : 'bg-zinc-100 text-zinc-600 border-zinc-300'
               }`}>
                 19 Subjects
               </span>
@@ -77,7 +77,7 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
           </div>
 
           {/* Search / Filter in tree */}
-          <div className={`p-2.5 border-b ${isDark ? 'border-zinc-800/80' : 'border-zinc-200'}`}>
+          <div className={`p-2.5 border-b ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
               <input 
@@ -85,7 +85,7 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
                 placeholder="Filter organs & systems..."
                 value={filterQuery}
                 onChange={(e) => setFilterQuery(e.target.value)}
-                className={`w-full rounded-lg pl-8 pr-2.5 py-1 text-xs focus:outline-none focus:border-emerald-500 transition-colors border ${
+                className={`w-full rounded-lg pl-8 pr-2.5 py-1 text-xs focus:outline-none focus:border-blue-500 transition-colors border ${
                   isDark 
                     ? 'bg-zinc-900 border-zinc-800 text-zinc-200 placeholder-zinc-500' 
                     : 'bg-zinc-50 border-zinc-200 text-zinc-800 placeholder-zinc-400'
@@ -142,7 +142,7 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
                         let badge = null;
                         if (node.status === 'active') {
                           badge = (
-                            <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
+                            <span className="flex items-center gap-1 text-[9px] font-bold text-blue-500 bg-blue-500/10 px-1.5 py-0.2 rounded border border-blue-500/20">
                               <CheckCircle2 className="w-2.5 h-2.5" /> Live
                             </span>
                           );
@@ -175,8 +175,8 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
                             className={`w-full flex items-center justify-between p-2 rounded-lg text-xs transition-all text-left cursor-pointer disabled:cursor-not-allowed ${
                               isActive 
                                 ? isDark
-                                  ? 'bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/30 shadow-sm'
-                                  : 'bg-emerald-50 text-emerald-800 font-bold border border-emerald-300 shadow-sm'
+                                  ? 'bg-blue-600/15 text-blue-400 font-bold border border-blue-500/30 shadow-sm'
+                                  : 'bg-blue-50 text-blue-900 font-bold border border-blue-200 shadow-sm'
                                 : node.status === 'active'
                                   ? isDark ? 'text-zinc-300 hover:bg-zinc-900 hover:text-white' : 'text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900'
                                   : isDark ? 'text-zinc-500 hover:text-zinc-400' : 'text-zinc-400 hover:text-zinc-600'
@@ -196,14 +196,14 @@ export const SystemsSidebar: React.FC<SystemsSidebarProps> = ({
 
           {/* Bottom Progress Bar */}
           <div className={`p-3 border-t text-[11px] ${
-            isDark ? 'border-zinc-800 bg-zinc-950/80 text-zinc-400' : 'border-zinc-200 bg-zinc-50 text-zinc-600'
+            isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400' : 'border-zinc-200 bg-zinc-50 text-zinc-600'
           }`}>
             <div className="flex items-center justify-between mb-1">
               <span className={`font-semibold ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>Curriculum Progress</span>
-              <span className="font-mono text-emerald-500 font-bold">1 / 19 Live</span>
+              <span className="font-mono text-blue-500 font-bold">1 / 19 Live</span>
             </div>
             <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 w-[5.2%]" />
+              <div className="h-full bg-blue-600 w-[5.2%]" />
             </div>
           </div>
         </div>

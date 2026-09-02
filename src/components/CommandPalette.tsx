@@ -217,9 +217,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       >
         {/* Search Input Bar */}
         <div className={`flex items-center gap-3 px-4 py-3.5 border-b ${
-          isDark ? 'border-zinc-800 bg-zinc-950/70' : 'border-zinc-200 bg-zinc-50'
+          isDark ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-200 bg-zinc-50'
         }`}>
-          <Search className="w-5 h-5 text-emerald-500 shrink-0" />
+          <Search className="w-5 h-5 text-blue-500 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -255,7 +255,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
         {/* Suggested Quick Filter Chips */}
         <div className={`flex items-center gap-1.5 px-4 py-2 border-b overflow-x-auto text-[11px] ${
-          isDark ? 'bg-zinc-950/40 border-zinc-800/80 text-zinc-400' : 'bg-zinc-100 border-zinc-200 text-zinc-600'
+          isDark ? 'bg-zinc-950/60 border-zinc-800 text-zinc-400' : 'bg-zinc-100 border-zinc-200 text-zinc-600'
         }`}>
           <span className="font-bold shrink-0">Suggestions:</span>
           {['Orphan Annie', 'PTU vs MMI', 'Thyroid Storm', 'Bethesda FNAC', 'EBSLN vs RLN', 'Wolff-Chaikoff'].map(s => (
@@ -264,8 +264,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               onClick={() => setQuery(s)}
               className={`px-2.5 py-0.5 rounded-full transition-colors whitespace-nowrap cursor-pointer border ${
                 isDark 
-                  ? 'bg-zinc-800 hover:bg-emerald-500/20 hover:text-emerald-300 text-zinc-300 border-zinc-700/60' 
-                  : 'bg-white hover:bg-emerald-50 hover:text-emerald-800 text-zinc-700 border-zinc-300 shadow-sm'
+                  ? 'bg-zinc-800 hover:bg-blue-600/20 hover:text-blue-300 text-zinc-300 border-zinc-700' 
+                  : 'bg-white hover:bg-blue-50 hover:text-blue-800 text-zinc-700 border-zinc-300 shadow-sm'
               }`}
             >
               {s}
@@ -301,8 +301,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
                     isSelected 
                       ? isDark 
-                        ? 'bg-zinc-800 text-white border border-emerald-500/40 shadow-sm' 
-                        : 'bg-emerald-50 text-emerald-950 border border-emerald-300 shadow-sm'
+                        ? 'bg-zinc-800 text-white border border-blue-500/40 shadow-sm' 
+                        : 'bg-blue-50 text-blue-950 border border-blue-300 shadow-sm'
                       : isDark
                         ? 'hover:bg-zinc-800/50 text-zinc-300'
                         : 'hover:bg-zinc-100 text-zinc-700'
@@ -311,7 +311,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   <div className="flex items-center gap-3 overflow-hidden">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                       isSelected 
-                        ? 'bg-emerald-500 text-zinc-950 font-bold' 
+                        ? 'bg-blue-600 text-white font-bold' 
                         : isDark ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'
                     }`}>
                       <CategoryIcon className="w-4 h-4" />
@@ -322,7 +322,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                           isDark ? 'text-zinc-100' : 'text-zinc-900'
                         }`}>{item.title}</span>
                         <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded border shrink-0 ${
-                          isDark ? 'bg-zinc-950 text-emerald-400 border-zinc-800' : 'bg-zinc-100 text-emerald-700 border-zinc-300'
+                          isDark ? 'bg-zinc-950 text-blue-400 border-zinc-800' : 'bg-zinc-100 text-blue-700 border-zinc-300'
                         }`}>
                           {item.badge}
                         </span>
@@ -333,7 +333,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
                   {isSelected && (
                     <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-400 shrink-0 ml-2">
-                      <CornerDownLeft className="w-3.5 h-3.5 text-emerald-500" />
+                      <CornerDownLeft className="w-3.5 h-3.5 text-blue-500" />
                     </div>
                   )}
                 </div>
@@ -369,7 +369,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               to close
             </span>
           </div>
-          <span className="hidden sm:inline text-emerald-500 font-mono font-semibold">
+          <span className="hidden sm:inline text-blue-500 font-mono font-semibold">
             {results.length} results
           </span>
         </div>

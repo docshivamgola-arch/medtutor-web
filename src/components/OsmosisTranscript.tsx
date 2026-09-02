@@ -17,14 +17,14 @@ export const OsmosisTranscript: React.FC<OsmosisTranscriptProps> = ({
   const { isDark } = useTheme();
 
   return (
-    <div className={`border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-xl transition-colors ${
-      isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-100' : 'bg-white border-zinc-200 text-zinc-900 shadow-sm'
+    <div className={`border rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shadow-sm transition-colors ${
+      isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-100' : 'bg-white border-zinc-200 text-zinc-900'
     }`}>
       <div className={`flex items-center justify-between border-b pb-2.5 ${
         isDark ? 'border-zinc-800' : 'border-zinc-200'
       }`}>
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-emerald-500" />
+          <Sparkles className="w-4 h-4 text-blue-500" />
           <h3 className={`text-xs uppercase font-extrabold tracking-widest ${
             isDark ? 'text-zinc-200' : 'text-zinc-800'
           }`}>
@@ -46,8 +46,8 @@ export const OsmosisTranscript: React.FC<OsmosisTranscriptProps> = ({
               className={`p-2.5 rounded-xl transition-all cursor-pointer flex items-start gap-3 ${
                 isActive 
                   ? isDark
-                    ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 shadow-sm'
-                    : 'bg-emerald-50 border border-emerald-300 text-emerald-900 shadow-sm'
+                    ? 'bg-blue-600/15 border border-blue-500/30 text-blue-300 shadow-sm'
+                    : 'bg-blue-50 border border-blue-200 text-blue-900 shadow-sm'
                   : isDark
                     ? 'hover:bg-zinc-950 text-zinc-400 hover:text-zinc-200'
                     : 'hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900'
@@ -55,7 +55,7 @@ export const OsmosisTranscript: React.FC<OsmosisTranscriptProps> = ({
             >
               <span className={`px-2 py-0.5 rounded text-[10px] font-mono shrink-0 flex items-center gap-1 font-bold ${
                 isActive 
-                  ? 'bg-emerald-500 text-zinc-950 shadow-sm' 
+                  ? 'bg-blue-600 text-white shadow-sm' 
                   : isDark ? 'bg-zinc-950 text-zinc-400 border border-zinc-800' : 'bg-zinc-100 text-zinc-600 border border-zinc-300'
               }`}>
                 <Clock className="w-2.5 h-2.5" />
@@ -65,7 +65,7 @@ export const OsmosisTranscript: React.FC<OsmosisTranscriptProps> = ({
               <div className="flex-1">
                 <span className={`font-bold block mb-0.5 ${
                   isActive 
-                    ? isDark ? 'text-white' : 'text-emerald-950 font-black' 
+                    ? isDark ? 'text-white' : 'text-blue-950 font-black' 
                     : isDark ? 'text-zinc-300' : 'text-zinc-800'
                 }`}>
                   Cut {cut.cutNumber}. {cut.title}
@@ -76,7 +76,7 @@ export const OsmosisTranscript: React.FC<OsmosisTranscriptProps> = ({
               </div>
 
               {isActive && (
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 mt-1.5" />
+                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shrink-0 mt-1.5" />
               )}
             </div>
           );
