@@ -5,7 +5,7 @@ import {
   Search, ShieldCheck, Heart, Award, 
   Sparkles, Stethoscope, AlertTriangle, Lightbulb,
   UploadCloud, X, PanelLeftClose, PanelLeftOpen,
-  Sun, Moon
+  Sun, Moon, Box
 } from 'lucide-react';
 import { 
   THYROID_CUTS, 
@@ -18,12 +18,14 @@ import { SystemsSidebar } from './components/SystemsSidebar';
 import { TableOfContents } from './components/TableOfContents';
 import { RadiopaediaCaseViewer } from './components/RadiopaediaCaseViewer';
 import { OsmosisTranscript } from './components/OsmosisTranscript';
+import { Cinematic3DBodyPortal } from './components/Cinematic3DBodyPortal';
 import { useTheme } from './context/ThemeContext';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
 export default function App() {
   const { isDark, toggleTheme } = useTheme();
+  const [is3DPortalOpen, setIs3DPortalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('visual');
   const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -58,10 +60,10 @@ export default function App() {
         e.preventDefault();
         setIsSidebarOpen(prev => !prev);
       }
-      if (e.altKey && e.key === '1') { e.preventDefault(); setActiveTab('visual'); }
-      if (e.altKey && e.key === '2') { e.preventDefault(); setActiveTab('wiki'); }
-      if (e.altKey && e.key === '3') { e.preventDefault(); setActiveTab('pyq'); }
-      if (e.altKey && e.key === '4') { e.preventDefault(); setActiveTab('atlas'); }
+      if (e.altKey && e.key === '1') { e.preventDefault(); setActiveTab('visual'); setIs3DPortalOpen(false); }
+      if (e.altKey && e.key === '2') { e.preventDefault(); setActiveTab('wiki'); setIs3DPortalOpen(false); }
+      if (e.altKey && e.key === '3') { e.preventDefault(); setActiveTab('pyq'); setIs3DPortalOpen(false); }
+      if (e.altKey && e.key === '4') { e.preventDefault(); setActiveTab('atlas'); setIs3DPortalOpen(false); }
     };
 
     window.addEventListener('keydown', handleGlobalKeyDown);
@@ -74,6 +76,7 @@ export default function App() {
     if (target) {
       setSelectedCut(target);
       setActiveTab('visual');
+      setIs3DPortalOpen(false);
     }
   };
 
@@ -102,8 +105,8 @@ export default function App() {
       <CommandPalette 
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
-        onSelectCut={(cut) => setSelectedCut(cut)}
-        onSwitchTab={(tab) => setActiveTab(tab)}
+        onSelectCut={(cut) => { setSelectedCut(cut); setIs3DPortalOpen(false); }}
+        onSwitchTab={(tab) => { setActiveTab(tab); setIs3DPortalOpen(false); }}
       />
 
       {/* ── Top Header Navigation ── */}
@@ -121,12 +124,18 @@ export default function App() {
             {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
           </button>
 
-          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
+          <div 
+            onClick={() => setIs3DPortalOpen(false)}
+            className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm cursor-pointer"
+          >
             <Stethoscope className="w-4 h-4 text-white" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className={`font-extrabold text-base tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+              <span 
+                onClick={() => setIs3DPortalOpen(false)}
+                className={`font-extrabold text-base tracking-tight cursor-pointer ${isDark ? 'text-white' : 'text-zinc-900'}`}
+              >
                 MedTutor
               </span>
               <span className={`text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.2 rounded border hidden sm:inline ${
@@ -140,10 +149,24 @@ export default function App() {
 
         {/* Center & Right Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* 3D Body Portal Switcher */}
+          <button
+            onClick={() => setIs3DPortalOpen(!is3DPortalOpen)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm ${
+              is3DPortalOpen
+                ? 'bg-blue-600 text-white border-blue-500 shadow-md'
+                : isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
+            }`}
+            title="3D Cinematic Anatomical Body Portal"
+          >
+            <Box className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">3D Body Explorer</span>
+          </button>
+
           {/* Global Command Palette Trigger Bar */}
           <button
             onClick={() => setIsCommandPaletteOpen(true)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all shadow-inner w-36 sm:w-64 justify-between cursor-pointer ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all shadow-inner w-32 sm:w-60 justify-between cursor-pointer ${
               isDark 
                 ? 'bg-zinc-950/80 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border-zinc-800' 
                 : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-900 border-zinc-300'
@@ -208,240 +231,260 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── Main App Layout ── */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Column: Collapsible Systems Tree */}
-        <SystemsSidebar 
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          activeNodeId="thyroid"
-          onSelectNode={() => {}}
+      {/* ── 3D Cinematic Body Portal Landing View ── */}
+      {is3DPortalOpen ? (
+        <Cinematic3DBodyPortal 
+          onEnterSystemOrgan={(_systemId, _organId) => {
+            setIs3DPortalOpen(false);
+          }}
+          onClose={() => setIs3DPortalOpen(false)}
         />
+      ) : (
+        /* ── Main App Layout (Vercel-Style 3-Column Architecture) ── */
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Column: Collapsible Systems Tree */}
+          <SystemsSidebar 
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+            activeNodeId="thyroid"
+            onSelectNode={() => {}}
+          />
 
-        {/* Center Column: Main Content Canvas */}
-        <div className={`flex-1 flex flex-col overflow-y-auto transition-colors duration-200 ${
-          isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#f8fafc] text-zinc-900'
-        }`}>
-          {/* Breadcrumb Status Bar */}
-          <div className={`border-b px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-30 backdrop-blur-md transition-colors duration-200 ${
-            isDark ? 'bg-zinc-900/60 border-zinc-800 text-zinc-400' : 'bg-zinc-100/90 border-zinc-200 text-zinc-600 shadow-sm'
+          {/* Center Column: Main Content Canvas */}
+          <div className={`flex-1 flex flex-col overflow-y-auto transition-colors duration-200 ${
+            isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#f8fafc] text-zinc-900'
           }`}>
-            <div className="flex items-center gap-2">
-              <span className="text-zinc-400">System:</span>
-              <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Endocrine System</span>
-              <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-              <span className={`font-semibold px-2 py-0.5 rounded border ${
-                isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
-              }`}>
-                Node: The Thyroid Gland
-              </span>
-              <span className="hidden md:inline text-zinc-400">• 20 Modular Cuts (16.5 min total)</span>
+            {/* Breadcrumb Status Bar with Reverse Spatial 3D Breadcrumb */}
+            <div className={`border-b px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-30 backdrop-blur-md transition-colors duration-200 ${
+              isDark ? 'bg-zinc-900/60 border-zinc-800 text-zinc-400' : 'bg-zinc-100/90 border-zinc-200 text-zinc-600 shadow-sm'
+            }`}>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIs3DPortalOpen(true)}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition-all cursor-pointer ${
+                    isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-700 border-zinc-300 shadow-sm'
+                  }`}
+                  title="Zoom Out to 3D Full Body Explorer"
+                >
+                  <Box className="w-3 h-3 text-blue-500" />
+                  <span>🧍 Body Portal</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
+                <span className="text-zinc-400">System:</span>
+                <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Endocrine System</span>
+                <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
+                <span className={`font-semibold px-2 py-0.5 rounded border ${
+                  isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
+                }`}>
+                  Node: The Thyroid Gland
+                </span>
+                <span className="hidden md:inline text-zinc-400">• 20 Modular Cuts (16.5 min total)</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="flex items-center gap-1 text-emerald-500 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5" /> 100% Peer-Verified & Free
+                </span>
+                <span className="text-zinc-400">|</span>
+                <span className="font-medium">CBME / NEET-PG Matrix</span>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-emerald-500 font-medium">
-                <ShieldCheck className="w-3.5 h-3.5" /> 100% Peer-Verified & Free
-              </span>
-              <span className="text-zinc-400">|</span>
-              <span className="font-medium">CBME / NEET-PG Matrix</span>
-            </div>
-          </div>
 
-          <main className={`flex-1 pb-24 transition-colors duration-200 ${
-            isDark ? 'bg-zinc-950' : 'bg-[#f8fafc]'
-          }`}>
-            {/* ROOM 1: VISUAL CINEMA */}
-            {activeTab === 'visual' && (
-              <div className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Left: Video Player Cinema & Interactive Callouts */}
-                <div className="lg:col-span-8 flex flex-col gap-4">
-                  <div className={`relative aspect-video rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between p-4 group ${
-                    isDark ? 'bg-black border-zinc-800' : 'bg-zinc-900 border-zinc-700 text-white'
-                  }`}>
-                    {/* Visual Simulation Canvas */}
-                    <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center p-6 text-center">
-                      <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-blue-500 shadow-inner">
-                        <Activity className="w-8 h-8 animate-pulse" />
+            <main className={`flex-1 pb-24 transition-colors duration-200 ${
+              isDark ? 'bg-zinc-950' : 'bg-[#f8fafc]'
+            }`}>
+              {/* ROOM 1: VISUAL CINEMA */}
+              {activeTab === 'visual' && (
+                <div className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  {/* Left: Video Player Cinema & Interactive Callouts */}
+                  <div className="lg:col-span-8 flex flex-col gap-4">
+                    <div className={`relative aspect-video rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between p-4 group ${
+                      isDark ? 'bg-black border-zinc-800' : 'bg-zinc-900 border-zinc-700 text-white'
+                    }`}>
+                      {/* Visual Simulation Canvas */}
+                      <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center p-6 text-center">
+                        <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-blue-500 shadow-inner">
+                          <Activity className="w-8 h-8 animate-pulse" />
+                        </div>
+                        <span className="text-xs uppercase tracking-widest text-blue-400 font-bold mb-1">
+                          {selectedCut.subject} • Cut {selectedCut.cutNumber} of {THYROID_CUTS.length}
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-black text-white max-w-xl">
+                          {selectedCut.title}
+                        </h2>
+                        <p className="text-xs sm:text-sm text-zinc-300 mt-2 max-w-md line-clamp-2">
+                          {selectedCut.visualSummary}
+                        </p>
                       </div>
-                      <span className="text-xs uppercase tracking-widest text-blue-400 font-bold mb-1">
-                        {selectedCut.subject} • Cut {selectedCut.cutNumber} of {THYROID_CUTS.length}
-                      </span>
-                      <h2 className="text-xl sm:text-2xl font-black text-white max-w-xl">
-                        {selectedCut.title}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-zinc-300 mt-2 max-w-md line-clamp-2">
-                        {selectedCut.visualSummary}
-                      </p>
-                    </div>
 
-                    {/* Video Top Controls */}
-                    <div className="relative z-10 flex items-center justify-between">
-                      <span className="text-[11px] font-mono font-bold bg-zinc-900 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60">
-                        {selectedCut.timecode}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        {(['1.0x', '1.25x', '1.5x', '2.0x'] as const).map(speed => (
-                          <button 
-                            key={speed}
-                            onClick={() => setPlaybackSpeed(speed)}
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
-                              playbackSpeed === speed 
+                      {/* Video Top Controls */}
+                      <div className="relative z-10 flex items-center justify-between">
+                        <span className="text-[11px] font-mono font-bold bg-zinc-900 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60">
+                          {selectedCut.timecode}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {(['1.0x', '1.25x', '1.5x', '2.0x'] as const).map(speed => (
+                            <button 
+                              key={speed}
+                              onClick={() => setPlaybackSpeed(speed)}
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
+                                playbackSpeed === speed 
                                 ? 'bg-blue-600 text-white shadow-sm' 
                                 : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'
-                            }`}
-                          >
-                            {speed}
-                          </button>
-                        ))}
+                              }`}
+                            >
+                              {speed}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Video Bottom Playback Bar */}
+                      <div className="relative z-10 flex flex-col gap-2">
+                        <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden cursor-pointer">
+                          <div 
+                            className="h-full bg-blue-600 transition-all duration-300"
+                            style={{ width: `${(selectedCut.cutNumber / THYROID_CUTS.length) * 100}%` }}
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="flex items-center gap-3">
+                            <button 
+                              onClick={() => {
+                                const prevIdx = Math.max(0, selectedCut.cutNumber - 2);
+                                setSelectedCut(THYROID_CUTS[prevIdx]);
+                              }}
+                              className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                              title="Previous Cut"
+                            >
+                              <Rewind className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => setIsPlaying(!isPlaying)}
+                              className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center font-bold transition-transform active:scale-95 shadow-sm cursor-pointer"
+                            >
+                              {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
+                            </button>
+                            <button 
+                              onClick={() => {
+                                const nextIdx = Math.min(THYROID_CUTS.length - 1, selectedCut.cutNumber);
+                                setSelectedCut(THYROID_CUTS[nextIdx]);
+                              }}
+                              className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                              title="Next Cut"
+                            >
+                              <FastForward className="w-4 h-4" />
+                            </button>
+                            <span className="text-xs text-zinc-400 font-mono">
+                              {isPlaying ? 'Playing Modular Stream...' : 'Paused'}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] text-zinc-400 font-medium">Modular Beat {selectedCut.cutNumber}/{THYROID_CUTS.length}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Video Bottom Playback Bar */}
-                    <div className="relative z-10 flex flex-col gap-2">
-                      <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden cursor-pointer">
-                        <div 
-                          className="h-full bg-blue-600 transition-all duration-300"
-                          style={{ width: `${(selectedCut.cutNumber / THYROID_CUTS.length) * 100}%` }}
-                        />
-                      </div>
+                    {/* Osmosis-Style Synchronized Interactive Transcript */}
+                    <OsmosisTranscript 
+                      currentCut={selectedCut}
+                      allCuts={THYROID_CUTS}
+                      onSelectCut={(c) => setSelectedCut(c)}
+                    />
 
-                      <div className="flex items-center justify-between pt-1">
-                        <div className="flex items-center gap-3">
-                          <button 
-                            onClick={() => {
-                              const prevIdx = Math.max(0, selectedCut.cutNumber - 2);
-                              setSelectedCut(THYROID_CUTS[prevIdx]);
-                            }}
-                            className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                            title="Previous Cut"
-                          >
-                            <Rewind className="w-4 h-4" />
-                          </button>
-                          <button 
-                            onClick={() => setIsPlaying(!isPlaying)}
-                            className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center font-bold transition-transform active:scale-95 shadow-sm cursor-pointer"
-                          >
-                            {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
-                          </button>
-                          <button 
-                            onClick={() => {
-                              const nextIdx = Math.min(THYROID_CUTS.length - 1, selectedCut.cutNumber);
-                              setSelectedCut(THYROID_CUTS[nextIdx]);
-                            }}
-                            className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                            title="Next Cut"
-                          >
-                            <FastForward className="w-4 h-4" />
-                          </button>
-                          <span className="text-xs text-zinc-400 font-mono">
-                            {isPlaying ? 'Playing Modular Stream...' : 'Paused'}
-                          </span>
-                        </div>
-
+                    {/* Dynamic Live Concept Card */}
+                    <div className={`border rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-colors duration-200 ${
+                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                    }`}>
+                      <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                         <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-zinc-400 font-medium">Modular Beat {selectedCut.cutNumber}/{THYROID_CUTS.length}</span>
+                          <Sparkles className="w-4 h-4 text-blue-500" />
+                          <h3 className={`text-sm font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                            Live High-Yield Micro-Card ({selectedCut.subject})
+                          </h3>
                         </div>
+                        <span className="text-[11px] text-zinc-400 font-mono">
+                          Node Ref: #{selectedCut.id}
+                        </span>
                       </div>
+
+                      <p className={`text-sm leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                        {selectedCut.coreConcept}
+                      </p>
+
+                      <div className="grid grid-cols-1 gap-2 pt-1">
+                        {selectedCut.highYieldBullets.map((bullet, idx) => (
+                          <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
+                            isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <CheckCircle className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                            <span>{bullet}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {selectedCut.mnemonic && (
+                        <div className={`flex items-start gap-2 border rounded-lg p-3 text-xs ${
+                          isDark ? 'bg-amber-950/20 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
+                        }`}>
+                          <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold uppercase tracking-wider text-amber-500 block mb-0.5">High-Yield Mnemonic</span>
+                            <span>{selectedCut.mnemonic}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Osmosis-Style Synchronized Interactive Transcript */}
-                  <OsmosisTranscript 
-                    currentCut={selectedCut}
-                    allCuts={THYROID_CUTS}
-                    onSelectCut={(c) => setSelectedCut(c)}
-                  />
-
-                  {/* Dynamic Live Concept Card */}
-                  <div className={`border rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-colors duration-200 ${
-                    isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                  }`}>
-                    <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-blue-500" />
-                        <h3 className={`text-sm font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
-                          Live High-Yield Micro-Card ({selectedCut.subject})
-                        </h3>
+                  {/* Right: 20-Cut Modular Beat Sheet Playlist */}
+                  <div className="lg:col-span-4 flex flex-col gap-3">
+                    <div className={`flex items-center justify-between border rounded-xl p-3 transition-colors ${
+                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                    }`}>
+                      <div>
+                        <h4 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Modular Cut Sequence</h4>
+                        <p className="text-[11px] text-zinc-400">20 Independent Cuts (19 Subjects)</p>
                       </div>
-                      <span className="text-[11px] text-zinc-400 font-mono">
-                        Node Ref: #{selectedCut.id}
+                      <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
+                        isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
+                      }`}>
+                        {filteredCuts.length} Cuts
                       </span>
                     </div>
 
-                    <p className={`text-sm leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                      {selectedCut.coreConcept}
-                    </p>
-
-                    <div className="grid grid-cols-1 gap-2 pt-1">
-                      {selectedCut.highYieldBullets.map((bullet, idx) => (
-                        <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
-                          isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <CheckCircle className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
-                          <span>{bullet}</span>
-                        </div>
+                    {/* Subject Filter Pills */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10px]">
+                      {['All', 'Anatomy', 'Physiology', 'Biochemistry', 'Pathology', 'Pharmacology', 'Medicine', 'Surgery'].map(subj => (
+                        <button
+                          key={subj}
+                          onClick={() => setActiveSubjectFilter(subj)}
+                          className={`px-2.5 py-1 rounded-md font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                            activeSubjectFilter === subj 
+                              ? 'bg-blue-600 text-white shadow-sm'
+                              : isDark ? 'bg-zinc-900 text-zinc-400 hover:text-zinc-200' : 'bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900'
+                          }`}
+                        >
+                          {subj}
+                        </button>
                       ))}
                     </div>
 
-                    {selectedCut.mnemonic && (
-                      <div className={`flex items-start gap-2 border rounded-lg p-3 text-xs ${
-                        isDark ? 'bg-amber-950/20 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
-                      }`}>
-                        <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                        <div>
-                          <span className="font-bold uppercase tracking-wider text-amber-500 block mb-0.5">High-Yield Mnemonic</span>
-                          <span>{selectedCut.mnemonic}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right: 20-Cut Modular Beat Sheet Playlist */}
-                <div className="lg:col-span-4 flex flex-col gap-3">
-                  <div className={`flex items-center justify-between border rounded-xl p-3 transition-colors ${
-                    isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                  }`}>
-                    <div>
-                      <h4 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Modular Cut Sequence</h4>
-                      <p className="text-[11px] text-zinc-400">20 Independent Cuts (19 Subjects)</p>
-                    </div>
-                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
-                      isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
-                    }`}>
-                      {filteredCuts.length} Cuts
-                    </span>
-                  </div>
-
-                  {/* Subject Filter Pills */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10px]">
-                    {['All', 'Anatomy', 'Physiology', 'Biochemistry', 'Pathology', 'Pharmacology', 'Medicine', 'Surgery'].map(subj => (
-                      <button
-                        key={subj}
-                        onClick={() => setActiveSubjectFilter(subj)}
-                        className={`px-2.5 py-1 rounded-md font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                          activeSubjectFilter === subj 
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : isDark ? 'bg-zinc-900 text-zinc-400 hover:text-zinc-200' : 'bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900'
-                        }`}
-                      >
-                        {subj}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Cut List */}
-                  <div className="flex flex-col gap-2 max-h-[640px] overflow-y-auto pr-1">
-                    {filteredCuts.map((cut) => {
-                      const isSelected = selectedCut.id === cut.id;
-                      return (
-                        <button
-                          key={cut.id}
-                          onClick={() => setSelectedCut(cut)}
-                          className={`text-left p-3 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
-                            isSelected 
-                              ? isDark
-                                ? 'bg-zinc-900 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
-                                : 'bg-blue-50 border-blue-500 shadow-sm ring-1 ring-blue-400/40'
+                    {/* Cut List */}
+                    <div className="flex flex-col gap-2 max-h-[640px] overflow-y-auto pr-1">
+                      {filteredCuts.map((cut) => {
+                        const isSelected = selectedCut.id === cut.id;
+                        return (
+                          <button
+                            key={cut.id}
+                            onClick={() => setSelectedCut(cut)}
+                            className={`text-left p-3 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
+                              isSelected 
+                                ? isDark
+                                  ? 'bg-zinc-900 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
+                                  : 'bg-blue-50 border-blue-500 shadow-sm ring-1 ring-blue-400/40'
                               : isDark
                                 ? 'bg-zinc-950 border-zinc-800 hover:bg-zinc-900 hover:border-zinc-700'
                                 : 'bg-white border-zinc-200 hover:bg-zinc-50 hover:border-zinc-300 shadow-sm'
@@ -760,7 +803,7 @@ export default function App() {
                       </div>
                       
                       <div className={`p-4 rounded-lg border text-xs space-y-2 ${
-                        isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                        isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                       }`}>
                         <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
                           Fine needle aspiration cytology is the primary diagnostic modality. Stratified using the{' '}
@@ -906,40 +949,43 @@ export default function App() {
           </main>
         </div>
       </div>
+    )}
 
       {/* ── Bottom Workspace Switcher Dock ── */}
-      <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
-        isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
-      }`}>
-        <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border ${
-          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-300'
+      {!is3DPortalOpen && (
+        <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
+          isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
         }`}>
-          {[
-            { id: 'visual', label: '1. Visual Cinema', icon: Play, shortcut: 'Alt+1' },
-            { id: 'wiki', label: '2. Integrated Wiki', icon: BookOpen, shortcut: 'Alt+2' },
-            { id: 'pyq', label: '3. PYQ Matrix', icon: CheckCircle, shortcut: 'Alt+3' },
-            { id: 'atlas', label: '4. Clinical Atlas', icon: Layers, shortcut: 'Alt+4' },
-          ].map(tab => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as WorkspaceTab)}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  isActive 
-                    ? 'bg-blue-600 text-white shadow-sm' 
-                    : isDark ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.split('.')[1]}</span>
-              </button>
-            );
-          })}
-        </div>
-      </footer>
+          <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border ${
+            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-300'
+          }`}>
+            {[
+              { id: 'visual', label: '1. Visual Cinema', icon: Play, shortcut: 'Alt+1' },
+              { id: 'wiki', label: '2. Integrated Wiki', icon: BookOpen, shortcut: 'Alt+2' },
+              { id: 'pyq', label: '3. PYQ Matrix', icon: CheckCircle, shortcut: 'Alt+3' },
+              { id: 'atlas', label: '4. Clinical Atlas', icon: Layers, shortcut: 'Alt+4' },
+            ].map(tab => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as WorkspaceTab)}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    isActive 
+                      ? 'bg-blue-600 text-white shadow-sm' 
+                      : isDark ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.label.split('.')[1]}</span>
+                </button>
+              );
+            })}
+          </div>
+        </footer>
+      )}
 
       {/* ── MODAL 1: Community Support / Patron Pass (₹99) ── */}
       {isPatronModalOpen && (
