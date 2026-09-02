@@ -6,16 +6,18 @@ import {
 } from 'lucide-react';
 import { THYROID_CASES } from '../data/thyroidData';
 import type { ClinicalCase } from '../data/thyroidData';
+import { useTheme } from '../context/ThemeContext';
 
 interface RadiopaediaCaseViewerProps {
   onOpenUploadModal: () => void;
 }
 
 export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ onOpenUploadModal }) => {
+  const { isDark } = useTheme();
   const [selectedCase, setSelectedCase] = useState<ClinicalCase>(THYROID_CASES[0]);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [showAnnotations, setShowAnnotations] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState<'presentation' | 'investigations' | 'pathology' | 'management'>('presentation');
+  const [activeTab, setActiveTab] = useState<'presentation' | 'investigations' | 'management'>('presentation');
   const [upvotes, setUpvotes] = useState<Record<string, number>>({
     'case-001': 42,
     'case-002': 38
@@ -39,11 +41,17 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 flex flex-col gap-6">
       {/* Top Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl">
+      <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-2xl shadow-xl ${
+        isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+      }`}>
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-black text-white">Radiopaedia-Style Clinical & Histology Atlas</h2>
-            <span className="text-[10px] uppercase font-bold bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded border border-teal-500/20">
+            <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Radiopaedia-Style Clinical & Histology Atlas
+            </h2>
+            <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${
+              isDark ? 'bg-teal-500/10 text-teal-400 border-teal-500/20' : 'bg-teal-50 text-teal-700 border-teal-200'
+            }`}>
               Interactive Slide Viewer
             </span>
           </div>
@@ -64,7 +72,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 selectedCase.id === c.id 
                   ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20' 
-                  : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                  : isDark ? 'bg-slate-800 text-slate-400 hover:text-slate-200' : 'bg-slate-100 text-slate-600 hover:text-slate-900'
               }`}
             >
               Case 0{idx + 1}: {c.finalDiagnosis.split(' ')[0]}
@@ -72,9 +80,11 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
           ))}
           <button
             onClick={onOpenUploadModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 transition-all cursor-pointer"
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+              isDark ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+            }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-teal-400" />
+            <UploadCloud className="w-3.5 h-3.5 text-teal-500" />
             <span className="hidden sm:inline">Upload</span>
           </button>
         </div>
@@ -83,15 +93,19 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
       {/* Main Split-Pane Canvas */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Pane: Interactive Deep Medical Image / Slide Viewer */}
-        <div className="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+        <div className={`lg:col-span-7 border rounded-2xl overflow-hidden shadow-2xl flex flex-col ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+        }`}>
           {/* Image Toolbar */}
-          <div className="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
+          <div className={`px-4 py-2.5 border-b flex items-center justify-between text-xs ${
+            isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-100 border-slate-200'
+          }`}>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-bold text-teal-400">
+              <span className="text-[11px] font-mono font-bold text-teal-500">
                 {selectedCase.ageGender}
               </span>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-300 font-medium truncate max-w-xs">
+              <span className="text-slate-400">|</span>
+              <span className={`font-medium truncate max-w-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                 {selectedCase.title}
               </span>
             </div>
@@ -102,8 +116,8 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
                 onClick={() => setShowAnnotations(!showAnnotations)}
                 className={`px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                   showAnnotations 
-                    ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30' 
-                    : 'bg-slate-800 text-slate-400'
+                    ? 'bg-teal-500/20 text-teal-500 border border-teal-500/30' 
+                    : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
                 }`}
                 title="Toggle High-Yield Hotspot Pins"
               >
@@ -112,7 +126,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               </button>
               <button
                 onClick={() => handleZoom(-0.2)}
-                className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer"
+                className={`p-1.5 rounded cursor-pointer ${isDark ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
                 title="Zoom Out"
               >
                 <ZoomOut className="w-3.5 h-3.5" />
@@ -122,14 +136,14 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               </span>
               <button
                 onClick={() => handleZoom(0.2)}
-                className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer"
+                className={`p-1.5 rounded cursor-pointer ${isDark ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
                 title="Zoom In"
               >
                 <ZoomIn className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setZoomLevel(1)}
-                className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer"
+                className={`p-1.5 rounded cursor-pointer ${isDark ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
                 title="Reset Zoom"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -186,17 +200,21 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
         </div>
 
         {/* Right Pane: Structured Clinical Accordion & Management */}
-        <div className="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+        <div className={`lg:col-span-5 border rounded-2xl p-5 shadow-2xl flex flex-col gap-4 ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+        }`}>
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800/80 text-[11px] font-bold">
+          <div className={`flex items-center gap-1 p-1 rounded-xl border text-[11px] font-bold ${
+            isDark ? 'bg-slate-950 border-slate-800/80' : 'bg-slate-100 border-slate-200'
+          }`}>
             {(['presentation', 'investigations', 'management'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-1.5 rounded-lg capitalize transition-all cursor-pointer ${
                   activeTab === tab 
-                    ? 'bg-slate-800 text-white shadow-sm' 
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? isDark ? 'bg-slate-800 text-white shadow-sm' : 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                 }`}
               >
                 {tab}
@@ -207,19 +225,25 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
           {/* Tab 1: Presentation & History */}
           {activeTab === 'presentation' && (
             <div className="space-y-3 text-xs animate-in fade-in duration-150">
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
-                <span className="font-bold text-teal-300 block uppercase tracking-wider text-[10px]">Chief Complaint</span>
-                <p className="text-slate-200 leading-relaxed">{selectedCase.presentingComplaint}</p>
+              <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
+                <span className="font-bold text-teal-500 block uppercase tracking-wider text-[10px]">Chief Complaint</span>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{selectedCase.presentingComplaint}</p>
               </div>
 
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+              <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <span className="font-bold text-slate-400 block uppercase tracking-wider text-[10px]">Clinical History</span>
-                <p className="text-slate-300 leading-relaxed">{selectedCase.history}</p>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{selectedCase.history}</p>
               </div>
 
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+              <div className={`p-3.5 rounded-xl border space-y-1.5 ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <span className="font-bold text-slate-400 block uppercase tracking-wider text-[10px]">Physical Examination</span>
-                <p className="text-slate-300 leading-relaxed">{selectedCase.findings}</p>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{selectedCase.findings}</p>
               </div>
             </div>
           )}
@@ -227,26 +251,36 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
           {/* Tab 2: Investigations & Scans */}
           {activeTab === 'investigations' && (
             <div className="space-y-2.5 text-xs animate-in fade-in duration-150">
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div className={`p-3 rounded-xl border flex items-center justify-between ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <span className="text-slate-400">Serum TSH:</span>
-                <span className="font-mono font-bold text-teal-300">{selectedCase.investigations.tsh}</span>
+                <span className="font-mono font-bold text-teal-500">{selectedCase.investigations.tsh}</span>
               </div>
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div className={`p-3 rounded-xl border flex items-center justify-between ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <span className="text-slate-400">Free T4:</span>
-                <span className="font-mono font-bold text-teal-300">{selectedCase.investigations.ft4}</span>
+                <span className="font-mono font-bold text-teal-500">{selectedCase.investigations.ft4}</span>
               </div>
-              <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div className={`p-3 rounded-xl border flex items-center justify-between ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <span className="text-slate-400">24-hr RAIU Scintigraphy:</span>
-                <span className="font-mono font-bold text-teal-300">{selectedCase.investigations.raiu}</span>
+                <span className="font-mono font-bold text-teal-500">{selectedCase.investigations.raiu}</span>
               </div>
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+              <div className={`p-3.5 rounded-xl border space-y-1 ${
+                isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <span className="text-slate-400 font-bold block text-[10px] uppercase">Ultrasound (USG) Features</span>
-                <p className="text-slate-200">{selectedCase.investigations.usg}</p>
+                <p className={isDark ? 'text-slate-200' : 'text-slate-800'}>{selectedCase.investigations.usg}</p>
               </div>
               {selectedCase.investigations.fnac && (
-                <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                  <span className="text-rose-400 font-bold block text-[10px] uppercase">FNAC Cytopathology</span>
-                  <p className="text-rose-200 font-medium">{selectedCase.investigations.fnac}</p>
+                <div className={`p-3.5 rounded-xl border space-y-1 ${
+                  isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                }`}>
+                  <span className="text-rose-500 font-bold block text-[10px] uppercase">FNAC Cytopathology</span>
+                  <p className="text-rose-600 dark:text-rose-300 font-medium">{selectedCase.investigations.fnac}</p>
                 </div>
               )}
             </div>
@@ -255,16 +289,20 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
           {/* Tab 3: Management & Protocols */}
           {activeTab === 'management' && (
             <div className="space-y-3 text-xs animate-in fade-in duration-150">
-              <div className="bg-teal-950/40 border border-teal-500/30 p-3.5 rounded-xl">
-                <span className="text-teal-400 font-bold uppercase tracking-wider text-[10px] block mb-1">Final Confirmed Diagnosis</span>
-                <p className="text-base font-black text-white">{selectedCase.finalDiagnosis}</p>
+              <div className={`border p-3.5 rounded-xl ${
+                isDark ? 'bg-teal-950/40 border-teal-500/30' : 'bg-teal-50 border-teal-200'
+              }`}>
+                <span className="text-teal-600 dark:text-teal-400 font-bold uppercase tracking-wider text-[10px] block mb-1">Final Confirmed Diagnosis</span>
+                <p className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>{selectedCase.finalDiagnosis}</p>
               </div>
 
               <div className="space-y-2">
                 <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block">Recommended Management Plan:</span>
                 {selectedCase.management.map((step, idx) => (
-                  <div key={idx} className="flex items-start gap-2 bg-slate-950 p-3 rounded-xl border border-slate-800 text-slate-200">
-                    <CheckCircle className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
+                  <div key={idx} className={`flex items-start gap-2 p-3 rounded-xl border ${
+                    isDark ? 'bg-slate-950 border-slate-800 text-slate-200' : 'bg-slate-50 border-slate-200 text-slate-800'
+                  }`}>
+                    <CheckCircle className="w-4 h-4 text-teal-500 shrink-0 mt-0.5" />
                     <span>{step}</span>
                   </div>
                 ))}
@@ -273,21 +311,23 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
           )}
 
           {/* Contributor Profile Footer */}
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+          <div className={`pt-3 border-t flex items-center justify-between text-xs ${
+            isDark ? 'border-slate-800' : 'border-slate-200'
+          }`}>
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-teal-500 to-indigo-600 text-white font-bold flex items-center justify-center text-xs shadow-md">
                 DR
               </div>
               <div>
                 <div className="flex items-center gap-1">
-                  <span className="font-bold text-slate-200">{selectedCase.contributor.name}</span>
+                  <span className={`font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{selectedCase.contributor.name}</span>
                   {selectedCase.contributor.verified && (
                     <span title="Verified Medical Editor">
-                      <UserCheck className="w-3.5 h-3.5 text-teal-400" />
+                      <UserCheck className="w-3.5 h-3.5 text-teal-500" />
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] text-slate-500 block">{selectedCase.contributor.hospital}</span>
+                <span className="text-[10px] text-slate-400 block">{selectedCase.contributor.hospital}</span>
               </div>
             </div>
 
@@ -296,7 +336,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
                 hasUpvoted[selectedCase.id]
                   ? 'bg-teal-500 text-slate-950 font-bold border-teal-400 shadow-md shadow-teal-500/20'
-                  : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  : isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
               }`}
             >
               <ThumbsUp className="w-3.5 h-3.5" />

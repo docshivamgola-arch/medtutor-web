@@ -70,18 +70,18 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
           </div>
 
           {/* Term Headline */}
-          <h4 className="text-sm font-black text-white leading-tight mb-1 flex items-center gap-1.5">
+          <div className="text-sm font-black text-white leading-tight mb-1 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
             <span>{concept.term}</span>
-          </h4>
-          <p className="text-[11px] font-medium text-teal-300 mb-2">
+          </div>
+          <div className="text-[11px] font-medium text-teal-300 mb-2">
             {concept.headline}
-          </p>
+          </div>
 
           {/* Definition */}
-          <p className="text-xs text-slate-300 leading-relaxed mb-3 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
+          <div className="text-xs text-slate-300 leading-relaxed mb-3 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
             {concept.definition}
-          </p>
+          </div>
 
           {/* Exam Trap Alert */}
           <div className="flex items-start gap-1.5 text-[11px] text-amber-300 bg-amber-950/40 border border-amber-800/40 p-2.5 rounded-lg mb-3">
