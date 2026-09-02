@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { 
   Play, Pause, FastForward, Rewind, CheckCircle, 
   BookOpen, Layers, Activity, ChevronRight,
@@ -12,6 +12,8 @@ import {
   THYROID_CASES
 } from './data/thyroidData';
 import type { ChapterCut } from './data/thyroidData';
+import { SmartCard } from './components/SmartCard';
+import { CommandPalette } from './components/CommandPalette';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
@@ -20,9 +22,11 @@ export default function App() {
   const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<'1.0x' | '1.25x' | '1.5x' | '2.0x'>('1.0x');
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeSubjectFilter, setActiveSubjectFilter] = useState<string>('All');
   
+  // Command Palette State
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
   // PYQ Interactive State
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [showExplanations, setShowExplanations] = useState<Record<string, boolean>>({});
@@ -36,17 +40,41 @@ export default function App() {
   // Wiki subject tab
   const [wikiSubject, setWikiSubject] = useState<'all' | 'anatomy' | 'biochem' | 'patho' | 'pharma' | 'medicine' | 'surgery'>('all');
 
-  // Filtered cuts
+  // Global Keyboard Shortcuts (Ctrl+K, Alt+1..4)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+K or Cmd+K
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(prev => !prev);
+      }
+      // Alt+1 to Alt+4 for rapid workspace switching
+      if (e.altKey && e.key === '1') { e.preventDefault(); setActiveTab('visual'); }
+      if (e.altKey && e.key === '2') { e.preventDefault(); setActiveTab('wiki'); }
+      if (e.altKey && e.key === '3') { e.preventDefault(); setActiveTab('pyq'); }
+      if (e.altKey && e.key === '4') { e.preventDefault(); setActiveTab('atlas'); }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
+
+  // Jump to specific cut from SmartCard
+  const handleNavigateToCut = (cutNumber: number) => {
+    const target = THYROID_CUTS.find(c => c.cutNumber === cutNumber);
+    if (target) {
+      setSelectedCut(target);
+      setActiveTab('visual');
+    }
+  };
+
+  // Filtered cuts for sidebar
   const filteredCuts = useMemo(() => {
     return THYROID_CUTS.filter(cut => {
-      const matchesSearch = 
-        cut.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cut.coreConcept.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cut.highYieldBullets.some(b => b.toLowerCase().includes(searchQuery.toLowerCase()));
       const matchesSubject = activeSubjectFilter === 'All' || cut.subject === activeSubjectFilter;
-      return matchesSearch && matchesSubject;
+      return matchesSubject;
     });
-  }, [searchQuery, activeSubjectFilter]);
+  }, [activeSubjectFilter]);
 
   const handleSelectOption = (questionId: string, optionIdx: number, correctIdx: number) => {
     if (selectedAnswers[questionId] !== undefined) return; // already answered
@@ -59,6 +87,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500 selection:text-white">
+      {/* ── Command Palette (Ctrl+K) ── */}
+      <CommandPalette 
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectCut={(cut) => setSelectedCut(cut)}
+        onSwitchTab={(tab) => setActiveTab(tab)}
+      />
+
       {/* ── Top Header Navigation ── */}
       <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-2.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -78,25 +114,28 @@ export default function App() {
           </div>
         </div>
 
-        {/* Search & Topic Identifier */}
+        {/* Global Command Palette Trigger Bar (Linear / Raycast Style) */}
         <div className="flex items-center gap-3">
-          <div className="relative hidden md:block w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input 
-              type="text" 
-              placeholder="Search concepts, drugs, buzzwords..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-teal-500 transition-colors"
-            />
-          </div>
+          <button
+            onClick={() => setIsCommandPaletteOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/80 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700 text-xs transition-all shadow-inner w-48 sm:w-72 justify-between cursor-pointer"
+          >
+            <div className="flex items-center gap-2 truncate">
+              <Search className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+              <span className="truncate">Quick jump, drugs, buzzwords...</span>
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-300 border border-slate-700">Ctrl</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-300 border border-slate-700">K</kbd>
+            </div>
+          </button>
 
           <button 
             onClick={() => setIsCaseUploadModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-all cursor-pointer hidden md:flex"
           >
             <UploadCloud className="w-3.5 h-3.5 text-teal-400" />
-            <span className="hidden sm:inline">Contribute Case</span>
+            <span>Contribute Case</span>
           </button>
 
           <button 
@@ -163,7 +202,7 @@ export default function App() {
                       <button 
                         key={speed}
                         onClick={() => setPlaybackSpeed(speed)}
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all ${
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
                           playbackSpeed === speed 
                             ? 'bg-teal-500 text-white shadow-sm shadow-teal-500/30' 
                             : 'bg-slate-900/80 text-slate-400 hover:text-slate-200'
@@ -335,14 +374,19 @@ export default function App() {
           </div>
         )}
 
-        {/* ROOM 2: INTEGRATED WIKI & HIGH-YIELD NOTES */}
+        {/* ROOM 2: INTEGRATED WIKI & HIGH-YIELD NOTES (with Amboss-Style Smart Cards) */}
         {activeTab === 'wiki' && (
           <div className="max-w-6xl mx-auto p-4 md:p-6 flex flex-col gap-6">
             {/* Wiki Filter Header */}
             <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-xl">
               <div>
-                <h2 className="text-lg font-black text-white">Integrated Knowledge Matrix: The Thyroid Gland</h2>
-                <p className="text-xs text-slate-400">Synthesized from Robbins, Guyton, Harrison, Bailey & Love, and First Aid.</p>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-black text-white">Integrated Knowledge Matrix: The Thyroid Gland</h2>
+                  <span className="text-[10px] font-bold bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded border border-teal-500/20">
+                    Amboss-Style Smart Cards Active
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-0.5">Hover or click any dotted-underline buzzword to open instant high-yield micro-cards.</p>
               </div>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {(['all', 'anatomy', 'biochem', 'patho', 'pharma', 'medicine', 'surgery'] as const).map(sub => (
@@ -372,7 +416,12 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
                     <span className="font-bold text-sky-300 text-sm">Superior Thyroid Artery (STA)</span>
-                    <p className="text-slate-300">Arises as the 1st anterior branch of the <strong>External Carotid Artery</strong>. Closely accompanied by the <strong>External Branch of the Superior Laryngeal Nerve (EBSLN)</strong>.</p>
+                    <p className="text-slate-300">
+                      Arises as the 1st anterior branch of the <strong>External Carotid Artery</strong>. Closely accompanied by the{' '}
+                      <SmartCard conceptId="ebsln" onNavigateToCut={handleNavigateToCut}>
+                        External Branch of the Superior Laryngeal Nerve (EBSLN)
+                      </SmartCard>.
+                    </p>
                     <div className="bg-sky-950/40 border border-sky-800/40 p-2.5 rounded text-sky-200 font-medium">
                       ⚠️ <strong>Golden Rule:</strong> Must be ligated <u>AS CLOSE AS POSSIBLE</u> to the upper pole of the gland to spare EBSLN (cricothyroid tensor).
                     </div>
@@ -380,11 +429,25 @@ export default function App() {
 
                   <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
                     <span className="font-bold text-rose-300 text-sm">Inferior Thyroid Artery (ITA)</span>
-                    <p className="text-slate-300">Arises from the <strong>Thyrocervical Trunk</strong> (Subclavian Artery). Crosses the branches of the <strong>Recurrent Laryngeal Nerve (RLN)</strong> near the lower pole.</p>
+                    <p className="text-slate-300">
+                      Arises from the <strong>Thyrocervical Trunk</strong> (Subclavian Artery). Crosses the branches of the{' '}
+                      <SmartCard conceptId="rln" onNavigateToCut={handleNavigateToCut}>
+                        Recurrent Laryngeal Nerve (RLN)
+                      </SmartCard>{' '}
+                      near the lower pole.
+                    </p>
                     <div className="bg-rose-950/40 border border-rose-800/40 p-2.5 rounded text-rose-200 font-medium">
                       ⚠️ <strong>Golden Rule:</strong> Must be ligated <u>FAR AWAY FROM THE GLAND</u> (at the trunk) to spare RLN (vocal cords).
                     </div>
                   </div>
+                </div>
+
+                <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-xs text-slate-300">
+                  <span>Midline congenital anomalies like Thyroglossal duct cysts require the{' '}</span>
+                  <SmartCard conceptId="sistrunk" onNavigateToCut={handleNavigateToCut}>
+                    Sistrunk Procedure
+                  </SmartCard>
+                  <span> to resect the cyst with the central body of the hyoid bone.</span>
                 </div>
               </div>
             )}
@@ -412,7 +475,12 @@ export default function App() {
                       <tr>
                         <td className="p-2.5 font-bold text-teal-300">Hashimoto</td>
                         <td className="p-2.5">Autoimmune (Anti-TPO, Anti-Tg, HLA-DR3/5)</td>
-                        <td className="p-2.5">Hurthle (Askanazy) cells with prominent germinal centers</td>
+                        <td className="p-2.5">
+                          <SmartCard conceptId="hurthle-cells" onNavigateToCut={handleNavigateToCut}>
+                            Hurthle (Askanazy) cells
+                          </SmartCard>{' '}
+                          with prominent germinal centers
+                        </td>
                         <td className="p-2.5">Painless diffuse goiter; leading cause of hypothyroidism</td>
                         <td className="p-2.5 text-amber-300">Risk of B-cell MALToma</td>
                       </tr>
@@ -436,7 +504,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Wiki Card 3: Oncology Matrix (Papillary vs Follicular vs Medullary) */}
+            {/* Wiki Card 3: Oncology Matrix */}
             {(wikiSubject === 'all' || wikiSubject === 'patho' || wikiSubject === 'surgery') && (
               <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-rose-400 font-bold text-sm uppercase tracking-wider border-b border-slate-800 pb-2">
@@ -447,7 +515,15 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
                     <span className="font-bold text-teal-400 text-sm">Papillary Ca (~80%)</span>
-                    <p className="text-slate-300">• <strong>Histology:</strong> Orphan Annie eye nuclei, Psammoma bodies, Nuclear grooves.</p>
+                    <p className="text-slate-300">
+                      • <strong>Histology:</strong>{' '}
+                      <SmartCard conceptId="orphan-annie" onNavigateToCut={handleNavigateToCut}>
+                        Orphan Annie eye nuclei
+                      </SmartCard>,{' '}
+                      <SmartCard conceptId="psammoma-bodies" onNavigateToCut={handleNavigateToCut}>
+                        Psammoma bodies
+                      </SmartCard>, Nuclear grooves.
+                    </p>
                     <p className="text-slate-300">• <strong>Genetics:</strong> BRAF V600E, RET/PTC.</p>
                     <p className="text-slate-300">• <strong>Spread:</strong> Lymphatic to cervical nodes.</p>
                     <span className="text-[11px] text-emerald-400 font-semibold">10-Year Survival &gt; 95%</span>
@@ -458,7 +534,12 @@ export default function App() {
                     <p className="text-slate-300">• <strong>Histology:</strong> Follicles with Capsular / Vascular invasion.</p>
                     <p className="text-slate-300">• <strong>Genetics:</strong> RAS, PAX8-PPARgamma.</p>
                     <p className="text-slate-300">• <strong>Spread:</strong> Hematogenous to Bone & Lungs.</p>
-                    <span className="text-[11px] text-rose-400 font-semibold">Cannot diagnose on FNAC!</span>
+                    <p className="text-slate-300">
+                      • <strong>Triage:</strong> Classified on FNAC under{' '}
+                      <SmartCard conceptId="bethesda" onNavigateToCut={handleNavigateToCut}>
+                        Bethesda IV (Follicular Neoplasm)
+                      </SmartCard>.
+                    </p>
                   </div>
 
                   <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
@@ -477,21 +558,48 @@ export default function App() {
               <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider border-b border-slate-800 pb-2">
                   <AlertTriangle className="w-4 h-4 text-emerald-400" />
-                  <span>Pharmacology & Thyroid Storm 4-Step Protocol</span>
+                  <span>Pharmacology, Autoregulation & Thyroid Storm</span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
-                    <span className="font-bold text-emerald-400 text-sm">Pregnancy Thioamide Rules</span>
-                    <ul className="space-y-1.5 text-slate-300">
-                      <li>• <strong>1st Trimester:</strong> Propylthiouracil (PTU) is drug of choice. (Avoids Methimazole's Aplasia Cutis & Choanal Atresia).</li>
-                      <li>• <strong>2nd & 3rd Trimester:</strong> Switch to Methimazole (MMI). (Avoids PTU's fulminant hepatotoxicity).</li>
-                      <li>• <strong>Both:</strong> Risk of Agranulocytosis (Check CBC immediately if fever/sore throat occurs).</li>
+                    <span className="font-bold text-emerald-400 text-sm">Thioamide Pregnancy Algorithm</span>
+                    <ul className="space-y-2 text-slate-300">
+                      <li>
+                        • <strong>1st Trimester:</strong>{' '}
+                        <SmartCard conceptId="ptu" onNavigateToCut={handleNavigateToCut}>
+                          Propylthiouracil (PTU)
+                        </SmartCard>{' '}
+                        is the drug of choice.
+                      </li>
+                      <li>
+                        • <strong>2nd & 3rd Trimester:</strong> Switch to{' '}
+                        <SmartCard conceptId="methimazole" onNavigateToCut={handleNavigateToCut}>
+                          Methimazole (MMI)
+                        </SmartCard>{' '}
+                        (prevents PTU hepatotoxicity).
+                      </li>
+                      <li>
+                        • <strong>Autoregulation:</strong> High iodide invokes the{' '}
+                        <SmartCard conceptId="wolff-chaikoff" onNavigateToCut={handleNavigateToCut}>
+                          Wolff-Chaikoff effect
+                        </SmartCard>; autonomous goiters can trigger{' '}
+                        <SmartCard conceptId="jod-basedow" onNavigateToCut={handleNavigateToCut}>
+                          Jod-Basedow hyperthyroidism
+                        </SmartCard>.
+                      </li>
                     </ul>
                   </div>
 
                   <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-2">
-                    <span className="font-bold text-emerald-400 text-sm">Thyroid Storm 4-Step Emergency Protocol</span>
+                    <span className="font-bold text-emerald-400 text-sm">Thyroid Storm 4-Step Protocol</span>
+                    <p className="text-slate-400 mb-1">
+                      Diagnosed when{' '}
+                      <SmartCard conceptId="burch-wartofsky" onNavigateToCut={handleNavigateToCut}>
+                        Burch-Wartofsky Score
+                      </SmartCard>{' '}
+                      &ge; 45:
+                    </p>
                     <ol className="space-y-1 text-slate-300">
                       <li><strong>1. IV Beta-Blocker:</strong> Esmolol / Propranolol (blocks sympathetic surge).</li>
                       <li><strong>2. High-Dose PTU:</strong> Blocks synthesis + peripheral 5'-deiodinase.</li>
@@ -511,7 +619,7 @@ export default function App() {
             <div className="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 rounded-xl">
               <div>
                 <h2 className="text-lg font-black text-white">NEET-PG & INI-CET Question Bank</h2>
-                <p className="text-xs text-slate-400">Interactive clinical vignettes mapped directly to this thyroid node.</p>
+                <p className="text-xs text-slate-400">Interactive clinical vignettes mapped directly to this thyroid node with Smart Card explanations.</p>
               </div>
               <div className="text-right">
                 <span className="text-xs text-slate-400 block">Score</span>
