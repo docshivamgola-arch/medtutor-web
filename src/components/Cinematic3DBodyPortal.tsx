@@ -225,14 +225,29 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     const bodyGroup = new THREE.Group();
     scene.add(bodyGroup);
 
+    // Glowing Anatomical Organ Micro-Beacon Nodes
+    const organMeshes: Record<string, THREE.Mesh> = {};
+
     const loader = new GLTFLoader();
     loader.load(
       '/models/human_body.glb',
       (gltf) => {
         const model = gltf.scene;
-        // Center and scale the anatomical model
-        model.scale.set(1.4, 1.4, 1.4);
-        model.position.set(0, -0.8, 0);
+        
+        // Auto-center and normalize bounding box
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        
+        // Target height ~3.6 units
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scaleFactor = 3.6 / (size.y || maxDim || 1);
+        model.scale.setScalar(scaleFactor);
+        
+        // Center model
+        model.position.x = -center.x * scaleFactor;
+        model.position.y = -center.y * scaleFactor + 0.6;
+        model.position.z = -center.z * scaleFactor;
 
         model.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
@@ -240,15 +255,11 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
             mesh.castShadow = true;
             mesh.receiveShadow = true;
 
-            // Apply high-end clinical physical material with subtle X-Ray transmission
-            mesh.material = new THREE.MeshPhysicalMaterial({
-              color: isDark ? 0x27272a : 0x94a3b8,
-              roughness: 0.35,
-              metalness: 0.15,
-              clearcoat: 0.4,
-              clearcoatRoughness: 0.2,
-              transparent: true,
-              opacity: isDark ? 0.85 : 0.9,
+            // Apply high-end clinical physical material with clean anatomical surface
+            mesh.material = new THREE.MeshStandardMaterial({
+              color: isDark ? 0x3f3f46 : 0xcbd5e1,
+              roughness: 0.4,
+              metalness: 0.1,
               wireframe: layer === 'skeletal'
             });
           }
@@ -262,49 +273,29 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
       }
     );
 
-    // Grid Floor
-    const gridHelper = new THREE.GridHelper(8, 20, isDark ? 0x27272a : 0xcbd5e1, isDark ? 0x18181b : 0xe2e8f0);
-    gridHelper.position.y = -1.5;
-    scene.add(gridHelper);
-
-    // 4. Glowing Anatomical Organ Nodes (Anchored to real anatomical coordinates)
-    const organMeshes: Record<string, THREE.Mesh> = {};
-
+    // Subtle Glowing Micro-Beacon Nodes (Point anchors for HUD pins)
     Object.values(ORGANS_CATALOG).flat().forEach(organ => {
-      let geo: THREE.BufferGeometry;
-      if (organ.id === 'thyroid') {
-        geo = new THREE.TorusGeometry(0.18, 0.08, 16, 24, Math.PI * 1.4);
-      } else if (organ.id === 'stomach') {
-        geo = new THREE.TorusGeometry(0.24, 0.12, 16, 24, Math.PI * 1.2);
-      } else if (organ.id === 'liver') {
-        geo = new THREE.ConeGeometry(0.38, 0.48, 16);
-      } else if (organ.id === 'heart') {
-        geo = new THREE.SphereGeometry(0.26, 20, 20);
-      } else if (organ.id === 'brain') {
-        geo = new THREE.SphereGeometry(0.34, 20, 20);
-      } else {
-        geo = new THREE.CapsuleGeometry(0.15, 0.24, 12, 16);
-      }
-
+      const geo = new THREE.SphereGeometry(0.04, 16, 16);
       const mat = new THREE.MeshStandardMaterial({
         color: new THREE.Color(organ.color),
         emissive: new THREE.Color(organ.color),
-        emissiveIntensity: organ.id === selectedOrgan.id ? 1.2 : 0.4,
-        roughness: 0.3,
-        metalness: 0.2
+        emissiveIntensity: organ.id === selectedOrgan.id ? 1.5 : 0.6,
+        roughness: 0.2,
+        metalness: 0.5
       });
 
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.set(...organ.position);
-      if (organ.id === 'thyroid') mesh.rotation.z = Math.PI * 0.8;
-      if (organ.id === 'stomach') mesh.rotation.z = Math.PI * 0.2;
-      if (organ.id === 'liver') mesh.rotation.z = -Math.PI * 0.35;
-
       bodyGroup.add(mesh);
       organMeshes[organ.id] = mesh;
     });
 
     organMeshesRef.current = organMeshes;
+
+    // Grid Floor
+    const gridHelper = new THREE.GridHelper(8, 20, isDark ? 0x27272a : 0xcbd5e1, isDark ? 0x18181b : 0xe2e8f0);
+    gridHelper.position.y = -1.5;
+    scene.add(gridHelper);
 
     // 5. Mouse Orbit Interaction
     let isDragging = false;
