@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { 
   RotateCcw, Layers, Flame, ChevronRight, X, 
   Stethoscope, ArrowRight
@@ -158,7 +159,6 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const torsoMeshRef = useRef<THREE.Mesh | null>(null);
   const organMeshesRef = useRef<Record<string, THREE.Mesh>>({});
   const targetCameraPos = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.8, 5.0));
   const targetLookAt = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.6, 0));
@@ -221,46 +221,53 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     bottomGlow.position.set(0, -2, 2);
     scene.add(bottomGlow);
 
-    // 3. Procedural Anatomical 3D Human Body Group
+    // 3. Load Real 3D Human Anatomy Model (.glb)
     const bodyGroup = new THREE.Group();
     scene.add(bodyGroup);
 
-    // Anatomical Torso Silhouette (Dynamic Regional X-Ray Material)
-    const torsoGeo = new THREE.CylinderGeometry(0.72, 0.58, 2.5, 24, 16);
-    const torsoMat = new THREE.MeshPhysicalMaterial({
-      color: isDark ? 0x18181b : 0xe2e8f0,
-      transparent: true,
-      opacity: isDark ? 0.35 : 0.45,
-      roughness: 0.2,
-      metalness: 0.1,
-      transmission: 0.65,
-      ior: 1.3,
-      wireframe: layer === 'skeletal'
-    });
-    const torso = new THREE.Mesh(torsoGeo, torsoMat);
-    torso.position.y = 0.5;
-    bodyGroup.add(torso);
-    torsoMeshRef.current = torso;
+    const loader = new GLTFLoader();
+    loader.load(
+      '/models/human_body.glb',
+      (gltf) => {
+        const model = gltf.scene;
+        // Center and scale the anatomical model
+        model.scale.set(1.4, 1.4, 1.4);
+        model.position.set(0, -0.8, 0);
 
-    // Anatomical Head Silhouette
-    const headGeo = new THREE.SphereGeometry(0.52, 24, 24);
-    const head = new THREE.Mesh(headGeo, torsoMat);
-    head.position.y = 2.15;
-    head.scale.set(0.85, 1.05, 0.95);
-    bodyGroup.add(head);
+        model.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
 
-    // Anatomical Neck
-    const neckGeo = new THREE.CylinderGeometry(0.32, 0.4, 0.55, 20);
-    const neck = new THREE.Mesh(neckGeo, torsoMat);
-    neck.position.y = 1.45;
-    bodyGroup.add(neck);
+            // Apply high-end clinical physical material with subtle X-Ray transmission
+            mesh.material = new THREE.MeshPhysicalMaterial({
+              color: isDark ? 0x27272a : 0x94a3b8,
+              roughness: 0.35,
+              metalness: 0.15,
+              clearcoat: 0.4,
+              clearcoatRoughness: 0.2,
+              transparent: true,
+              opacity: isDark ? 0.85 : 0.9,
+              wireframe: layer === 'skeletal'
+            });
+          }
+        });
+
+        bodyGroup.add(model);
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading human_body.glb:', error);
+      }
+    );
 
     // Grid Floor
     const gridHelper = new THREE.GridHelper(8, 20, isDark ? 0x27272a : 0xcbd5e1, isDark ? 0x18181b : 0xe2e8f0);
     gridHelper.position.y = -1.5;
     scene.add(gridHelper);
 
-    // 4. Glowing Anatomical Organ Meshes
+    // 4. Glowing Anatomical Organ Nodes (Anchored to real anatomical coordinates)
     const organMeshes: Record<string, THREE.Mesh> = {};
 
     Object.values(ORGANS_CATALOG).flat().forEach(organ => {
