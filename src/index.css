@@ -7,12 +7,18 @@
   }
 }
 
-:root.light-theme {
+:root.light-theme,
+:root.light-theme body {
   color-scheme: light;
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
-:root.dark-theme {
+:root.dark-theme,
+:root.dark-theme body {
   color-scheme: dark;
+  background-color: #020617;
+  color: #f8fafc;
 }
 
 /* Custom scrollbars */

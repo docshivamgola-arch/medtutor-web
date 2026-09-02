@@ -99,7 +99,7 @@ export default function App() {
 
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
-      isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
+      isDark ? 'bg-slate-950 text-slate-100' : 'bg-[#f8fafc] text-slate-900'
     }`}>
       {/* ── Command Palette (Ctrl+K) ── */}
       <CommandPalette 
@@ -110,7 +110,7 @@ export default function App() {
       />
 
       {/* ── Top Header Navigation ── */}
-      <header className={`sticky top-0 z-40 backdrop-blur-md border-b px-4 py-2.5 flex items-center justify-between transition-colors ${
+      <header className={`sticky top-0 z-40 backdrop-blur-md border-b px-4 py-2.5 flex items-center justify-between transition-colors duration-200 ${
         isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200 shadow-sm'
       }`}>
         <div className="flex items-center gap-3">
@@ -222,9 +222,11 @@ export default function App() {
         />
 
         {/* Center Column: Main Content Canvas */}
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <div className={`flex-1 flex flex-col overflow-y-auto transition-colors duration-200 ${
+          isDark ? 'bg-slate-950 text-slate-100' : 'bg-[#f8fafc] text-slate-900'
+        }`}>
           {/* Breadcrumb Status Bar */}
-          <div className={`border-b px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-30 backdrop-blur-md transition-colors ${
+          <div className={`border-b px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-30 backdrop-blur-md transition-colors duration-200 ${
             isDark ? 'bg-slate-900/40 border-slate-800/80 text-slate-400' : 'bg-slate-100/90 border-slate-200 text-slate-600 shadow-sm'
           }`}>
             <div className="flex items-center gap-2">
@@ -247,7 +249,9 @@ export default function App() {
             </div>
           </div>
 
-          <main className="flex-1 pb-24">
+          <main className={`flex-1 pb-24 transition-colors duration-200 ${
+            isDark ? 'bg-slate-950' : 'bg-[#f8fafc]'
+          }`}>
             {/* ROOM 1: VISUAL CINEMA (Modular Video Engine + Osmosis Synced Transcript) */}
             {activeTab === 'visual' && (
               <div className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -351,7 +355,7 @@ export default function App() {
                   />
 
                   {/* Dynamic Live Concept Card */}
-                  <div className={`border rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-colors ${
+                  <div className={`border rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-colors duration-200 ${
                     isDark ? 'bg-slate-900/70 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                   }`}>
                     <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
@@ -373,7 +377,7 @@ export default function App() {
                     <div className="grid grid-cols-1 gap-2 pt-1">
                       {selectedCut.highYieldBullets.map((bullet, idx) => (
                         <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
-                          isDark ? 'bg-slate-950/60 border-slate-800/80 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                          isDark ? 'bg-slate-950/60 border-slate-800/80 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-800 shadow-none'
                         }`}>
                           <CheckCircle className="w-3.5 h-3.5 text-teal-500 shrink-0 mt-0.5" />
                           <span>{bullet}</span>
@@ -383,7 +387,7 @@ export default function App() {
 
                     {selectedCut.mnemonic && (
                       <div className={`flex items-start gap-2 border rounded-lg p-3 text-xs ${
-                        isDark ? 'bg-indigo-950/40 border-indigo-800/50 text-indigo-200' : 'bg-indigo-50 border-indigo-200 text-indigo-900'
+                        isDark ? 'bg-indigo-950/40 border-indigo-800/50 text-indigo-200' : 'bg-indigo-50 border-indigo-200 text-indigo-950'
                       }`}>
                         <Lightbulb className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                         <div>
@@ -397,7 +401,7 @@ export default function App() {
 
                 {/* Right: 20-Cut Modular Beat Sheet Playlist */}
                 <div className="lg:col-span-4 flex flex-col gap-3">
-                  <div className={`flex items-center justify-between border rounded-xl p-3 ${
+                  <div className={`flex items-center justify-between border rounded-xl p-3 transition-colors ${
                     isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                   }`}>
                     <div>
@@ -481,7 +485,7 @@ export default function App() {
               <div className="flex items-start justify-center p-4 md:p-6 gap-6">
                 <div className="flex-1 max-w-5xl flex flex-col gap-6">
                   {/* Wiki Filter Header */}
-                  <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-xl ${
+                  <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-xl transition-colors duration-200 ${
                     isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                   }`}>
                     <div>
@@ -516,7 +520,7 @@ export default function App() {
 
                   {/* Section 1: Surgical Anatomy */}
                   {(wikiSubject === 'all' || wikiSubject === 'anatomy' || wikiSubject === 'surgery') && (
-                    <div id="sec-anatomy" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 ${
+                    <div id="sec-anatomy" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
                       isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                     }`}>
                       <div className="flex items-center gap-2 text-sky-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-slate-200 dark:border-slate-800">
@@ -526,7 +530,7 @@ export default function App() {
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-sky-600 dark:text-sky-300 text-sm">Superior Thyroid Artery (STA)</span>
                           <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
@@ -543,7 +547,7 @@ export default function App() {
                         </div>
 
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-rose-600 dark:text-rose-300 text-sm">Inferior Thyroid Artery (ITA)</span>
                           <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
@@ -562,7 +566,7 @@ export default function App() {
                       </div>
 
                       <div className={`p-3 rounded-lg border text-xs ${
-                        isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                        isDark ? 'bg-slate-950/60 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-800'
                       }`}>
                         <span>Midline congenital anomalies like Thyroglossal duct cysts require the{' '}</span>
                         <SmartCard conceptId="sistrunk" onNavigateToCut={handleNavigateToCut}>
@@ -575,7 +579,7 @@ export default function App() {
 
                   {/* Section 2: Thyroiditis Matrix */}
                   {(wikiSubject === 'all' || wikiSubject === 'patho') && (
-                    <div id="sec-thyroiditis" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 ${
+                    <div id="sec-thyroiditis" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
                       isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                     }`}>
                       <div className="flex items-center gap-2 text-amber-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-slate-200 dark:border-slate-800">
@@ -629,7 +633,7 @@ export default function App() {
 
                   {/* Section 3: Oncology Matrix */}
                   {(wikiSubject === 'all' || wikiSubject === 'patho' || wikiSubject === 'surgery') && (
-                    <div id="sec-oncology" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 ${
+                    <div id="sec-oncology" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
                       isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                     }`}>
                       <div className="flex items-center gap-2 text-rose-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-slate-200 dark:border-slate-800">
@@ -639,7 +643,7 @@ export default function App() {
 
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-teal-600 dark:text-teal-400 text-sm">Papillary Ca (~80%)</span>
                           <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
@@ -657,7 +661,7 @@ export default function App() {
                         </div>
 
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-amber-600 dark:text-amber-400 text-sm">Follicular Ca (~10%)</span>
                           <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>• <strong>Histology:</strong> Follicles with Capsular / Vascular invasion.</p>
@@ -672,7 +676,7 @@ export default function App() {
                         </div>
 
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-purple-600 dark:text-purple-400 text-sm">Medullary Ca (~5%)</span>
                           <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>• <strong>Histology:</strong> Amyloid stroma (Congo Red apple-green).</p>
@@ -686,7 +690,7 @@ export default function App() {
 
                   {/* Section 4: Pharmacology & Emergencies */}
                   {(wikiSubject === 'all' || wikiSubject === 'pharma' || wikiSubject === 'medicine') && (
-                    <div id="sec-pharma" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 ${
+                    <div id="sec-pharma" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
                       isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                     }`}>
                       <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm uppercase tracking-wider border-b pb-2 border-slate-200 dark:border-slate-800">
@@ -696,7 +700,7 @@ export default function App() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">Thioamide Pregnancy Algorithm</span>
                           <ul className={`space-y-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
@@ -727,7 +731,7 @@ export default function App() {
                         </div>
 
                         <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                         }`}>
                           <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">Thyroid Storm 4-Step Protocol</span>
                           <p className="text-slate-400 mb-1">
@@ -750,7 +754,7 @@ export default function App() {
 
                   {/* Section 5: Bethesda FNAC */}
                   {(wikiSubject === 'all' || wikiSubject === 'surgery') && (
-                    <div id="sec-bethesda" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 ${
+                    <div id="sec-bethesda" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
                       isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                     }`}>
                       <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-sm uppercase tracking-wider border-b pb-2 border-slate-200 dark:border-slate-800">
@@ -759,7 +763,7 @@ export default function App() {
                       </div>
                       
                       <div className={`p-4 rounded-lg border text-xs space-y-2 ${
-                        isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'
+                        isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-800'
                       }`}>
                         <p className={isDark ? 'text-slate-300' : 'text-slate-700'}>
                           Fine needle aspiration cytology is the primary diagnostic modality. Stratified using the{' '}
@@ -768,15 +772,15 @@ export default function App() {
                           </SmartCard>:
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                          <div className={`p-2.5 rounded border ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700'}`}>
+                          <div className={`p-2.5 rounded border ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}>
                             <strong className="text-emerald-600 dark:text-emerald-400 block">Bethesda II (Benign, 0-3% risk):</strong>
                             Observation with serial USG.
                           </div>
-                          <div className={`p-2.5 rounded border ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700'}`}>
+                          <div className={`p-2.5 rounded border ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}>
                             <strong className="text-amber-600 dark:text-amber-400 block">Bethesda IV (Follicular Neoplasm, 25-40%):</strong>
                             Diagnostic Hemithyroidectomy.
                           </div>
-                          <div className={`p-2.5 rounded border sm:col-span-2 ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700'}`}>
+                          <div className={`p-2.5 rounded border sm:col-span-2 ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}>
                             <strong className="text-rose-600 dark:text-rose-400 block">Bethesda VI (Malignant, 97-99% risk):</strong>
                             Total Thyroidectomy with central compartment dissection.
                           </div>
@@ -794,7 +798,7 @@ export default function App() {
             {/* ROOM 3: PYQ & ACTIVE RECALL MATRIX */}
             {activeTab === 'pyq' && (
               <div className="max-w-4xl mx-auto p-4 md:p-6 flex flex-col gap-6">
-                <div className={`flex items-center justify-between border p-4 rounded-xl ${
+                <div className={`flex items-center justify-between border p-4 rounded-xl transition-colors duration-200 ${
                   isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                 }`}>
                   <div>
@@ -818,7 +822,7 @@ export default function App() {
                     return (
                       <div 
                         key={q.id}
-                        className={`border rounded-xl p-5 flex flex-col gap-4 shadow-lg ${
+                        className={`border rounded-xl p-5 flex flex-col gap-4 shadow-lg transition-colors duration-200 ${
                           isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
                         }`}
                       >
@@ -840,17 +844,21 @@ export default function App() {
                           {q.options.map((opt, optIdx) => {
                             let btnStyle = isDark 
                               ? 'bg-slate-950 border-slate-800 hover:border-slate-700 text-slate-300'
-                              : 'bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-800';
+                              : 'bg-slate-50 border-slate-200 hover:bg-slate-100 hover:border-slate-300 text-slate-800 shadow-none';
                             
                             if (isAnswered) {
                               if (optIdx === q.correctIndex) {
-                                btnStyle = 'bg-emerald-950/70 border-emerald-500 text-emerald-200 font-semibold';
+                                btnStyle = isDark 
+                                  ? 'bg-emerald-950/70 border-emerald-500 text-emerald-200 font-semibold'
+                                  : 'bg-emerald-50 border-emerald-500 text-emerald-900 font-semibold shadow-sm';
                               } else if (userAnswer === optIdx) {
-                                btnStyle = 'bg-rose-950/70 border-rose-500 text-rose-200 line-through';
+                                btnStyle = isDark
+                                  ? 'bg-rose-950/70 border-rose-500 text-rose-200 line-through'
+                                  : 'bg-rose-50 border-rose-400 text-rose-900 line-through';
                               } else {
                                 btnStyle = isDark 
                                   ? 'bg-slate-950/40 border-slate-900 text-slate-600 opacity-60'
-                                  : 'bg-slate-100 border-slate-200 text-slate-400 opacity-60';
+                                  : 'bg-slate-100/50 border-slate-200 text-slate-400 opacity-60';
                               }
                             }
 
@@ -903,7 +911,7 @@ export default function App() {
       </div>
 
       {/* ── DaVinci-Style Bottom Workspace Switcher Dock ── */}
-      <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors ${
+      <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
         isDark ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-slate-200 shadow-lg'
       }`}>
         <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border shadow-2xl ${
@@ -940,7 +948,7 @@ export default function App() {
       {isPatronModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className={`border rounded-2xl max-w-md w-full p-6 relative shadow-2xl animate-in zoom-in-95 duration-150 ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
+            isDark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
           }`}>
             <button 
               onClick={() => setIsPatronModalOpen(false)}
@@ -1002,7 +1010,7 @@ export default function App() {
       {isCaseUploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className={`border rounded-2xl max-w-lg w-full p-6 relative shadow-2xl ${
-            isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
+            isDark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
           }`}>
             <button 
               onClick={() => {
