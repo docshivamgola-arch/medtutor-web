@@ -5,7 +5,7 @@ import {
   Search, ShieldCheck, Heart, Award, 
   Sparkles, Stethoscope, AlertTriangle, Lightbulb,
   UploadCloud, X, PanelLeftClose, PanelLeftOpen,
-  Sun, Moon
+  Sun, Moon, Box
 } from 'lucide-react';
 import { 
   THYROID_CUTS, 
@@ -18,12 +18,14 @@ import { SystemsSidebar } from './components/SystemsSidebar';
 import { TableOfContents } from './components/TableOfContents';
 import { RadiopaediaCaseViewer } from './components/RadiopaediaCaseViewer';
 import { OsmosisTranscript } from './components/OsmosisTranscript';
+import { Anatomy3DHero } from './components/Anatomy3DHero';
 import { useTheme } from './context/ThemeContext';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
 export default function App() {
   const { isDark, toggleTheme } = useTheme();
+  const [is3DPortalOpen, setIs3DPortalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('visual');
   const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -102,8 +104,8 @@ export default function App() {
       <CommandPalette 
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
-        onSelectCut={(cut) => setSelectedCut(cut)}
-        onSwitchTab={(tab) => setActiveTab(tab)}
+        onSelectCut={(cut) => { setSelectedCut(cut); setIs3DPortalOpen(false); }}
+        onSwitchTab={(tab) => { setActiveTab(tab); setIs3DPortalOpen(false); }}
       />
 
       {/* ── Top Header Navigation ── */}
@@ -121,12 +123,18 @@ export default function App() {
             {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
           </button>
 
-          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
+          <div 
+            onClick={() => setIs3DPortalOpen(false)}
+            className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm cursor-pointer"
+          >
             <Stethoscope className="w-4 h-4 text-white" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className={`font-extrabold text-base tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+              <span 
+                onClick={() => setIs3DPortalOpen(false)}
+                className={`font-extrabold text-base tracking-tight cursor-pointer ${isDark ? 'text-white' : 'text-zinc-900'}`}
+              >
                 MedTutor
               </span>
               <span className={`text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.2 rounded border hidden sm:inline ${
@@ -140,10 +148,24 @@ export default function App() {
 
         {/* Center & Right Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* 3D Body Portal Switcher */}
+          <button
+            onClick={() => setIs3DPortalOpen(!is3DPortalOpen)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm ${
+              is3DPortalOpen
+                ? 'bg-blue-600 text-white border-blue-500 shadow-md'
+                : isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
+            }`}
+            title="Toggle 3D Interactive Anatomical Body Portal"
+          >
+            <Box className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">3D Body Explorer</span>
+          </button>
+
           {/* Global Command Palette Trigger Bar */}
           <button
             onClick={() => setIsCommandPaletteOpen(true)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all shadow-inner w-36 sm:w-64 justify-between cursor-pointer ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all shadow-inner w-32 sm:w-60 justify-between cursor-pointer ${
               isDark 
                 ? 'bg-zinc-950/80 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border-zinc-800' 
                 : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-900 border-zinc-300'
@@ -208,738 +230,750 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── Main App Layout ── */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Column: Collapsible Systems Tree */}
-        <SystemsSidebar 
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          activeNodeId="thyroid"
-          onSelectNode={() => {}}
+      {/* ── 3D Body Portal Landing Screen ── */}
+      {is3DPortalOpen ? (
+        <Anatomy3DHero 
+          onEnterSystem={(_systemId) => {
+            setIs3DPortalOpen(false);
+          }}
+          onClose={() => setIs3DPortalOpen(false)}
         />
+      ) : (
+        /* ── Main App Layout (Vercel-Style 3-Column Architecture) ── */
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Column: Collapsible Systems Tree */}
+          <SystemsSidebar 
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+            activeNodeId="thyroid"
+            onSelectNode={() => {}}
+          />
 
-        {/* Center Column: Main Content Canvas */}
-        <div className={`flex-1 flex flex-col overflow-y-auto transition-colors duration-200 ${
-          isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#f8fafc] text-zinc-900'
-        }`}>
-          {/* Breadcrumb Status Bar */}
-          <div className={`border-b px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-30 backdrop-blur-md transition-colors duration-200 ${
-            isDark ? 'bg-zinc-900/60 border-zinc-800 text-zinc-400' : 'bg-zinc-100/90 border-zinc-200 text-zinc-600 shadow-sm'
+          {/* Center Column: Main Content Canvas */}
+          <div className={`flex-1 flex flex-col overflow-y-auto transition-colors duration-200 ${
+            isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#f8fafc] text-zinc-900'
           }`}>
-            <div className="flex items-center gap-2">
-              <span className="text-zinc-400">System:</span>
-              <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Endocrine System</span>
-              <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-              <span className={`font-semibold px-2 py-0.5 rounded border ${
-                isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
-              }`}>
-                Node: The Thyroid Gland
-              </span>
-              <span className="hidden md:inline text-zinc-400">• 20 Modular Cuts (16.5 min total)</span>
+            {/* Breadcrumb Status Bar */}
+            <div className={`border-b px-4 py-2 flex flex-wrap items-center justify-between text-xs sticky top-0 z-30 backdrop-blur-md transition-colors duration-200 ${
+              isDark ? 'bg-zinc-900/60 border-zinc-800 text-zinc-400' : 'bg-zinc-100/90 border-zinc-200 text-zinc-600 shadow-sm'
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className="text-zinc-400">System:</span>
+                <span className={`font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Endocrine System</span>
+                <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
+                <span className={`font-semibold px-2 py-0.5 rounded border ${
+                  isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
+                }`}>
+                  Node: The Thyroid Gland
+                </span>
+                <span className="hidden md:inline text-zinc-400">• 20 Modular Cuts (16.5 min total)</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="flex items-center gap-1 text-emerald-500 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5" /> 100% Peer-Verified & Free
+                </span>
+                <span className="text-zinc-400">|</span>
+                <span className="font-medium">CBME / NEET-PG Matrix</span>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-emerald-500 font-medium">
-                <ShieldCheck className="w-3.5 h-3.5" /> 100% Peer-Verified & Free
-              </span>
-              <span className="text-zinc-400">|</span>
-              <span className="font-medium">CBME / NEET-PG Matrix</span>
-            </div>
-          </div>
 
-          <main className={`flex-1 pb-24 transition-colors duration-200 ${
-            isDark ? 'bg-zinc-950' : 'bg-[#f8fafc]'
-          }`}>
-            {/* ROOM 1: VISUAL CINEMA */}
-            {activeTab === 'visual' && (
-              <div className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Left: Video Player Cinema & Interactive Callouts */}
-                <div className="lg:col-span-8 flex flex-col gap-4">
-                  <div className={`relative aspect-video rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between p-4 group ${
-                    isDark ? 'bg-black border-zinc-800' : 'bg-zinc-900 border-zinc-700 text-white'
-                  }`}>
-                    {/* Visual Simulation Canvas */}
-                    <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center p-6 text-center">
-                      <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-blue-500 shadow-inner">
-                        <Activity className="w-8 h-8 animate-pulse" />
+            <main className={`flex-1 pb-24 transition-colors duration-200 ${
+              isDark ? 'bg-zinc-950' : 'bg-[#f8fafc]'
+            }`}>
+              {/* ROOM 1: VISUAL CINEMA */}
+              {activeTab === 'visual' && (
+                <div className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  {/* Left: Video Player Cinema & Interactive Callouts */}
+                  <div className="lg:col-span-8 flex flex-col gap-4">
+                    <div className={`relative aspect-video rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between p-4 group ${
+                      isDark ? 'bg-black border-zinc-800' : 'bg-zinc-900 border-zinc-700 text-white'
+                    }`}>
+                      {/* Visual Simulation Canvas */}
+                      <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center p-6 text-center">
+                        <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-blue-500 shadow-inner">
+                          <Activity className="w-8 h-8 animate-pulse" />
+                        </div>
+                        <span className="text-xs uppercase tracking-widest text-blue-400 font-bold mb-1">
+                          {selectedCut.subject} • Cut {selectedCut.cutNumber} of {THYROID_CUTS.length}
+                        </span>
+                        <h2 className="text-xl sm:text-2xl font-black text-white max-w-xl">
+                          {selectedCut.title}
+                        </h2>
+                        <p className="text-xs sm:text-sm text-zinc-300 mt-2 max-w-md line-clamp-2">
+                          {selectedCut.visualSummary}
+                        </p>
                       </div>
-                      <span className="text-xs uppercase tracking-widest text-blue-400 font-bold mb-1">
-                        {selectedCut.subject} • Cut {selectedCut.cutNumber} of {THYROID_CUTS.length}
-                      </span>
-                      <h2 className="text-xl sm:text-2xl font-black text-white max-w-xl">
-                        {selectedCut.title}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-zinc-300 mt-2 max-w-md line-clamp-2">
-                        {selectedCut.visualSummary}
-                      </p>
-                    </div>
 
-                    {/* Video Top Controls */}
-                    <div className="relative z-10 flex items-center justify-between">
-                      <span className="text-[11px] font-mono font-bold bg-zinc-900 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60">
-                        {selectedCut.timecode}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        {(['1.0x', '1.25x', '1.5x', '2.0x'] as const).map(speed => (
-                          <button 
-                            key={speed}
-                            onClick={() => setPlaybackSpeed(speed)}
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
-                              playbackSpeed === speed 
+                      {/* Video Top Controls */}
+                      <div className="relative z-10 flex items-center justify-between">
+                        <span className="text-[11px] font-mono font-bold bg-zinc-900 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60">
+                          {selectedCut.timecode}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {(['1.0x', '1.25x', '1.5x', '2.0x'] as const).map(speed => (
+                            <button 
+                              key={speed}
+                              onClick={() => setPlaybackSpeed(speed)}
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded transition-all cursor-pointer ${
+                                playbackSpeed === speed 
                                 ? 'bg-blue-600 text-white shadow-sm' 
                                 : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'
+                              }`}
+                            >
+                              {speed}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Video Bottom Playback Bar */}
+                      <div className="relative z-10 flex flex-col gap-2">
+                        <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden cursor-pointer">
+                          <div 
+                            className="h-full bg-blue-600 transition-all duration-300"
+                            style={{ width: `${(selectedCut.cutNumber / THYROID_CUTS.length) * 100}%` }}
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="flex items-center gap-3">
+                            <button 
+                              onClick={() => {
+                                const prevIdx = Math.max(0, selectedCut.cutNumber - 2);
+                                setSelectedCut(THYROID_CUTS[prevIdx]);
+                              }}
+                              className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                              title="Previous Cut"
+                            >
+                              <Rewind className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => setIsPlaying(!isPlaying)}
+                              className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center font-bold transition-transform active:scale-95 shadow-sm cursor-pointer"
+                            >
+                              {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
+                            </button>
+                            <button 
+                              onClick={() => {
+                                const nextIdx = Math.min(THYROID_CUTS.length - 1, selectedCut.cutNumber);
+                                setSelectedCut(THYROID_CUTS[nextIdx]);
+                              }}
+                              className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                              title="Next Cut"
+                            >
+                              <FastForward className="w-4 h-4" />
+                            </button>
+                            <span className="text-xs text-zinc-400 font-mono">
+                              {isPlaying ? 'Playing Modular Stream...' : 'Paused'}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] text-zinc-400 font-medium">Modular Beat {selectedCut.cutNumber}/{THYROID_CUTS.length}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Osmosis-Style Synchronized Interactive Transcript */}
+                    <OsmosisTranscript 
+                      currentCut={selectedCut}
+                      allCuts={THYROID_CUTS}
+                      onSelectCut={(c) => setSelectedCut(c)}
+                    />
+
+                    {/* Dynamic Live Concept Card */}
+                    <div className={`border rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-colors duration-200 ${
+                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                    }`}>
+                      <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-blue-500" />
+                          <h3 className={`text-sm font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                            Live High-Yield Micro-Card ({selectedCut.subject})
+                          </h3>
+                        </div>
+                        <span className="text-[11px] text-zinc-400 font-mono">
+                          Node Ref: #{selectedCut.id}
+                        </span>
+                      </div>
+
+                      <p className={`text-sm leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                        {selectedCut.coreConcept}
+                      </p>
+
+                      <div className="grid grid-cols-1 gap-2 pt-1">
+                        {selectedCut.highYieldBullets.map((bullet, idx) => (
+                          <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
+                            isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <CheckCircle className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                            <span>{bullet}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {selectedCut.mnemonic && (
+                        <div className={`flex items-start gap-2 border rounded-lg p-3 text-xs ${
+                          isDark ? 'bg-amber-950/20 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
+                        }`}>
+                          <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold uppercase tracking-wider text-amber-500 block mb-0.5">High-Yield Mnemonic</span>
+                            <span>{selectedCut.mnemonic}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right: 20-Cut Modular Beat Sheet Playlist */}
+                  <div className="lg:col-span-4 flex flex-col gap-3">
+                    <div className={`flex items-center justify-between border rounded-xl p-3 transition-colors ${
+                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                    }`}>
+                      <div>
+                        <h4 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Modular Cut Sequence</h4>
+                        <p className="text-[11px] text-zinc-400">20 Independent Cuts (19 Subjects)</p>
+                      </div>
+                      <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
+                        isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
+                      }`}>
+                        {filteredCuts.length} Cuts
+                      </span>
+                    </div>
+
+                    {/* Subject Filter Pills */}
+                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10px]">
+                      {['All', 'Anatomy', 'Physiology', 'Biochemistry', 'Pathology', 'Pharmacology', 'Medicine', 'Surgery'].map(subj => (
+                        <button
+                          key={subj}
+                          onClick={() => setActiveSubjectFilter(subj)}
+                          className={`px-2.5 py-1 rounded-md font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                            activeSubjectFilter === subj 
+                              ? 'bg-blue-600 text-white shadow-sm'
+                              : isDark ? 'bg-zinc-900 text-zinc-400 hover:text-zinc-200' : 'bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900'
+                          }`}
+                        >
+                          {subj}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Cut List */}
+                    <div className="flex flex-col gap-2 max-h-[640px] overflow-y-auto pr-1">
+                      {filteredCuts.map((cut) => {
+                        const isSelected = selectedCut.id === cut.id;
+                        return (
+                          <button
+                            key={cut.id}
+                            onClick={() => setSelectedCut(cut)}
+                            className={`text-left p-3 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
+                              isSelected 
+                                ? isDark
+                                  ? 'bg-zinc-900 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
+                                  : 'bg-blue-50 border-blue-500 shadow-sm ring-1 ring-blue-400/40'
+                                : isDark
+                                  ? 'bg-zinc-950 border-zinc-800 hover:bg-zinc-900 hover:border-zinc-700'
+                                  : 'bg-white border-zinc-200 hover:bg-zinc-50 hover:border-zinc-300 shadow-sm'
                             }`}
                           >
-                            {speed}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span 
+                                  className="w-2 h-2 rounded-full" 
+                                  style={{ backgroundColor: cut.subjectColor }}
+                                />
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                                  {cut.subject}
+                                </span>
+                              </div>
+                              <span className="text-[10px] font-mono text-zinc-400">
+                                {cut.timecode}
+                              </span>
+                            </div>
+                            <span className={`text-xs font-bold line-clamp-1 ${
+                              isSelected ? isDark ? 'text-blue-400' : 'text-blue-950' : isDark ? 'text-zinc-200' : 'text-zinc-800'
+                            }`}>
+                              Cut {cut.cutNumber}. {cut.title}
+                            </span>
+                            <p className="text-[11px] text-zinc-400 line-clamp-1">
+                              {cut.coreConcept}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ROOM 2: INTEGRATED WIKI */}
+              {activeTab === 'wiki' && (
+                <div className="flex items-start justify-center p-4 md:p-6 gap-6">
+                  <div className="flex-1 max-w-5xl flex flex-col gap-6">
+                    {/* Wiki Filter Header */}
+                    <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-xl transition-colors duration-200 ${
+                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                    }`}>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                            Integrated Knowledge Matrix: The Thyroid Gland
+                          </h2>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                            isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'
+                          }`}>
+                            Amboss Smart Cards Active
+                          </span>
+                        </div>
+                        <p className="text-xs text-zinc-400 mt-0.5">Hover or click any dotted-underline buzzword to open instant high-yield micro-cards.</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {(['all', 'anatomy', 'biochem', 'patho', 'pharma', 'medicine', 'surgery'] as const).map(sub => (
+                          <button
+                            key={sub}
+                            onClick={() => setWikiSubject(sub)}
+                            className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                              wikiSubject === sub 
+                                ? 'bg-blue-600 text-white shadow-sm' 
+                                : isDark ? 'bg-zinc-800 text-zinc-400 hover:text-zinc-200' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                            }`}
+                          >
+                            {sub}
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Video Bottom Playback Bar */}
-                    <div className="relative z-10 flex flex-col gap-2">
-                      <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden cursor-pointer">
-                        <div 
-                          className="h-full bg-blue-600 transition-all duration-300"
-                          style={{ width: `${(selectedCut.cutNumber / THYROID_CUTS.length) * 100}%` }}
-                        />
-                      </div>
+                    {/* Section 1: Surgical Anatomy */}
+                    {(wikiSubject === 'all' || wikiSubject === 'anatomy' || wikiSubject === 'surgery') && (
+                      <div id="sec-anatomy" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
+                        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                      }`}>
+                        <div className="flex items-center gap-2 text-sky-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
+                          <Layers className="w-4 h-4" />
+                          <span>1. Surgical Anatomy & Nerve Safety Rules</span>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-sky-500 text-sm">Superior Thyroid Artery (STA)</span>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                              Arises as the 1st anterior branch of the <strong>External Carotid Artery</strong>. Closely accompanied by the{' '}
+                              <SmartCard conceptId="ebsln" onNavigateToCut={handleNavigateToCut}>
+                                External Branch of the Superior Laryngeal Nerve (EBSLN)
+                              </SmartCard>.
+                            </p>
+                            <div className={`p-2.5 rounded font-medium border ${
+                              isDark ? 'bg-sky-950/40 border-sky-800/40 text-sky-200' : 'bg-sky-50 border-sky-200 text-sky-900'
+                            }`}>
+                              ⚠️ <strong>Golden Rule:</strong> Must be ligated <u>AS CLOSE AS POSSIBLE</u> to the upper pole of the gland to spare EBSLN (cricothyroid tensor).
+                            </div>
+                          </div>
 
-                      <div className="flex items-center justify-between pt-1">
-                        <div className="flex items-center gap-3">
-                          <button 
-                            onClick={() => {
-                              const prevIdx = Math.max(0, selectedCut.cutNumber - 2);
-                              setSelectedCut(THYROID_CUTS[prevIdx]);
-                            }}
-                            className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                            title="Previous Cut"
-                          >
-                            <Rewind className="w-4 h-4" />
-                          </button>
-                          <button 
-                            onClick={() => setIsPlaying(!isPlaying)}
-                            className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center font-bold transition-transform active:scale-95 shadow-sm cursor-pointer"
-                          >
-                            {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
-                          </button>
-                          <button 
-                            onClick={() => {
-                              const nextIdx = Math.min(THYROID_CUTS.length - 1, selectedCut.cutNumber);
-                              setSelectedCut(THYROID_CUTS[nextIdx]);
-                            }}
-                            className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                            title="Next Cut"
-                          >
-                            <FastForward className="w-4 h-4" />
-                          </button>
-                          <span className="text-xs text-zinc-400 font-mono">
-                            {isPlaying ? 'Playing Modular Stream...' : 'Paused'}
-                          </span>
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-rose-500 text-sm">Inferior Thyroid Artery (ITA)</span>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                              Arises from the <strong>Thyrocervical Trunk</strong> (Subclavian Artery). Crosses the branches of the{' '}
+                              <SmartCard conceptId="rln" onNavigateToCut={handleNavigateToCut}>
+                                Recurrent Laryngeal Nerve (RLN)
+                              </SmartCard>{' '}
+                              near the lower pole.
+                            </p>
+                            <div className={`p-2.5 rounded font-medium border ${
+                              isDark ? 'bg-rose-950/40 border-rose-800/40 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'
+                            }`}>
+                              ⚠️ <strong>Golden Rule:</strong> Must be ligated <u>FAR AWAY FROM THE GLAND</u> (at the trunk) to spare RLN (vocal cords).
+                            </div>
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-zinc-400 font-medium">Modular Beat {selectedCut.cutNumber}/{THYROID_CUTS.length}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Osmosis-Style Synchronized Interactive Transcript */}
-                  <OsmosisTranscript 
-                    currentCut={selectedCut}
-                    allCuts={THYROID_CUTS}
-                    onSelectCut={(c) => setSelectedCut(c)}
-                  />
-
-                  {/* Dynamic Live Concept Card */}
-                  <div className={`border rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-colors duration-200 ${
-                    isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                  }`}>
-                    <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-blue-500" />
-                        <h3 className={`text-sm font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
-                          Live High-Yield Micro-Card ({selectedCut.subject})
-                        </h3>
-                      </div>
-                      <span className="text-[11px] text-zinc-400 font-mono">
-                        Node Ref: #{selectedCut.id}
-                      </span>
-                    </div>
-
-                    <p className={`text-sm leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                      {selectedCut.coreConcept}
-                    </p>
-
-                    <div className="grid grid-cols-1 gap-2 pt-1">
-                      {selectedCut.highYieldBullets.map((bullet, idx) => (
-                        <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
+                        <div className={`p-3 rounded-lg border text-xs ${
                           isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                         }`}>
-                          <CheckCircle className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
-                          <span>{bullet}</span>
+                          <span>Midline congenital anomalies like Thyroglossal duct cysts require the{' '}</span>
+                          <SmartCard conceptId="sistrunk" onNavigateToCut={handleNavigateToCut}>
+                            Sistrunk Procedure
+                          </SmartCard>
+                          <span> to resect the cyst with the central body of the hyoid bone.</span>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    )}
 
-                    {selectedCut.mnemonic && (
-                      <div className={`flex items-start gap-2 border rounded-lg p-3 text-xs ${
-                        isDark ? 'bg-amber-950/20 border-amber-800/40 text-amber-200' : 'bg-amber-50 border-amber-200 text-amber-900'
+                    {/* Section 2: Thyroiditis Matrix */}
+                    {(wikiSubject === 'all' || wikiSubject === 'patho') && (
+                      <div id="sec-thyroiditis" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
+                        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
                       }`}>
-                        <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                        <div>
-                          <span className="font-bold uppercase tracking-wider text-amber-500 block mb-0.5">High-Yield Mnemonic</span>
-                          <span>{selectedCut.mnemonic}</span>
+                        <div className="flex items-center gap-2 text-amber-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
+                          <BookOpen className="w-4 h-4" />
+                          <span>2. High-Yield Comparison: Thyroiditis Subtypes</span>
+                        </div>
+
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left text-xs border-collapse">
+                            <thead>
+                              <tr className={`border-b text-zinc-400 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
+                                <th className="p-2.5 font-bold">Thyroiditis</th>
+                                <th className="p-2.5 font-bold">Etiology</th>
+                                <th className="p-2.5 font-bold">Histopathology</th>
+                                <th className="p-2.5 font-bold">Clinical & Lab Highlights</th>
+                                <th className="p-2.5 font-bold">Exam Trap</th>
+                              </tr>
+                            </thead>
+                            <tbody className={`divide-y ${isDark ? 'divide-zinc-800 text-zinc-300' : 'divide-zinc-200 text-zinc-700'}`}>
+                              <tr>
+                                <td className="p-2.5 font-bold text-blue-400">Hashimoto</td>
+                                <td className="p-2.5">Autoimmune (Anti-TPO, Anti-Tg, HLA-DR3/5)</td>
+                                <td className="p-2.5">
+                                  <SmartCard conceptId="hurthle-cells" onNavigateToCut={handleNavigateToCut}>
+                                    Hurthle (Askanazy) cells
+                                  </SmartCard>{' '}
+                                  with prominent germinal centers
+                                </td>
+                                <td className="p-2.5">Painless diffuse goiter; leading cause of hypothyroidism</td>
+                                <td className="p-2.5 text-amber-500 font-semibold">Risk of B-cell MALToma</td>
+                              </tr>
+                              <tr>
+                                <td className="p-2.5 font-bold text-blue-400">De Quervain's</td>
+                                <td className="p-2.5">Post-viral URI (Coxsackie, Adenovirus)</td>
+                                <td className="p-2.5">Multinucleated giant cells with non-caseating granulomas</td>
+                                <td className="p-2.5">Painful tender thyroid, very high ESR</td>
+                                <td className="p-2.5 text-amber-500 font-semibold">RAIU is suppressed (&lt; 2%)</td>
+                              </tr>
+                              <tr>
+                                <td className="p-2.5 font-bold text-blue-400">Riedel's</td>
+                                <td className="p-2.5">IgG4-Related Systemic Sclerosis</td>
+                                <td className="p-2.5">Dense fibrous replacement extending into neck structures</td>
+                                <td className="p-2.5">"Woody" rock-hard fixed thyroid in young females</td>
+                                <td className="p-2.5 text-amber-500 font-semibold">Mimics Anaplastic Carcinoma</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Section 3: Oncology Matrix */}
+                    {(wikiSubject === 'all' || wikiSubject === 'patho' || wikiSubject === 'surgery') && (
+                      <div id="sec-oncology" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
+                        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                      }`}>
+                        <div className="flex items-center gap-2 text-rose-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
+                          <Award className="w-4 h-4" />
+                          <span>3. The Thyroid Oncology Matrix</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-blue-400 text-sm">Papillary Ca (~80%)</span>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                              • <strong>Histology:</strong>{' '}
+                              <SmartCard conceptId="orphan-annie" onNavigateToCut={handleNavigateToCut}>
+                                Orphan Annie eye nuclei
+                              </SmartCard>,{' '}
+                              <SmartCard conceptId="psammoma-bodies" onNavigateToCut={handleNavigateToCut}>
+                                Psammoma bodies
+                              </SmartCard>, Nuclear grooves.
+                            </p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Genetics:</strong> BRAF V600E, RET/PTC.</p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Spread:</strong> Lymphatic to cervical nodes.</p>
+                            <span className="text-[11px] text-emerald-500 font-semibold">10-Year Survival &gt; 95%</span>
+                          </div>
+
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-amber-500 text-sm">Follicular Ca (~10%)</span>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Histology:</strong> Follicles with Capsular / Vascular invasion.</p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Genetics:</strong> RAS, PAX8-PPARgamma.</p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Spread:</strong> Hematogenous to Bone & Lungs.</p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                              • <strong>Triage:</strong> Classified under{' '}
+                              <SmartCard conceptId="bethesda" onNavigateToCut={handleNavigateToCut}>
+                                Bethesda IV (Follicular Neoplasm)
+                              </SmartCard>.
+                            </p>
+                          </div>
+
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-purple-400 text-sm">Medullary Ca (~5%)</span>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Histology:</strong> Amyloid stroma (Congo Red apple-green).</p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Origin:</strong> Parafollicular C-cells (Calcitonin+).</p>
+                            <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Genetics:</strong> RET mutation (MEN 2A & 2B).</p>
+                            <span className="text-[11px] text-purple-400 font-semibold">Screen family for RET</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Section 4: Pharmacology & Emergencies */}
+                    {(wikiSubject === 'all' || wikiSubject === 'pharma' || wikiSubject === 'medicine') && (
+                      <div id="sec-pharma" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
+                        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                      }`}>
+                        <div className="flex items-center gap-2 text-emerald-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
+                          <AlertTriangle className="w-4 h-4" />
+                          <span>4. Pharmacology, Autoregulation & Thyroid Storm</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-emerald-500 text-sm">Thioamide Pregnancy Algorithm</span>
+                            <ul className={`space-y-2 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                              <li>
+                                • <strong>1st Trimester:</strong>{' '}
+                                <SmartCard conceptId="ptu" onNavigateToCut={handleNavigateToCut}>
+                                  Propylthiouracil (PTU)
+                                </SmartCard>{' '}
+                                is the drug of choice.
+                              </li>
+                              <li>
+                                • <strong>2nd & 3rd Trimester:</strong> Switch to{' '}
+                                <SmartCard conceptId="methimazole" onNavigateToCut={handleNavigateToCut}>
+                                  Methimazole (MMI)
+                                </SmartCard>{' '}
+                                (prevents PTU hepatotoxicity).
+                              </li>
+                              <li>
+                                • <strong>Autoregulation:</strong> High iodide invokes the{' '}
+                                <SmartCard conceptId="wolff-chaikoff" onNavigateToCut={handleNavigateToCut}>
+                                  Wolff-Chaikoff effect
+                                </SmartCard>; autonomous goiters can trigger{' '}
+                                <SmartCard conceptId="jod-basedow" onNavigateToCut={handleNavigateToCut}>
+                                  Jod-Basedow hyperthyroidism
+                                </SmartCard>.
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
+                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                          }`}>
+                            <span className="font-bold text-emerald-500 text-sm">Thyroid Storm 4-Step Protocol</span>
+                            <p className="text-zinc-400 mb-1">
+                              Diagnosed when{' '}
+                              <SmartCard conceptId="burch-wartofsky" onNavigateToCut={handleNavigateToCut}>
+                                Burch-Wartofsky Score
+                              </SmartCard>{' '}
+                              &ge; 45:
+                            </p>
+                            <ol className={`space-y-1 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                              <li><strong>1. IV Beta-Blocker:</strong> Esmolol / Propranolol (blocks sympathetic surge).</li>
+                              <li><strong>2. High-Dose PTU:</strong> Blocks synthesis + peripheral 5'-deiodinase.</li>
+                              <li><strong>3. Iodine (Lugol's):</strong> <u>Given 1 hour AFTER PTU</u> (Wolff-Chaikoff).</li>
+                              <li><strong>4. IV Hydrocortisone:</strong> Adrenal support + blocks T4 to T3 conversion.</li>
+                            </ol>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Section 5: Bethesda FNAC */}
+                    {(wikiSubject === 'all' || wikiSubject === 'surgery') && (
+                      <div id="sec-bethesda" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
+                        isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
+                      }`}>
+                        <div className="flex items-center gap-2 text-purple-400 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
+                          <Layers className="w-4 h-4" />
+                          <span>5. Bethesda System for Thyroid Cytopathology</span>
+                        </div>
+                        
+                        <div className={`p-4 rounded-lg border text-xs space-y-2 ${
+                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
+                        }`}>
+                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Fine needle aspiration cytology is the primary diagnostic modality. Stratified using the{' '}
+                            <SmartCard conceptId="bethesda" onNavigateToCut={handleNavigateToCut}>
+                              Bethesda 6-Tier System
+                            </SmartCard>:
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                            <div className={`p-2.5 rounded border ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
+                              <strong className="text-emerald-500 block">Bethesda II (Benign, 0-3% risk):</strong>
+                              Observation with serial USG.
+                            </div>
+                            <div className={`p-2.5 rounded border ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
+                              <strong className="text-amber-500 block">Bethesda IV (Follicular Neoplasm, 25-40%):</strong>
+                              Diagnostic Hemithyroidectomy.
+                            </div>
+                            <div className={`p-2.5 rounded border sm:col-span-2 ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
+                              <strong className="text-rose-500 block">Bethesda VI (Malignant, 97-99% risk):</strong>
+                              Total Thyroidectomy with central compartment dissection.
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
-                </div>
 
-                {/* Right: 20-Cut Modular Beat Sheet Playlist */}
-                <div className="lg:col-span-4 flex flex-col gap-3">
-                  <div className={`flex items-center justify-between border rounded-xl p-3 transition-colors ${
+                  {/* Right Column: Sticky Table of Contents */}
+                  <TableOfContents />
+                </div>
+              )}
+
+              {/* ROOM 3: PYQ & ACTIVE RECALL MATRIX */}
+              {activeTab === 'pyq' && (
+                <div className="max-w-4xl mx-auto p-4 md:p-6 flex flex-col gap-6">
+                  <div className={`flex items-center justify-between border p-4 rounded-xl transition-colors duration-200 ${
                     isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
                   }`}>
                     <div>
-                      <h4 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>Modular Cut Sequence</h4>
-                      <p className="text-[11px] text-zinc-400">20 Independent Cuts (19 Subjects)</p>
+                      <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>NEET-PG & INI-CET Question Bank</h2>
+                      <p className="text-xs text-zinc-400">Interactive clinical vignettes mapped directly to this thyroid node with Smart Card explanations.</p>
                     </div>
-                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
-                      isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' : 'text-blue-700 bg-blue-50 border-blue-200'
-                    }`}>
-                      {filteredCuts.length} Cuts
-                    </span>
+                    <div className="text-right">
+                      <span className="text-xs text-zinc-400 block">Score</span>
+                      <span className="text-lg font-black text-blue-500 font-mono">
+                        {score} / {THYROID_PYQS.length}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Subject Filter Pills */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[10px]">
-                    {['All', 'Anatomy', 'Physiology', 'Biochemistry', 'Pathology', 'Pharmacology', 'Medicine', 'Surgery'].map(subj => (
-                      <button
-                        key={subj}
-                        onClick={() => setActiveSubjectFilter(subj)}
-                        className={`px-2.5 py-1 rounded-md font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                          activeSubjectFilter === subj 
-                            ? 'bg-blue-600 text-white shadow-sm'
-                            : isDark ? 'bg-zinc-900 text-zinc-400 hover:text-zinc-200' : 'bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900'
-                        }`}
-                      >
-                        {subj}
-                      </button>
-                    ))}
-                  </div>
+                  <div className="flex flex-col gap-6">
+                    {THYROID_PYQS.map((q, qIndex) => {
+                      const userAnswer = selectedAnswers[q.id];
+                      const isAnswered = userAnswer !== undefined;
+                      const isCorrect = isAnswered && userAnswer === q.correctIndex;
 
-                  {/* Cut List */}
-                  <div className="flex flex-col gap-2 max-h-[640px] overflow-y-auto pr-1">
-                    {filteredCuts.map((cut) => {
-                      const isSelected = selectedCut.id === cut.id;
                       return (
-                        <button
-                          key={cut.id}
-                          onClick={() => setSelectedCut(cut)}
-                          className={`text-left p-3 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
-                            isSelected 
-                              ? isDark
-                                ? 'bg-zinc-900 border-blue-500 shadow-sm ring-1 ring-blue-500/30'
-                                : 'bg-blue-50 border-blue-500 shadow-sm ring-1 ring-blue-400/40'
-                              : isDark
-                                ? 'bg-zinc-950 border-zinc-800 hover:bg-zinc-900 hover:border-zinc-700'
-                                : 'bg-white border-zinc-200 hover:bg-zinc-50 hover:border-zinc-300 shadow-sm'
+                        <div 
+                          key={q.id}
+                          className={`border rounded-xl p-5 flex flex-col gap-4 shadow-sm transition-colors duration-200 ${
+                            isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
                           }`}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <span 
-                                className="w-2 h-2 rounded-full" 
-                                style={{ backgroundColor: cut.subjectColor }}
-                              />
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-                                {cut.subject}
+                              <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                                {q.exam} {q.year}
                               </span>
+                              <span className="text-xs text-zinc-400">{q.subjectTag}</span>
                             </div>
-                            <span className="text-[10px] font-mono text-zinc-400">
-                              {cut.timecode}
-                            </span>
+                            <span className="text-xs font-mono text-zinc-400">Q{qIndex + 1}</span>
                           </div>
-                          <span className={`text-xs font-bold line-clamp-1 ${
-                            isSelected ? isDark ? 'text-blue-400' : 'text-blue-950' : isDark ? 'text-zinc-200' : 'text-zinc-800'
-                          }`}>
-                            Cut {cut.cutNumber}. {cut.title}
-                          </span>
-                          <p className="text-[11px] text-zinc-400 line-clamp-1">
-                            {cut.coreConcept}
+
+                          <p className={`text-sm font-medium leading-relaxed ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                            {q.question}
                           </p>
-                        </button>
+
+                          <div className="grid grid-cols-1 gap-2">
+                            {q.options.map((opt, optIdx) => {
+                              let btnStyle = isDark 
+                                ? 'bg-zinc-950 border-zinc-800 hover:border-zinc-700 text-zinc-300'
+                                : 'bg-zinc-50 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300 text-zinc-800 shadow-none';
+                              
+                              if (isAnswered) {
+                                if (optIdx === q.correctIndex) {
+                                  btnStyle = isDark 
+                                    ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-semibold'
+                                    : 'bg-emerald-50 border-emerald-500 text-emerald-900 font-semibold shadow-sm';
+                                } else if (userAnswer === optIdx) {
+                                  btnStyle = isDark
+                                    ? 'bg-rose-950/50 border-rose-500 text-rose-300 line-through'
+                                    : 'bg-rose-50 border-rose-400 text-rose-900 line-through';
+                                } else {
+                                  btnStyle = isDark 
+                                    ? 'bg-zinc-950 border-zinc-900 text-zinc-600 opacity-60'
+                                    : 'bg-zinc-100/50 border-zinc-200 text-zinc-400 opacity-60';
+                                }
+                              }
+
+                              return (
+                                <button
+                                  key={optIdx}
+                                  disabled={isAnswered}
+                                  onClick={() => handleSelectOption(q.id, optIdx, q.correctIndex)}
+                                  className={`text-left px-4 py-3 rounded-lg border text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer disabled:cursor-default ${btnStyle}`}
+                                >
+                                  <span>{String.fromCharCode(65 + optIdx)}. {opt}</span>
+                                  {isAnswered && optIdx === q.correctIndex && (
+                                    <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 ml-2" />
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {/* Explanation Box */}
+                          {showExplanations[q.id] && (
+                            <div className={`mt-2 p-4 rounded-lg border flex flex-col gap-2 text-xs animate-in fade-in duration-200 ${
+                              isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
+                            }`}>
+                              <div className="flex items-center gap-2">
+                                <span className={`font-bold ${isCorrect ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                  {isCorrect ? '✓ Correct Answer!' : '✕ Incorrect'}
+                                </span>
+                                <span className="text-zinc-400">•</span>
+                                <span className="text-blue-400 font-semibold">⚡ {q.buzzword}</span>
+                              </div>
+                              <p className={`leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                                {q.explanation}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* ROOM 2: INTEGRATED WIKI */}
-            {activeTab === 'wiki' && (
-              <div className="flex items-start justify-center p-4 md:p-6 gap-6">
-                <div className="flex-1 max-w-5xl flex flex-col gap-6">
-                  {/* Wiki Filter Header */}
-                  <div className={`flex flex-wrap items-center justify-between gap-3 border p-4 rounded-xl transition-colors duration-200 ${
-                    isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                  }`}>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                          Integrated Knowledge Matrix: The Thyroid Gland
-                        </h2>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                          isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'
-                        }`}>
-                          Amboss Smart Cards Active
-                        </span>
-                      </div>
-                      <p className="text-xs text-zinc-400 mt-0.5">Hover or click any dotted-underline buzzword to open instant high-yield micro-cards.</p>
-                    </div>
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {(['all', 'anatomy', 'biochem', 'patho', 'pharma', 'medicine', 'surgery'] as const).map(sub => (
-                        <button
-                          key={sub}
-                          onClick={() => setWikiSubject(sub)}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                            wikiSubject === sub 
-                              ? 'bg-blue-600 text-white shadow-sm' 
-                              : isDark ? 'bg-zinc-800 text-zinc-400 hover:text-zinc-200' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
-                          }`}
-                        >
-                          {sub}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Section 1: Surgical Anatomy */}
-                  {(wikiSubject === 'all' || wikiSubject === 'anatomy' || wikiSubject === 'surgery') && (
-                    <div id="sec-anatomy" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
-                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                    }`}>
-                      <div className="flex items-center gap-2 text-sky-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
-                        <Layers className="w-4 h-4" />
-                        <span>1. Surgical Anatomy & Nerve Safety Rules</span>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-sky-500 text-sm">Superior Thyroid Artery (STA)</span>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            Arises as the 1st anterior branch of the <strong>External Carotid Artery</strong>. Closely accompanied by the{' '}
-                            <SmartCard conceptId="ebsln" onNavigateToCut={handleNavigateToCut}>
-                              External Branch of the Superior Laryngeal Nerve (EBSLN)
-                            </SmartCard>.
-                          </p>
-                          <div className={`p-2.5 rounded font-medium border ${
-                            isDark ? 'bg-sky-950/40 border-sky-800/40 text-sky-200' : 'bg-sky-50 border-sky-200 text-sky-900'
-                          }`}>
-                            ⚠️ <strong>Golden Rule:</strong> Must be ligated <u>AS CLOSE AS POSSIBLE</u> to the upper pole of the gland to spare EBSLN (cricothyroid tensor).
-                          </div>
-                        </div>
-
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-rose-500 text-sm">Inferior Thyroid Artery (ITA)</span>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            Arises from the <strong>Thyrocervical Trunk</strong> (Subclavian Artery). Crosses the branches of the{' '}
-                            <SmartCard conceptId="rln" onNavigateToCut={handleNavigateToCut}>
-                              Recurrent Laryngeal Nerve (RLN)
-                            </SmartCard>{' '}
-                            near the lower pole.
-                          </p>
-                          <div className={`p-2.5 rounded font-medium border ${
-                            isDark ? 'bg-rose-950/40 border-rose-800/40 text-rose-200' : 'bg-rose-50 border-rose-200 text-rose-900'
-                          }`}>
-                            ⚠️ <strong>Golden Rule:</strong> Must be ligated <u>FAR AWAY FROM THE GLAND</u> (at the trunk) to spare RLN (vocal cords).
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className={`p-3 rounded-lg border text-xs ${
-                        isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                      }`}>
-                        <span>Midline congenital anomalies like Thyroglossal duct cysts require the{' '}</span>
-                        <SmartCard conceptId="sistrunk" onNavigateToCut={handleNavigateToCut}>
-                          Sistrunk Procedure
-                        </SmartCard>
-                        <span> to resect the cyst with the central body of the hyoid bone.</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Section 2: Thyroiditis Matrix */}
-                  {(wikiSubject === 'all' || wikiSubject === 'patho') && (
-                    <div id="sec-thyroiditis" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
-                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                    }`}>
-                      <div className="flex items-center gap-2 text-amber-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
-                        <BookOpen className="w-4 h-4" />
-                        <span>2. High-Yield Comparison: Thyroiditis Subtypes</span>
-                      </div>
-
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left text-xs border-collapse">
-                          <thead>
-                            <tr className={`border-b text-zinc-400 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-                              <th className="p-2.5 font-bold">Thyroiditis</th>
-                              <th className="p-2.5 font-bold">Etiology</th>
-                              <th className="p-2.5 font-bold">Histopathology</th>
-                              <th className="p-2.5 font-bold">Clinical & Lab Highlights</th>
-                              <th className="p-2.5 font-bold">Exam Trap</th>
-                            </tr>
-                          </thead>
-                          <tbody className={`divide-y ${isDark ? 'divide-zinc-800 text-zinc-300' : 'divide-zinc-200 text-zinc-700'}`}>
-                            <tr>
-                              <td className="p-2.5 font-bold text-blue-400">Hashimoto</td>
-                              <td className="p-2.5">Autoimmune (Anti-TPO, Anti-Tg, HLA-DR3/5)</td>
-                              <td className="p-2.5">
-                                <SmartCard conceptId="hurthle-cells" onNavigateToCut={handleNavigateToCut}>
-                                  Hurthle (Askanazy) cells
-                                </SmartCard>{' '}
-                                with prominent germinal centers
-                              </td>
-                              <td className="p-2.5">Painless diffuse goiter; leading cause of hypothyroidism</td>
-                              <td className="p-2.5 text-amber-500 font-semibold">Risk of B-cell MALToma</td>
-                            </tr>
-                            <tr>
-                              <td className="p-2.5 font-bold text-blue-400">De Quervain's</td>
-                              <td className="p-2.5">Post-viral URI (Coxsackie, Adenovirus)</td>
-                              <td className="p-2.5">Multinucleated giant cells with non-caseating granulomas</td>
-                              <td className="p-2.5">Painful tender thyroid, very high ESR</td>
-                              <td className="p-2.5 text-amber-500 font-semibold">RAIU is suppressed (&lt; 2%)</td>
-                            </tr>
-                            <tr>
-                              <td className="p-2.5 font-bold text-blue-400">Riedel's</td>
-                              <td className="p-2.5">IgG4-Related Systemic Sclerosis</td>
-                              <td className="p-2.5">Dense fibrous replacement extending into neck structures</td>
-                              <td className="p-2.5">"Woody" rock-hard fixed thyroid in young females</td>
-                              <td className="p-2.5 text-amber-500 font-semibold">Mimics Anaplastic Carcinoma</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Section 3: Oncology Matrix */}
-                  {(wikiSubject === 'all' || wikiSubject === 'patho' || wikiSubject === 'surgery') && (
-                    <div id="sec-oncology" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
-                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                    }`}>
-                      <div className="flex items-center gap-2 text-rose-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
-                        <Award className="w-4 h-4" />
-                        <span>3. The Thyroid Oncology Matrix</span>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-blue-400 text-sm">Papillary Ca (~80%)</span>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            • <strong>Histology:</strong>{' '}
-                            <SmartCard conceptId="orphan-annie" onNavigateToCut={handleNavigateToCut}>
-                              Orphan Annie eye nuclei
-                            </SmartCard>,{' '}
-                            <SmartCard conceptId="psammoma-bodies" onNavigateToCut={handleNavigateToCut}>
-                              Psammoma bodies
-                            </SmartCard>, Nuclear grooves.
-                          </p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Genetics:</strong> BRAF V600E, RET/PTC.</p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Spread:</strong> Lymphatic to cervical nodes.</p>
-                          <span className="text-[11px] text-emerald-500 font-semibold">10-Year Survival &gt; 95%</span>
-                        </div>
-
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-amber-500 text-sm">Follicular Ca (~10%)</span>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Histology:</strong> Follicles with Capsular / Vascular invasion.</p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Genetics:</strong> RAS, PAX8-PPARgamma.</p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Spread:</strong> Hematogenous to Bone & Lungs.</p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            • <strong>Triage:</strong> Classified under{' '}
-                            <SmartCard conceptId="bethesda" onNavigateToCut={handleNavigateToCut}>
-                              Bethesda IV (Follicular Neoplasm)
-                            </SmartCard>.
-                          </p>
-                        </div>
-
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-purple-400 text-sm">Medullary Ca (~5%)</span>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Histology:</strong> Amyloid stroma (Congo Red apple-green).</p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Origin:</strong> Parafollicular C-cells (Calcitonin+).</p>
-                          <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>• <strong>Genetics:</strong> RET mutation (MEN 2A & 2B).</p>
-                          <span className="text-[11px] text-purple-400 font-semibold">Screen family for RET</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Section 4: Pharmacology & Emergencies */}
-                  {(wikiSubject === 'all' || wikiSubject === 'pharma' || wikiSubject === 'medicine') && (
-                    <div id="sec-pharma" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
-                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                    }`}>
-                      <div className="flex items-center gap-2 text-emerald-500 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
-                        <AlertTriangle className="w-4 h-4" />
-                        <span>4. Pharmacology, Autoregulation & Thyroid Storm</span>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-emerald-500 text-sm">Thioamide Pregnancy Algorithm</span>
-                          <ul className={`space-y-2 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                            <li>
-                              • <strong>1st Trimester:</strong>{' '}
-                              <SmartCard conceptId="ptu" onNavigateToCut={handleNavigateToCut}>
-                                Propylthiouracil (PTU)
-                              </SmartCard>{' '}
-                              is the drug of choice.
-                            </li>
-                            <li>
-                              • <strong>2nd & 3rd Trimester:</strong> Switch to{' '}
-                              <SmartCard conceptId="methimazole" onNavigateToCut={handleNavigateToCut}>
-                                Methimazole (MMI)
-                              </SmartCard>{' '}
-                              (prevents PTU hepatotoxicity).
-                            </li>
-                            <li>
-                              • <strong>Autoregulation:</strong> High iodide invokes the{' '}
-                              <SmartCard conceptId="wolff-chaikoff" onNavigateToCut={handleNavigateToCut}>
-                                Wolff-Chaikoff effect
-                              </SmartCard>; autonomous goiters can trigger{' '}
-                              <SmartCard conceptId="jod-basedow" onNavigateToCut={handleNavigateToCut}>
-                                Jod-Basedow hyperthyroidism
-                              </SmartCard>.
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className={`p-4 rounded-lg border flex flex-col gap-2 ${
-                          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                        }`}>
-                          <span className="font-bold text-emerald-500 text-sm">Thyroid Storm 4-Step Protocol</span>
-                          <p className="text-zinc-400 mb-1">
-                            Diagnosed when{' '}
-                            <SmartCard conceptId="burch-wartofsky" onNavigateToCut={handleNavigateToCut}>
-                              Burch-Wartofsky Score
-                            </SmartCard>{' '}
-                            &ge; 45:
-                          </p>
-                          <ol className={`space-y-1 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                            <li><strong>1. IV Beta-Blocker:</strong> Esmolol / Propranolol (blocks sympathetic surge).</li>
-                            <li><strong>2. High-Dose PTU:</strong> Blocks synthesis + peripheral 5'-deiodinase.</li>
-                            <li><strong>3. Iodine (Lugol's):</strong> <u>Given 1 hour AFTER PTU</u> (Wolff-Chaikoff).</li>
-                            <li><strong>4. IV Hydrocortisone:</strong> Adrenal support + blocks T4 to T3 conversion.</li>
-                          </ol>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Section 5: Bethesda FNAC */}
-                  {(wikiSubject === 'all' || wikiSubject === 'surgery') && (
-                    <div id="sec-bethesda" className={`border rounded-xl p-5 flex flex-col gap-4 scroll-mt-20 transition-colors duration-200 ${
-                      isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                    }`}>
-                      <div className="flex items-center gap-2 text-purple-400 font-bold text-sm uppercase tracking-wider border-b pb-2 border-zinc-200 dark:border-zinc-800">
-                        <Layers className="w-4 h-4" />
-                        <span>5. Bethesda System for Thyroid Cytopathology</span>
-                      </div>
-                      
-                      <div className={`p-4 rounded-lg border text-xs space-y-2 ${
-                        isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
-                      }`}>
-                        <p className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                          Fine needle aspiration cytology is the primary diagnostic modality. Stratified using the{' '}
-                          <SmartCard conceptId="bethesda" onNavigateToCut={handleNavigateToCut}>
-                            Bethesda 6-Tier System
-                          </SmartCard>:
-                        </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                          <div className={`p-2.5 rounded border ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
-                            <strong className="text-emerald-500 block">Bethesda II (Benign, 0-3% risk):</strong>
-                            Observation with serial USG.
-                          </div>
-                          <div className={`p-2.5 rounded border ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
-                            <strong className="text-amber-500 block">Bethesda IV (Follicular Neoplasm, 25-40%):</strong>
-                            Diagnostic Hemithyroidectomy.
-                          </div>
-                          <div className={`p-2.5 rounded border sm:col-span-2 ${isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
-                            <strong className="text-rose-500 block">Bethesda VI (Malignant, 97-99% risk):</strong>
-                            Total Thyroidectomy with central compartment dissection.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Right Column: Sticky Table of Contents */}
-                <TableOfContents />
-              </div>
-            )}
-
-            {/* ROOM 3: PYQ & ACTIVE RECALL MATRIX */}
-            {activeTab === 'pyq' && (
-              <div className="max-w-4xl mx-auto p-4 md:p-6 flex flex-col gap-6">
-                <div className={`flex items-center justify-between border p-4 rounded-xl transition-colors duration-200 ${
-                  isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'
-                }`}>
-                  <div>
-                    <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>NEET-PG & INI-CET Question Bank</h2>
-                    <p className="text-xs text-zinc-400">Interactive clinical vignettes mapped directly to this thyroid node with Smart Card explanations.</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs text-zinc-400 block">Score</span>
-                    <span className="text-lg font-black text-blue-500 font-mono">
-                      {score} / {THYROID_PYQS.length}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-6">
-                  {THYROID_PYQS.map((q, qIndex) => {
-                    const userAnswer = selectedAnswers[q.id];
-                    const isAnswered = userAnswer !== undefined;
-                    const isCorrect = isAnswered && userAnswer === q.correctIndex;
-
-                    return (
-                      <div 
-                        key={q.id}
-                        className={`border rounded-xl p-5 flex flex-col gap-4 shadow-sm transition-colors duration-200 ${
-                          isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                              {q.exam} {q.year}
-                            </span>
-                            <span className="text-xs text-zinc-400">{q.subjectTag}</span>
-                          </div>
-                          <span className="text-xs font-mono text-zinc-400">Q{qIndex + 1}</span>
-                        </div>
-
-                        <p className={`text-sm font-medium leading-relaxed ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
-                          {q.question}
-                        </p>
-
-                        <div className="grid grid-cols-1 gap-2">
-                          {q.options.map((opt, optIdx) => {
-                            let btnStyle = isDark 
-                              ? 'bg-zinc-950 border-zinc-800 hover:border-zinc-700 text-zinc-300'
-                              : 'bg-zinc-50 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300 text-zinc-800 shadow-none';
-                            
-                            if (isAnswered) {
-                              if (optIdx === q.correctIndex) {
-                                btnStyle = isDark 
-                                  ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-semibold'
-                                  : 'bg-emerald-50 border-emerald-500 text-emerald-900 font-semibold shadow-sm';
-                              } else if (userAnswer === optIdx) {
-                                btnStyle = isDark
-                                  ? 'bg-rose-950/50 border-rose-500 text-rose-300 line-through'
-                                  : 'bg-rose-50 border-rose-400 text-rose-900 line-through';
-                              } else {
-                                btnStyle = isDark 
-                                  ? 'bg-zinc-950 border-zinc-900 text-zinc-600 opacity-60'
-                                  : 'bg-zinc-100/50 border-zinc-200 text-zinc-400 opacity-60';
-                              }
-                            }
-
-                            return (
-                              <button
-                                key={optIdx}
-                                disabled={isAnswered}
-                                onClick={() => handleSelectOption(q.id, optIdx, q.correctIndex)}
-                                className={`text-left px-4 py-3 rounded-lg border text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer disabled:cursor-default ${btnStyle}`}
-                              >
-                                <span>{String.fromCharCode(65 + optIdx)}. {opt}</span>
-                                {isAnswered && optIdx === q.correctIndex && (
-                                  <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 ml-2" />
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
-
-                        {/* Explanation Box */}
-                        {showExplanations[q.id] && (
-                          <div className={`mt-2 p-4 rounded-lg border flex flex-col gap-2 text-xs animate-in fade-in duration-200 ${
-                            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-50 border-zinc-200'
-                          }`}>
-                            <div className="flex items-center gap-2">
-                              <span className={`font-bold ${isCorrect ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                {isCorrect ? '✓ Correct Answer!' : '✕ Incorrect'}
-                              </span>
-                              <span className="text-zinc-400">•</span>
-                              <span className="text-blue-400 font-semibold">⚡ {q.buzzword}</span>
-                            </div>
-                            <p className={`leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                              {q.explanation}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* ROOM 4: RADIOPAEDIA-STYLE CLINICAL ATLAS */}
-            {activeTab === 'atlas' && (
-              <RadiopaediaCaseViewer onOpenUploadModal={() => setIsCaseUploadModalOpen(true)} />
-            )}
-          </main>
+              {/* ROOM 4: RADIOPAEDIA-STYLE CLINICAL ATLAS */}
+              {activeTab === 'atlas' && (
+                <RadiopaediaCaseViewer onOpenUploadModal={() => setIsCaseUploadModalOpen(true)} />
+              )}
+            </main>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Bottom Workspace Switcher Dock ── */}
-      <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
-        isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
-      }`}>
-        <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border ${
-          isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-300'
+      {!is3DPortalOpen && (
+        <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
+          isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
         }`}>
-          {[
-            { id: 'visual', label: '1. Visual Cinema', icon: Play, shortcut: 'Alt+1' },
-            { id: 'wiki', label: '2. Integrated Wiki', icon: BookOpen, shortcut: 'Alt+2' },
-            { id: 'pyq', label: '3. PYQ Matrix', icon: CheckCircle, shortcut: 'Alt+3' },
-            { id: 'atlas', label: '4. Clinical Atlas', icon: Layers, shortcut: 'Alt+4' },
-          ].map(tab => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as WorkspaceTab)}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  isActive 
-                    ? 'bg-blue-600 text-white shadow-sm' 
-                    : isDark ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.split('.')[1]}</span>
-              </button>
-            );
-          })}
-        </div>
-      </footer>
+          <div className={`flex items-center gap-1 sm:gap-2 p-1 rounded-xl border ${
+            isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-300'
+          }`}>
+            {[
+              { id: 'visual', label: '1. Visual Cinema', icon: Play, shortcut: 'Alt+1' },
+              { id: 'wiki', label: '2. Integrated Wiki', icon: BookOpen, shortcut: 'Alt+2' },
+              { id: 'pyq', label: '3. PYQ Matrix', icon: CheckCircle, shortcut: 'Alt+3' },
+              { id: 'atlas', label: '4. Clinical Atlas', icon: Layers, shortcut: 'Alt+4' },
+            ].map(tab => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as WorkspaceTab)}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    isActive 
+                      ? 'bg-blue-600 text-white shadow-sm' 
+                      : isDark ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.label.split('.')[1]}</span>
+                </button>
+              );
+            })}
+          </div>
+        </footer>
+      )}
 
       {/* ── MODAL 1: Community Support / Patron Pass (₹99) ── */}
       {isPatronModalOpen && (
