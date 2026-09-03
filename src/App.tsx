@@ -19,12 +19,15 @@ import { TableOfContents } from './components/TableOfContents';
 import { RadiopaediaCaseViewer } from './components/RadiopaediaCaseViewer';
 import { OsmosisTranscript } from './components/OsmosisTranscript';
 import { Cinematic3DBodyPortal } from './components/Cinematic3DBodyPortal';
+import { BodyNavigatorHome } from './components/BodyNavigatorHome';
+import { IntroOverlay } from './components/IntroOverlay';
 import { useTheme } from './context/ThemeContext';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
 export default function App() {
   const { isDark, toggleTheme } = useTheme();
+  const [isHomePage, setIsHomePage] = useState(true);
   const [is3DPortalOpen, setIs3DPortalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('visual');
   const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
@@ -99,10 +102,12 @@ export default function App() {
 
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${
-      isDark ? 'bg-zinc-950 text-zinc-100' : 'bg-[#f8fafc] text-zinc-900'
-    }`}>
+      isDark ? 'bg-zinc-950 text-zinc-100' : 'text-zinc-900'
+    }`} style={!isDark ? { background: 'var(--mist)' } : undefined}>
+      <IntroOverlay />
+
       {/* ── Command Palette (Ctrl+K) ── */}
-      <CommandPalette 
+      <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
         onSelectCut={(cut) => { setSelectedCut(cut); setIs3DPortalOpen(false); }}
@@ -125,7 +130,7 @@ export default function App() {
           </button>
 
           <div
-            onClick={() => setIs3DPortalOpen(false)}
+            onClick={() => { setIsHomePage(true); setIs3DPortalOpen(false); }}
             className="w-8 h-8 rounded-xl flex items-center justify-center shadow-sm cursor-pointer"
             style={{ background: 'transparent' }}
           >
@@ -138,7 +143,7 @@ export default function App() {
           <div>
             <div className="flex items-center gap-2">
               <span
-                onClick={() => setIs3DPortalOpen(false)}
+                onClick={() => { setIsHomePage(true); setIs3DPortalOpen(false); }}
                 className={`font-extrabold text-base tracking-tight cursor-pointer ${isDark ? 'text-white' : 'text-zinc-900'}`}
               >
                 Clinova
@@ -239,9 +244,14 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── 3D Cinematic Body Portal Landing View ── */}
-      {is3DPortalOpen ? (
-        <Cinematic3DBodyPortal 
+      {/* ── Homepage: Body Navigator ── */}
+      {isHomePage ? (
+        <BodyNavigatorHome onEnterDashboard={(_system) => {
+          setIsHomePage(false);
+          setIs3DPortalOpen(false);
+        }} />
+      ) : is3DPortalOpen ? (
+        <Cinematic3DBodyPortal
           onEnterSystemOrgan={(_systemId, _organId) => {
             setIs3DPortalOpen(false);
           }}
@@ -268,11 +278,11 @@ export default function App() {
             }`}>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setIs3DPortalOpen(true)}
+                  onClick={() => setIsHomePage(true)}
                   className={`flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition-all cursor-pointer ${
                     isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-700 border-zinc-300 shadow-sm'
                   }`}
-                  title="Zoom Out to 3D Full Body Explorer"
+                  title="Back to Body Navigator"
                 >
                   <Box className="w-3 h-3 text-blue-500" />
                   <span>🧍 Body Portal</span>
@@ -960,7 +970,7 @@ export default function App() {
     )}
 
       {/* ── Bottom Workspace Switcher Dock ── */}
-      {!is3DPortalOpen && (
+      {!is3DPortalOpen && !isHomePage && (
         <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
           isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
         }`}>

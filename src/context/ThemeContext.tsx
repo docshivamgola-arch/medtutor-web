@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('clinova-theme');
-    return (saved === 'nordic' ? 'nordic' : 'carbon') as Theme;
+    return (saved === 'carbon' ? 'carbon' : 'nordic') as Theme;
   });
 
   useEffect(() => {

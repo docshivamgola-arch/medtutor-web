@@ -1,5 +1,45 @@
 @import "tailwindcss";
 
+/* ── Clinova Design Tokens ── */
+:root {
+  --mist: #F2F6FB;
+  --surface: #FFFFFF;
+  --elevated: #EAF0F9;
+  --border: #D4E1EE;
+  --border-soft: #E8EFF8;
+  --navy: #123F63;
+  --navy-mid: #1E5580;
+  --teal: #36C7B7;
+  --teal-mid: #2BA898;
+  --teal-light: #E8F9F7;
+  --text: #1A3A52;
+  --muted: #5E82A0;
+  --light: #94B3CB;
+  --shadow: 0 2px 12px rgba(18,63,99,.08);
+  --shadow-md: 0 4px 24px rgba(18,63,99,.12);
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+
+:root.dark-theme {
+  --mist: #0C1B2A;
+  --surface: #0F2236;
+  --elevated: #162E46;
+  --border: #1E3D5C;
+  --border-soft: #1A3350;
+  --navy: #E0EEFA;
+  --navy-mid: #B8D4EA;
+  --text: #B8D4EA;
+  --muted: #6A93B0;
+  --light: #2E4D6A;
+  --teal-light: rgba(54,199,183,.08);
+  --shadow: 0 2px 12px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 24px rgba(0,0,0,.4);
+}
+
+@keyframes clv-bar-grow { to { width: 100%; } }
+@keyframes clv-fade-out { to { opacity: 0; transform: scale(.98); } }
+
 @layer base {
   body {
     @apply antialiased selection:bg-blue-600 selection:text-white font-sans transition-colors duration-200;
