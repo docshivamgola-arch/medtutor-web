@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { 
-  RotateCcw, Layers, Flame, ChevronRight, X, 
-  Stethoscope, ArrowRight
+  RotateCcw, Layers, Flame, ChevronRight, X, ArrowRight
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -513,12 +512,16 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
           style={{ perspective: 1000 }}
         >
           <div className="flex flex-col items-center gap-4 transition-all duration-700 ease-out transform translate-z-0 hover:scale-105">
-            <div className="w-20 h-20 rounded-2xl bg-blue-600 flex items-center justify-center shadow-2xl shadow-blue-500/20 border border-blue-400/30">
-              <Stethoscope className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-2xl border border-white/10" style={{ background: 'rgba(54,199,183,.15)' }}>
+              <svg width="52" height="52" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M22 8A10 10 0 1 0 22 24" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M15 16 L22 16" stroke="#36C7B7" strokeWidth="2.5" strokeLinecap="round"/>
+                <path d="M19 13 L22 16 L19 19" stroke="#36C7B7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
             <div>
               <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                MedTutor
+                Clinova
               </h1>
               <p className="text-xs uppercase tracking-widest font-mono text-zinc-400 mt-1">
                 19-Subject Medical Cinema & Active Recall

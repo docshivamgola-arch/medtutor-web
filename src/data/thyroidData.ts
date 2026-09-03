@@ -509,7 +509,7 @@ export const THYROID_CASES: ClinicalCase[] = [
     contributor: {
       name: 'Dr. Shivam Gola',
       role: 'Founding Lead & Medical Editor',
-      hospital: 'MedTutor Core Clinical Team',
+      hospital: 'Clinova Editorial Team',
       verified: true
     },
     upvotes: 42

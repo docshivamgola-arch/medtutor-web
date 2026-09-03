@@ -12,12 +12,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('medtutor-theme');
+    const saved = localStorage.getItem('clinova-theme');
     return (saved === 'nordic' ? 'nordic' : 'carbon') as Theme;
   });
 
   useEffect(() => {
-    localStorage.setItem('medtutor-theme', theme);
+    localStorage.setItem('clinova-theme', theme);
     if (theme === 'nordic') {
       document.documentElement.classList.add('light-theme');
       document.documentElement.classList.remove('dark-theme');

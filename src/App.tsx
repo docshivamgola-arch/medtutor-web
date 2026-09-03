@@ -2,8 +2,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { 
   Play, Pause, FastForward, Rewind, CheckCircle, 
   BookOpen, Layers, Activity, ChevronRight,
-  Search, ShieldCheck, Heart, Award, 
-  Sparkles, Stethoscope, AlertTriangle, Lightbulb,
+  Search, ShieldCheck, Heart, Award,
+  Sparkles, AlertTriangle, Lightbulb,
   UploadCloud, X, PanelLeftClose, PanelLeftOpen,
   Sun, Moon, Box
 } from 'lucide-react';
@@ -124,19 +124,24 @@ export default function App() {
             {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
           </button>
 
-          <div 
+          <div
             onClick={() => setIs3DPortalOpen(false)}
-            className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm cursor-pointer"
+            className="w-8 h-8 rounded-xl flex items-center justify-center shadow-sm cursor-pointer"
+            style={{ background: 'transparent' }}
           >
-            <Stethoscope className="w-4 h-4 text-white" />
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M22 8A10 10 0 1 0 22 24" stroke="#123F63" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M15 16 L22 16" stroke="#36C7B7" strokeWidth="2.5" strokeLinecap="round"/>
+              <path d="M19 13 L22 16 L19 19" stroke="#36C7B7" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span 
+              <span
                 onClick={() => setIs3DPortalOpen(false)}
                 className={`font-extrabold text-base tracking-tight cursor-pointer ${isDark ? 'text-white' : 'text-zinc-900'}`}
               >
-                MedTutor
+                Clinova
               </span>
               <span className={`text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.2 rounded border hidden sm:inline ${
                 isDark ? 'bg-zinc-800 text-zinc-300 border-zinc-700' : 'bg-zinc-100 text-zinc-700 border-zinc-300'
@@ -223,7 +228,10 @@ export default function App() {
 
           <button 
             onClick={() => setIsPatronModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
+            style={{ background: '#36C7B7' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#2BA898')}
+            onMouseLeave={e => (e.currentTarget.style.background = '#36C7B7')}
           >
             <Heart className="w-3.5 h-3.5 fill-current" />
             <span className="hidden sm:inline">Support (₹99)</span>
@@ -1006,7 +1014,7 @@ export default function App() {
 
             <h3 className={`text-xl font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>Keep Medical Education 100% Free</h3>
             <p className={`text-xs mt-2 leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>
-              MedTutor is an initiative to make integrated 19-subject MBBS and NEET-PG education free, visual, and accessible without expensive coaching paywalls.
+              Clinova is building integrated 19-subject MBBS and NEET-PG education that is free, visual, and accessible — no expensive coaching paywalls.
             </p>
 
             <div className={`p-4 rounded-xl border my-4 flex items-center justify-between ${
@@ -1036,12 +1044,15 @@ export default function App() {
               </li>
             </ul>
 
-            <button 
+            <button
               onClick={() => {
-                alert('Thank you for supporting MedTutor! Payment gateway simulation complete.');
+                alert('Thank you for supporting Clinova! Payment gateway simulation complete.');
                 setIsPatronModalOpen(false);
               }}
-              className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
+              className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
+              style={{ background: '#36C7B7' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#2BA898')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#36C7B7')}
             >
               Support with ₹99 via UPI / Card
             </button>
@@ -1127,7 +1138,10 @@ export default function App() {
 
                 <button 
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                  className="w-full py-2.5 rounded-xl text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                  style={{ background: '#36C7B7' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#2BA898')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#36C7B7')}
                 >
                   Submit Case to Editorial Review Queue
                 </button>
