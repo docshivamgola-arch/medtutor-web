@@ -15,7 +15,7 @@ interface Cinematic3DBodyPortalProps {
  * inside the Clinova app without re-implementing the viewer.
  */
 export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
-  onEnterSystemOrgan,
+  onEnterSystemOrgan: _onEnterSystemOrgan,
   onClose
 }) => {
   const { isDark } = useTheme();
