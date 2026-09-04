@@ -1147,6 +1147,82 @@ const ANATOMY_DATABASE = {
     func: "Thick muscular syncytium of striated cardiac myocytes driving left ventricular contractile ejection during systole.",
     landmarks: "Anterior left ventricular free wall, interventricular septum junction, subepicardial fat pad, epicardial coronary capillary bed.",
     clinical: "Ischemic territory at risk during LAD occlusion; collateral revascularization via CABG restores metabolic perfusion and salvages hibernating myocardium."
+  },
+
+  // ----------------------------------------------------------------------------
+  // PULMONARY MICRO-ANATOMY & ALVEOLAR GAS EXCHANGE (TA2 ENTRIES)
+  // ----------------------------------------------------------------------------
+  "Pulmo_Airway_TerminalBronchiole": {
+    ta2: "Bronchiolus terminalis (TA2: 3230)",
+    system: "System_Respiratory",
+    sysLabel: "Respiratory / Terminal Bronchiole (Conducting Airway)",
+    func: "Final segment of the conducting airway (<1 mm caliber); lined by simple ciliated columnar epithelium and non-ciliated Club cells (Clara cells); wrapped by spiraling smooth muscle rings without hyaline cartilage plates.",
+    landmarks: "Bronchiolar lumen, smooth muscle sphincter coat, Club cell secretory dome, bifurcation into respiratory bronchioles.",
+    clinical: "Target of intense smooth muscle bronchoconstriction in asthma (reversible airflow obstruction) and bronchiolitis obliterans."
+  },
+  "Pulmo_Airway_RespiratoryBronchiole": {
+    ta2: "Bronchiolus respiratorius (TA2: 3235)",
+    system: "System_Respiratory",
+    sysLabel: "Respiratory / Respiratory Bronchiole (Transitional Airway)",
+    func: "First site of microscopic gas exchange in the bronchial tree; exhibits transitional cuboidal epithelium with scattered single alveoli outpouching directly from its lateral walls.",
+    landmarks: "Transitional epithelial lining, scattered alveolar outpouchings, interstitial elastic fiber network.",
+    clinical: "Primary site of tissue destruction in Centriacinar (Centrilobular) Emphysema, predominantly affecting cigarette smokers and upper lung lobes."
+  },
+  "Pulmo_Airway_AlveolarDuct": {
+    ta2: "Ductus alveolaris (TA2: 3240)",
+    system: "System_Respiratory",
+    sysLabel: "Respiratory / Alveolar Duct & Sphincters",
+    func: "Elongated corridor completely surrounded by alveolar openings; contains spiraling smooth muscle bundles ('alveolar knobs') at the entrances of individual alveoli.",
+    landmarks: "Alveolar entrance rings, smooth muscle sphincteric knobs, terminal transition into alveolar sacs.",
+    clinical: "Smooth muscle tone regulates local ventilation-perfusion matching (V/Q ratio); susceptible to chronic inflammatory remodeling in COPD."
+  },
+  "Pulmo_Alveolus_HealthySac": {
+    ta2: "Sacculus alveolaris / Alveoli pulmonis (TA2: 3250)",
+    system: "System_Respiratory",
+    sysLabel: "Respiratory / Alveolar Sac & Collateral Pores",
+    func: "Polyhedral cluster of terminal functional gas-exchange units (~200 um diameter); provides ~70-100 m² of total surface area in healthy adult lungs; inter-alveolar septa feature Pores of Kohn for collateral airflow.",
+    landmarks: "Alveolar cluster dome, interalveolar septa, Pores of Kohn (8 um apertures), delicate reticular fiber basket.",
+    clinical: "Collateral ventilation via Pores of Kohn prevents atelectasis distal to obstructed bronchioles but also facilitates the intra-lobar spread of lobar pneumonia (Streptococcus pneumoniae)."
+  },
+  "Pulmo_Alveolus_CutawayLumen": {
+    ta2: "Septum interalveolare et Cavitas alveolaris (TA2: 3252)",
+    system: "System_Respiratory",
+    sysLabel: "Respiratory / Alveolar Lumen & Blood-Air Barrier",
+    func: "Anatomical 180° cross-section revealing the internal alveolar cavity and ultra-thin respiratory membrane (0.2-0.5 um) comprising alveolar epithelium, fused basal lamina, and capillary endothelium.",
+    landmarks: "Alveolar lumen, concave septal wall, fused basement membrane, endothelial interface.",
+    clinical: "Fick's law dictates rapid O2/CO2 diffusion across the 0.2-0.5 um barrier; pathologically thickened in pulmonary fibrosis, ARDS, and hydrostatic pulmonary edema."
+  },
+  "Pulmo_Cell_Pneumocyte_Type1": {
+    ta2: "Pneumocytus typus I / Epitheliocytus respiratorius (TA2: 3255)",
+    system: "System_Respiratory",
+    sysLabel: "Histology / Type I Alveolar Pneumocyte",
+    func: "Extremely attenuated squamous epithelial cells covering ~95% of the total alveolar surface area; cytoplasm stretched to 0.1-0.2 um thickness to minimize the diffusion distance for gas exchange.",
+    landmarks: "Attenuated cytoplasmic plates, central nuclear protrusion, tight junctions (zonulae occludentes).",
+    clinical: "Vulnerable to toxic, viral, and ischemic injury; unable to divide or self-replicate; damaged Type I cells must be replaced by proliferating and differentiating Type II pneumocytes."
+  },
+  "Pulmo_Cell_Pneumocyte_Type2": {
+    ta2: "Pneumocytus typus II / Epitheliocytus granulosus (TA2: 3260)",
+    system: "System_Respiratory",
+    sysLabel: "Histology / Type II Pneumocyte (Surfactant Factory)",
+    func: "Cuboidal secretory cells nestled in alveolar septal angles; synthesize and secrete pulmonary surfactant (dipalmitoylphosphatidylcholine - DPPC) stored in intracellular lamellar bodies; act as stem cell progenitors for Type I cells.",
+    landmarks: "Cuboidal cell body, apical microvilli, lamellar secretory bodies, alveolar macrophage (dust cell) neighbor.",
+    clinical: "Surfactant reduces surface tension (Laplace's Law: P=2T/r), preventing small alveoli from collapsing at end-expiration; deficiency causes Infant Respiratory Distress Syndrome (IRDS / Hyaline Membrane Disease) in premature infants."
+  },
+  "Pulmo_Capillary_Plexus_Diffusion": {
+    ta2: "Plexus capillaris alveolaris (TA2: 3265)",
+    system: "System_Cardiovascular",
+    sysLabel: "Microcirculation / Alveolar Capillary Plexus",
+    func: "Dense anastomosing vascular basket enveloping the alveolus like a continuous sheet of blood; receives deoxygenated blood from terminal pulmonary arterioles and returns fully oxygenated scarlet blood to pulmonary venules.",
+    landmarks: "Pulmonary arteriole inlet (deoxygenated), anastomotic capillary meshwork, pulmonary venule outlet (oxygenated).",
+    clinical: "Transit time through the capillary bed is ~0.75 seconds (reduced to 0.25s during heavy exercise); complete O2 equilibration occurs within the first 0.25s in healthy lungs, providing huge diffusion reserve."
+  },
+  "Pulmo_Pathology_Emphysema_Bullae": {
+    ta2: "Emphysema pulmonum panacinaris / bullosum (ICD-11: CA22 / Robbins Path)",
+    system: "System_Respiratory",
+    sysLabel: "Pathology / Emphysematous Bulla (COPD)",
+    func: "Permanent abnormal enlargement of respiratory airspaces distal to terminal bronchioles with extensive proteolytic destruction of interalveolar septa by neutrophil elastase (exceeding alpha-1 antitrypsin antiprotease defense).",
+    landmarks: "Confluent hyperinflated bullous airspace, necrotic septal stumps, destroyed capillary beds, loss of elastic tethering.",
+    clinical: "Marked reduction in alveolar diffusing capacity (DLCO), loss of elastic recoil causing expiratory air trapping, hyperinflation ('barrel chest'), and 'pink puffer' presentation in severe COPD."
   }
 };
 
@@ -1582,6 +1658,14 @@ function loadAnatomyModel(modelFileName = 'human_anatomy_commercial.glb') {
         controls.maxDistance = 1.0;
         controls.target.set(0.043, 0.005, 1.582);
         camera.position.set(0.043 + 0.045, 0.005 - 0.055, 1.582 + 0.035);
+        controls.update();
+      } else if (modelFileName === 'submodel_pulmonary_alveolus.glb') {
+        camera.near = 0.002;
+        camera.updateProjectionMatrix();
+        controls.minDistance = 0.01;
+        controls.maxDistance = 1.2;
+        controls.target.set(0.068, -0.033, 1.317);
+        camera.position.set(0.068 + 0.035, -0.033 - 0.125, 1.317 + 0.020);
         controls.update();
       } else {
         camera.near = 0.05;
