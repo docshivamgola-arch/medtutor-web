@@ -211,6 +211,7 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
     mountRef.current.appendChild(renderer.domElement);
@@ -252,6 +253,8 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
 
+        console.log('[Portal] GLB loaded. bbox size:', JSON.stringify({x: +size.x.toFixed(2), y: +size.y.toFixed(2), z: +size.z.toFixed(2)}), 'center:', JSON.stringify({x: +center.x.toFixed(2), y: +center.y.toFixed(2), z: +center.z.toFixed(2)}));
+
         const maxDim = Math.max(size.x, size.y, size.z);
         const scaleFactor = 3.4 / (size.y || maxDim || 1);
         model.scale.setScalar(scaleFactor);
@@ -260,11 +263,17 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
         model.position.y = -center.y * scaleFactor + 0.6;
         model.position.z = -center.z * scaleFactor;
 
+        console.log('[Portal] model scale:', +scaleFactor.toFixed(3), 'position after center:', JSON.stringify({x: +model.position.x.toFixed(2), y: +model.position.y.toFixed(2), z: +model.position.z.toFixed(2)}));
+
         model.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.castShadow = true;
             mesh.receiveShadow = true;
+            // Draco-decoded bounding spheres are sometimes computed before vertex data
+            // is ready, producing radius=0 spheres that fail frustum culling. Disable
+            // culling since the body is always within the camera's view.
+            mesh.frustumCulled = false;
 
             // Map and style organ meshes with vibrant PBR materials
             if (mesh.name.includes('Organ_Thyroid')) {
@@ -338,9 +347,20 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
                 depthWrite: false,
                 wireframe: layer === 'skeletal'
               });
+            } else {
+              // Catch-all for Muscle_* and any other unmatched meshes — warm anatomical flesh
+              mesh.material = new THREE.MeshStandardMaterial({
+                color: 0xc45c4a,
+                roughness: 0.65,
+                metalness: 0.05
+              });
             }
           }
         });
+
+        let meshCount = 0;
+        model.traverse(c => { if ((c as THREE.Mesh).isMesh) meshCount++; });
+        console.log('[Portal] Total meshes in model:', meshCount, '| organ meshes found:', Object.keys(organMeshes).join(', ') || 'none');
 
         bodyGroup.add(model);
         organMeshesRef.current = organMeshes;
