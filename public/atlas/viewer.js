@@ -1079,6 +1079,74 @@ const ANATOMY_DATABASE = {
     func: "Transmits tonotopically organized action potentials from organ of Corti spiral ganglion neurons to cochlear nuclei in rostral medulla / pontomedullary junction.",
     landmarks: "Internal acoustic meatus, Spiral ganglion of Corti, Cerebellopontine angle cistern.",
     clinical: "Vestibular schwannoma (acoustic neuroma) in cerebellopontine angle causing unilateral sensorineural hearing loss and tinnitus."
+  },
+
+  // ----------------------------------------------------------------------------
+  // CORONARY ATHEROSCLEROSIS, STENTING & CABG BYPASS (TA2 ENTRIES)
+  // ----------------------------------------------------------------------------
+  "Cardio_Coronary_LAD_Healthy": {
+    ta2: "Ramus interventricularis anterior arteriae coronariae sinistrae (TA2: 4005)",
+    system: "System_Cardiovascular",
+    sysLabel: "Cardiovascular / Left Anterior Descending Artery",
+    func: "Principal coronary conduit ('widow-maker artery') supplying ~50% of left ventricular myocardium, apex, and anterior 2/3 of interventricular septum.",
+    landmarks: "Anterior interventricular sulcus, diagonal branches (D1, D2), septal perforators, terminal apical loop.",
+    clinical: "Primary target of percutaneous coronary intervention (PCI); critical LAD stenosis causes anterior wall STEMI with high mortality."
+  },
+  "Cardio_Coronary_Plaque_Stenosis": {
+    ta2: "Atheroma arteriae coronariae (ICD-11: BA80 / Robbins Path)",
+    system: "System_Cardiovascular",
+    sysLabel: "Cardiovascular / Atherosclerotic Plaque (80% Stenosis)",
+    func: "Eccentric fibrofatty intimal lesion consisting of a soft lipid-rich necrotic core (cholesterol crystals, foam cells) covered by a fibrous collagen cap.",
+    landmarks: "Fibrous cap, necrotic lipid core, intraplaque neovascularization, calcification, critical 80% luminal area reduction.",
+    clinical: "Plaque rupture triggers platelet aggregation and acute luminal thrombosis, causing unstable angina or acute transmural myocardial infarction."
+  },
+  "Cardio_Coronary_Balloon_Angioplasty": {
+    ta2: "Angioplastia coronaria transluminalis percutanea (PTCA / MeSH: D015908)",
+    system: "System_Cardiovascular",
+    sysLabel: "Interventional Hardware / Semi-Compliant PTCA Balloon",
+    func: "Polyethylene terephthalate (PET) balloon inflated to 10-16 atmospheres to fracture rigid fibrocalcific plaque and expand the metallic stent scaffold.",
+    landmarks: "Tapered distal/proximal shoulders, radio-opaque gold marker bands, delivery catheter shaft (0.014-inch guidewire compatibility).",
+    clinical: "Balloon pre-dilatation restores initial channel; high-pressure post-dilatation ensures full stent apposition against arterial wall without edge dissection."
+  },
+  "Cardio_Coronary_Stent_CobaltChromium": {
+    ta2: "Prosthesis vascularis stent coronaria (MeSH: D054855 / Drug-Eluting Stent)",
+    system: "System_Cardiovascular",
+    sysLabel: "Interventional Hardware / Cobalt-Chromium DES Stent",
+    func: "Balloon-expandable metallic tubular scaffold with sinusoidal diamond struts (strut thickness ~80 um) eluting antiproliferative drugs (everolimus/zotarolimus).",
+    landmarks: "Sinusoidal strut crowns, flexible inter-ring connectors, durable fluoropolymer drug matrix, expanded diamond cellular architecture.",
+    clinical: "Prevents acute vessel recoil and reduces neointimal hyperplasia / in-stent restenosis to <5%; requires dual antiplatelet therapy (DAPT: aspirin + P2Y12 inhibitor)."
+  },
+  "Cardio_Bypass_LIMA_Graft": {
+    ta2: "Arteria thoracica interna sinistra - Insitio bypass (TA2: 4120 / CABG)",
+    system: "System_Cardiovascular",
+    sysLabel: "Surgical Reconstruction / LIMA-to-LAD In Situ Arterial Graft",
+    func: "Gold-standard pedicled arterial conduit mobilized from the left anterior chest wall and anastomosed end-to-side to LAD distal to stenosis.",
+    landmarks: "Subclavian origin, sternal pleural pedicle, bevelled graft heel, continuous 7-0 or 8-0 polypropylene running microvascular suture anastomosis.",
+    clinical: "Superior long-term patency (>90% at 10-15 years) due to active endothelial nitric oxide synthase (eNOS) production; resistant to atherosclerosis."
+  },
+  "Cardio_Bypass_Saphenous_Graft": {
+    ta2: "Vena saphena magna - Insitio aortocoronaria (TA2: 5210 / SVG CABG)",
+    system: "System_Cardiovascular",
+    sysLabel: "Surgical Reconstruction / Reverse Saphenous Vein Graft (SVG)",
+    func: "Free autologous venous conduit harvested from lower extremity, reversed (valvular orientation) to bypass ascending aorta directly to diagonal/circumflex branches.",
+    landmarks: "Aortic punch aortotomy hood, continuous 6-0 polypropylene proximal aortic anastomosis, distal coronary arteriotomy anastomosis.",
+    clinical: "Susceptible to accelerated vein graft atheroma and intimal hyperplasia (~50% occlusion at 10 years); antiplatelet and high-intensity statin therapy required."
+  },
+  "Cardio_Aorta_Root": {
+    ta2: "Radix aortae et Aorta ascendens (TA2: 3990)",
+    system: "System_Cardiovascular",
+    sysLabel: "Cardiovascular / Ascending Aorta Root",
+    func: "Primary systemic outflow vessel receiving oxygenated blood from left ventricle; provides ostial inflow to native coronaries and proximal CABG anastomoses.",
+    landmarks: "Sinuses of Valsalva, sinotubular junction, ascending aorta anterior wall, SVG aortic anastomosis site.",
+    clinical: "Site of partial-occlusion side-biting vascular clamp during proximal CABG anastomosis; ascending aortic dissection (Stanford type A)."
+  },
+  "Cardio_Myocardium_Bed": {
+    ta2: "Myocardium ventriculi sinistri (TA2: 3968)",
+    system: "System_Cardiovascular",
+    sysLabel: "Cardiovascular / Ventricular Myocardium",
+    func: "Thick muscular syncytium of striated cardiac myocytes driving left ventricular contractile ejection during systole.",
+    landmarks: "Anterior left ventricular free wall, interventricular septum junction, subepicardial fat pad, epicardial coronary capillary bed.",
+    clinical: "Ischemic territory at risk during LAD occlusion; collateral revascularization via CABG restores metabolic perfusion and salvages hibernating myocardium."
   }
 };
 
@@ -1499,7 +1567,15 @@ function loadAnatomyModel(modelFileName = 'human_anatomy_commercial.glb') {
       }
 
       // Camera auto-focus per submodel
-      if (modelFileName === 'submodel_auditory_apparatus.glb') {
+            if (modelFileName === 'submodel_coronary_stent_bypass.glb') {
+        camera.near = 0.005;
+        camera.updateProjectionMatrix();
+        controls.minDistance = 0.02;
+        controls.maxDistance = 1.5;
+        controls.target.set(0.038, -0.038, 1.268);
+        camera.position.set(0.038 + 0.045, -0.038 - 0.12, 1.268 + 0.020);
+        controls.update();
+      } else if (modelFileName === 'submodel_auditory_apparatus.glb') {
         camera.near = 0.002;
         camera.updateProjectionMatrix();
         controls.minDistance = 0.01;
