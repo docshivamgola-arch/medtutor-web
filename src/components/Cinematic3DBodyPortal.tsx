@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { 
   RotateCcw, Layers, Flame, ChevronRight, X, ArrowRight
 } from 'lucide-react';
@@ -161,6 +162,11 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
   const organMeshesRef = useRef<Record<string, THREE.Mesh>>({});
   const targetCameraPos = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.8, 5.0));
   const targetLookAt = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.6, 0));
+  // Refs to let animation loop read latest state without triggering 3D scene rebuild
+  const phaseRef = useRef(phase);
+  const activeSystemIdRef = useRef(activeSystemId);
+  const hoveredOrganRef = useRef(hoveredOrgan);
+  const selectedOrganRef = useRef(selectedOrgan);
 
   // Phase 1: Brand Splash Timer (0.75s) with Instant Skip Option
   useEffect(() => {
@@ -181,7 +187,13 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     };
   }, []);
 
-  // Three.js 3D Anatomical Living Body Scene Setup
+  // Keep animation-loop refs in sync with state (no 3D scene rebuild needed for these)
+  useEffect(() => { phaseRef.current = phase; }, [phase]);
+  useEffect(() => { activeSystemIdRef.current = activeSystemId; }, [activeSystemId]);
+  useEffect(() => { hoveredOrganRef.current = hoveredOrgan; }, [hoveredOrgan]);
+  useEffect(() => { selectedOrganRef.current = selectedOrgan; }, [selectedOrgan]);
+
+  // Three.js 3D Anatomical Living Body Scene Setup — only rebuilds when visual params change
   useEffect(() => {
     if (!mountRef.current) return;
 
@@ -226,9 +238,12 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
 
     const organMeshes: Record<string, THREE.Mesh> = {};
 
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/draco/');
     const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
     loader.load(
-      '/models/human_anatomy_pro.glb',
+      '/models/human_anatomy_commercial.glb',
       (gltf) => {
         const model = gltf.scene;
 
@@ -382,8 +397,8 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Ambient idle breathing oscillation
-      if (!isDragging && phase !== 'organ-zooming') {
+      // Ambient idle breathing oscillation — reads phase via ref to avoid scene rebuild
+      if (!isDragging && phaseRef.current !== 'organ-zooming') {
         bodyGroup.rotation.y = Math.sin(elapsedTime * 0.4) * 0.15;
         bodyGroup.position.y = Math.sin(elapsedTime * 1.2) * 0.04;
       }
@@ -393,19 +408,19 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
       currentLookAt.lerp(targetLookAt.current, 0.06);
       camera.lookAt(currentLookAt);
 
-      // Dynamic organ glow animation
-      const currentOrgans = ORGANS_CATALOG[activeSystemId] || [];
+      // Dynamic organ glow animation — reads activeSystemId via ref
+      const currentOrgans = ORGANS_CATALOG[activeSystemIdRef.current] || [];
       Object.keys(organMeshes).forEach(key => {
         const mesh = organMeshes[key];
         if (mesh && mesh.material && 'emissiveIntensity' in mesh.material) {
           const isBelongToActiveSystem = currentOrgans.some(o => o.id === key);
-          const isSelectedOrHovered = selectedOrgan.id === key || hoveredOrgan?.id === key;
+          const isSelectedOrHovered = selectedOrganRef.current.id === key || hoveredOrganRef.current?.id === key;
 
           let baseIntensity = 0.25;
           if (isBelongToActiveSystem) baseIntensity = 0.8;
           if (isSelectedOrHovered) baseIntensity = 1.5;
 
-          (mesh.material as THREE.MeshStandardMaterial).emissiveIntensity = 
+          (mesh.material as THREE.MeshStandardMaterial).emissiveIntensity =
             baseIntensity + Math.sin(elapsedTime * 3.5) * 0.15;
         }
       });
@@ -413,7 +428,7 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
       // Project 3D Organ coordinates to 2D screen positions for floating HUD callouts
       if (mountRef.current) {
         const rect = mountRef.current.getBoundingClientRect();
-        const activeOrgans = ORGANS_CATALOG[activeSystemId] || [];
+        const activeOrgans = ORGANS_CATALOG[activeSystemIdRef.current] || [];
 
         const projected = activeOrgans.map(organ => {
           const mesh = organMeshes[organ.id];
@@ -464,7 +479,7 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
       }
       renderer.dispose();
     };
-  }, [isDark, layer, activeSystemId, phase]);
+  }, [isDark, layer]); // only visual setup params; phase/activeSystemId/hover read via refs
 
   // Phase 3: Regional X-Ray Activation on System Click
   const handleSelectSystem = (systemId: string) => {
