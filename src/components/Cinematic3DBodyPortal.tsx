@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { X, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface Cinematic3DBodyPortalProps {
