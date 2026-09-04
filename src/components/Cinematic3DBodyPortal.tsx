@@ -214,6 +214,10 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
+    // Position absolute so StrictMode's double-canvas doesn't stack vertically below overflow:hidden
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0';
+    renderer.domElement.style.left = '0';
     mountRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -243,9 +247,13 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     dracoLoader.setDecoderPath('/draco/');
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
+
+    let cancelled = false;
+
     loader.load(
       '/models/human_anatomy_commercial.glb',
       (gltf) => {
+        if (cancelled) return;
         const model = gltf.scene;
 
         // Auto-center and normalize bounding box
@@ -265,15 +273,19 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
 
         console.log('[Portal] model scale:', +scaleFactor.toFixed(3), 'position after center:', JSON.stringify({x: +model.position.x.toFixed(2), y: +model.position.y.toFixed(2), z: +model.position.z.toFixed(2)}));
 
+        // Disable frustum culling on the entire model group tree (belt-and-suspenders)
+        model.frustumCulled = false;
         model.traverse((child) => {
+          child.frustumCulled = false;
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.castShadow = true;
             mesh.receiveShadow = true;
-            // Draco-decoded bounding spheres are sometimes computed before vertex data
-            // is ready, producing radius=0 spheres that fail frustum culling. Disable
-            // culling since the body is always within the camera's view.
-            mesh.frustumCulled = false;
+            // Force bounding sphere recomputation so it's valid even if frustumCulled is re-enabled
+            if (mesh.geometry) {
+              mesh.geometry.computeBoundingBox();
+              mesh.geometry.computeBoundingSphere();
+            }
 
             // Map and style organ meshes with vibrant PBR materials
             if (mesh.name.includes('Organ_Thyroid')) {
@@ -333,6 +345,8 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
             } else if (mesh.name.includes('Skeletal_')) {
               mesh.material = new THREE.MeshStandardMaterial({
                 color: 0xf8fafc,
+                emissive: 0x888888,
+                emissiveIntensity: 0.4,
                 roughness: 0.4,
                 metalness: 0.1
               });
@@ -348,9 +362,11 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
                 wireframe: layer === 'skeletal'
               });
             } else {
-              // Catch-all for Muscle_* and any other unmatched meshes — warm anatomical flesh
+              // Catch-all for Muscle_* and any other unmatched meshes — warm anatomical flesh with emissive glow
               mesh.material = new THREE.MeshStandardMaterial({
                 color: 0xc45c4a,
+                emissive: 0x7a2d1f,
+                emissiveIntensity: 0.6,
                 roughness: 0.65,
                 metalness: 0.05
               });
@@ -404,6 +420,8 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     };
 
     const dom = renderer.domElement;
+    // Keep a direct canvas reference for cleanup — mountRef.current may be null in StrictMode
+    const canvas = renderer.domElement;
     dom.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
@@ -473,6 +491,10 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
         setProjectedPins(projected);
       }
 
+      // Per-frame guarantee: ensure every body mesh bypasses frustum culling.
+      // This handles any timing or React StrictMode double-invoke edge cases.
+      bodyGroup.traverse((c) => { c.frustumCulled = false; });
+
       renderer.render(scene, camera);
     };
 
@@ -489,13 +511,16 @@ export const Cinematic3DBodyPortal: React.FC<Cinematic3DBodyPortalProps> = ({
     window.addEventListener('resize', handleResize);
 
     return () => {
+      cancelled = true;
       cancelAnimationFrame(animationFrameId);
       dom.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('resize', handleResize);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
+      dracoLoader.dispose();
+      // Use direct canvas ref — mountRef.current is null in React StrictMode cleanup
+      if (canvas.parentElement) {
+        canvas.parentElement.removeChild(canvas);
       }
       renderer.dispose();
     };
