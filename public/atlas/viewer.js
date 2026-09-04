@@ -1223,6 +1223,150 @@ const ANATOMY_DATABASE = {
     func: "Permanent abnormal enlargement of respiratory airspaces distal to terminal bronchioles with extensive proteolytic destruction of interalveolar septa by neutrophil elastase (exceeding alpha-1 antitrypsin antiprotease defense).",
     landmarks: "Confluent hyperinflated bullous airspace, necrotic septal stumps, destroyed capillary beds, loss of elastic tethering.",
     clinical: "Marked reduction in alveolar diffusing capacity (DLCO), loss of elastic recoil causing expiratory air trapping, hyperinflation ('barrel chest'), and 'pink puffer' presentation in severe COPD."
+  },
+
+  // ----------------------------------------------------------------------------
+  // RENAL GLOMERULUS, FILTRATION BARRIER & JGA (TA2 ENTRIES)
+  // ----------------------------------------------------------------------------
+  "Renal_Arteriole_Afferent": {
+    ta2: "Arteriola glomerularis afferens (TA2: 3410)",
+    system: "System_Renal",
+    sysLabel: "Renal / Afferent Glomerular Arteriole",
+    func: "High-compliance muscular resistance conduit delivering oxygenated cortical blood from interlobular (cortical radiate) arteries directly into the glomerular capillary tuft; regulates renal blood flow and glomerular filtration rate via myogenic autoregulation and tubuloglomerular feedback.",
+    landmarks: "Vascular pole entrance, tunica media with renin-positive granular juxtaglomerular cells, internal elastic lamina, vascular smooth muscle rings.",
+    clinical: "Preferential vasodilatation by prostaglandins (PGE2, PGI2) maintains GFR; NSAIDs block prostaglandin synthesis causing afferent vasoconstriction and precipitating acute pre-renal azotemia and acute kidney injury (AKI)."
+  },
+  "Renal_Arteriole_Efferent": {
+    ta2: "Arteriola glomerularis efferens (TA2: 3412)",
+    system: "System_Renal",
+    sysLabel: "Renal / Efferent Glomerular Arteriole (Resistance Gate)",
+    func: "Narrower, high-resistance post-glomerular outlet vessel draining capillary blood toward peritubular capillary plexuses (cortical nephrons) or vasa recta hairpins (juxtamedullary nephrons); regulates intraglomerular capillary hydrostatic pressure (P_GC ~55 mmHg).",
+    landmarks: "Vascular pole exit cleft, narrower vascular caliber, peritubular capillary transition.",
+    clinical: "Preferential vasoconstriction by Angiotensin II maintains GFR during systemic hypotension; ACE inhibitors and Angiotensin Receptor Blockers (ARBs) dilate efferent arterioles, reducing intraglomerular hypertension and slowing diabetic nephropathy progression."
+  },
+  "Renal_Glomerulus_CapillaryTuft": {
+    ta2: "Glomerulus / Rete capillare glomerulare (TA2: 3405)",
+    system: "System_Renal",
+    sysLabel: "Renal / Glomerular Capillary Tuft & Mesangium",
+    func: "Highly specialized anastomosing lobular capillary network suspended between two arterioles; generates ~180 liters of primary ultrafiltrate daily driven by high net ultrafiltration pressure (P_UF = P_GC - P_BS - pi_GC). Mesangial cells provide structural axial support, phagocytic debris clearance, and contractile tone.",
+    landmarks: "Lobular capillary loops, central mesangial stalks, vascular pole origin, urinary pole outflow.",
+    clinical: "Target of immune-complex deposition in post-streptococcal glomerulonephritis, lupus nephritis (wire-loop lesions), and anti-GBM (Goodpasture) disease presenting with hematuria, RBC casts, and nephritic syndrome."
+  },
+  "Renal_Glomerulus_EndotheliumFenestrated": {
+    ta2: "Endothelium fenestratum capillaris glomerularis (TA2: 3406)",
+    system: "System_Renal",
+    sysLabel: "Histology / Fenestrated Glomerular Endothelium",
+    func: "Innermost cellular layer of the glomerular filtration barrier; characterized by dense arrays of transcellular circular pores (fenestrae, 70-100 nm diameter) lacking diaphragm seals; coated by negatively charged luminal glycocalyx (syndecans, podocalyxin, sialic acid) repelling circulating erythrocytes, leukocytes, and platelets.",
+    landmarks: "Attenuated endothelial cytoplasm, transcellular fenestrae sieve plate, endothelial glycocalyx lumen interface.",
+    clinical: "Endothelial glycocalyx shedding occurs in sepsis, preeclampsia (glomerular endotheliosis with swollen endothelial cells obliterating capillary lumens), and thrombotic microangiopathies (HUS/TTP)."
+  },
+  "Renal_Membrane_GBM": {
+    ta2: "Membrana basalis glomerularis (TA2: 3407)",
+    system: "System_Renal",
+    sysLabel: "Ultrastructure / Glomerular Basement Membrane (GBM)",
+    func: "Thick fused trilaminar extracellular matrix (300-350 nm) composed of lamina rara interna, lamina densa, and lamina rara externa; synthesized jointly by podocytes and endothelial cells; composed of Type IV collagen (alpha-3, alpha-4, alpha-5 chains), laminin-521, nidogen, and negatively charged heparan sulfate proteoglycans (agrin, perlecan) forming a crucial electrostatic and molecular sieve barrier.",
+    landmarks: "Trilaminar basement membrane, lamina densa central core, subendothelial and subepithelial zones.",
+    clinical: "Alport syndrome (X-linked mutation in COL4A5 causing split, 'basket-weave' lamina densa and progressive renal failure with sensorineural deafness); Goodpasture syndrome (autoantibodies targeting the NC1 domain of alpha-3 Type IV collagen causing rapidly progressive crescentic glomerulonephritis and pulmonary hemorrhage).",
+  },
+  "Renal_Cell_Podocyte_Pedicels": {
+    ta2: "Podocytus / Pedicelli podocyti (TA2: 3408)",
+    system: "System_Renal",
+    sysLabel: "Histology / Visceral Podocytes & Slit Diaphragms",
+    func: "Terminally differentiated visceral epithelial cells with octopus-like star bodies and branching primary/secondary trabeculae terminating in interdigitating foot processes (pedicels); pedicels embrace outer capillary GBM and are bridged by molecular slit diaphragms (nephrin, podocin, NEPH1, CD2AP) with narrow filtration pores (4-14 nm), constituting the final selective barrier against proteinuria.",
+    landmarks: "Podocyte perikaryon (cell body), primary trabecular arms, interdigitating pedicel interspaces, filtration slit diaphragm pores.",
+    clinical: "Podocyte effacement (flattening and loss of foot processes) is the hallmark of Minimal Change Disease (MCD) and Focal Segmental Glomerulosclerosis (FSGS), resulting in severe non-selective nephrotic-range proteinuria (>3.5 g/24h), hypoalbuminemia, and generalized anasarca edema."
+  },
+  "Renal_Capsule_Bowman_Space": {
+    ta2: "Capsula glomerularis (Bowmani) et Spatium urinarium (TA2: 3409)",
+    system: "System_Renal",
+    sysLabel: "Renal / Bowman's Capsule & Urinary Space",
+    func: "Double-layered epithelial cup surrounding the capillary tuft; outer parietal layer composed of simple squamous epithelium supported by a thick basement membrane; internal urinary space collects protein-free glomerular ultrafiltrate and funnels it into the neck of the proximal convoluted tubule (PCT) at the urinary pole.",
+    landmarks: "Parietal squamous epithelium, Bowman's space (urinary space), vascular pole reflection, urinary pole neck transitioning into PCT.",
+    clinical: "Crescentic glomerulonephritis (RPGN) characterized by exuberant proliferation of parietal epithelial cells and infiltrating macrophages filling Bowman's space, compressing the capillary tuft and causing rapid, irreversible loss of renal function within weeks."
+  },
+  "Renal_Apparatus_Juxtaglomerular": {
+    ta2: "Complexus juxtaglomerularis (TA2: 3415)",
+    system: "System_Renal",
+    sysLabel: "Renal / Juxtaglomerular Apparatus (JGA Autoregulation)",
+    func: "Specialized endocrine-sensory micro-organ nestled in the vascular cleft; Macula Densa cells in the distal tubule sense luminal NaCl delivery via NKCC2 co-transporters; JG granular cells in afferent arteriole synthesize, store, and release renin in response to decreased renal perfusion, sympathetic beta-1 stimulation, or low NaCl delivery; Extraglomerular mesangial (Lacis) cells mediate tubuloglomerular feedback signaling.",
+    landmarks: "Macula densa plaque (tall columnar sensory cells), JG granular cells with renin storage vesicles, extraglomerular mesangial (Lacis/Goormaghtigh) triangular cell bed.",
+    clinical: "Renin cleaves angiotensinogen to Angiotensin I (converted by pulmonary ACE to Angiotensin II), stimulating systemic vasoconstriction and aldosterone release; renal artery stenosis hyperactivates the JGA, producing severe renovascular hypertension (Goldblatt kidney mechanism)."
+  },
+  "Renal_Pathology_KimmelstielWilson": {
+    ta2: "Glomerulosclerosis diabetica nodularis (Kimmelstiel-Wilson) (ICD-11: GB61 / Robbins Path)",
+    system: "System_Renal",
+    sysLabel: "Pathology / Kimmelstiel-Wilson Diabetic Glomerulosclerosis",
+    func: "Hallmark advanced lesion of Diabetic Nephropathy (diabetic glomerulosclerosis); chronic hyperglycemia promotes advanced glycation end-products (AGEs), non-enzymatic glycation of efferent arteriole, and TGF-beta overexpression, causing massive mesangial matrix expansion, acellular PAS-positive eosinophilic nodular hyaline masses (Kimmelstiel-Wilson nodules), and peripheral capillary microaneurysms and capillary lumen obliteration.",
+    landmarks: "Lobular acellular eosinophilic hyaline nodule, compressed and obliterated peripheral capillaries, microaneurysmal capillary dilatation, thickened hyalinized arteriolar cuffs.",
+    clinical: "Causes progressive microalbuminuria transitioning to overt macroalbuminuria, nephrotic syndrome, secondary hypertension, and relentless decline in GFR leading to End-Stage Renal Disease (ESRD) requiring chronic hemodialysis or renal transplantation."
+  },
+
+  // ----------------------------------------------------------------------------
+  // HEPATIC LOBULE, SINUSOIDAL SPACE OF DISSE & CIRRHOSIS / JAUNDICE (TA2 ENTRIES)
+  // ----------------------------------------------------------------------------
+  "Hepatic_Lobule_HexagonalFrame": {
+    ta2: "Lobulus hepaticus classicus (TA2: 2950)",
+    system: "System_Digestive",
+    sysLabel: "Hepatic Micro-Architecture / Classical Lobule",
+    func: "Hexagonal functional subunit of the liver parenchyma (~1-2 mm) centered around a central vein; comprises radiating plates of hepatocytes (Remak cords) separated by vascular sinusoids, bound peripherally by portal tracts and the limiting plate.",
+    landmarks: "Hexagonal outer perilobular boundary, radiating hepatocyte plates, limiting plate (lamina limitans), subcapsular Glissonian stroma.",
+    clinical: "Zonal metabolic heterogeneity (Rappaport acinar model): Zone 1 (periportal) is oxygen-rich and vulnerable to direct toxins; Zone 3 (centrilobular) has low PO2 and is most susceptible to ischemic necrosis, acetaminophen hepatotoxicity, and fatty change (steatosis)."
+  },
+  "Hepatic_Triad_PortalVein": {
+    ta2: "Vena interlobularis / Ramus venae portae hepatis (TA2: 4320)",
+    system: "System_Cardiovascular",
+    sysLabel: "Portal Triad / Interlobular Portal Venule",
+    func: "Wide, thin-walled venous conduit traversing the portal canal (of Kiernan); delivers low-pressure (8-10 mmHg), nutrient-rich, deoxygenated blood carrying intestinal nutrients, pancreatic hormones, and absorbed antigens directly from mesenteric circulation into the lobular sinusoids.",
+    landmarks: "Interlobular portal canal, distributing inlet venules piercing the limiting plate, connective tissue collar.",
+    clinical: "Portal hypertension (wedge hepatic venous pressure gradient > 10-12 mmHg) causes portosystemic collateral shunting (esophageal varices, caput medusae, hemorrhoids), ascites, and congestive splenomegaly."
+  },
+  "Hepatic_Triad_HepaticArtery": {
+    ta2: "Arteria interlobularis / Ramus arteriae hepaticae propriae (TA2: 4125)",
+    system: "System_Cardiovascular",
+    sysLabel: "Portal Triad / Interlobular Hepatic Arteriole",
+    func: "Narrow, thick-walled muscular resistance vessel supplying high-pressure pulsatile oxygenated blood (25-30% of total hepatic inflow) to biliary peribiliary capillary plexuses and lobular sinusoids.",
+    landmarks: "Arteriolar muscular media, internal elastic lamina, terminal inlet arterioles emptying into periportal sinusoids.",
+    clinical: "Hepatic arterial thrombosis is a catastrophic post-liver transplant complication causing severe ischemic necrosis of the biliary tree and biliary strictures, as bile ducts depend exclusively on hepatic arterial blood supply."
+  },
+  "Hepatic_Triad_BileDuctule": {
+    ta2: "Ductulus bilifer / Canalis Heringi (TA2: 2962)",
+    system: "System_Digestive",
+    sysLabel: "Portal Triad / Interlobular Bile Ductule",
+    func: "Simple cuboidal epithelial conduit running centrifugally (counter-current to sinusoidal blood flow); collects bile synthesized by hepatocytes via apical canalicular networks and canals of Hering, directing it into interlobular and lobar bile ducts.",
+    landmarks: "Cuboidal cholangiocyte lumen, basement membrane, canal of Hering-ductule junction.",
+    clinical: "Primary Biliary Cholangitis (PBC) targets interlobular bile ductules via autoimmune granulomatous destruction (anti-mitochondrial antibodies / AMA positive), resulting in progressive vanishing bile duct syndrome and severe cholestatic jaundice."
+  },
+  "Hepatic_Sinusoid_Capillaries": {
+    ta2: "Vasa capillaria sinusoidea hepatica (TA2: 2955)",
+    system: "System_Cardiovascular",
+    sysLabel: "Microcirculation / Sinusoidal Capillaries & Kupffer Cells",
+    func: "Low-resistance, wide, tortuous fenestrated capillaries lined by discontinuous endothelial cells lacking a continuous basement membrane; permit bidirectional exchange of plasma solutes between blood and hepatocytes. Houses resident star-shaped Kupffer cells (macrophages) that scavenge senescent erythrocytes and gut-derived endotoxins.",
+    landmarks: "Endothelial sieve plates (fenestrae ~100-150 nm), sinusoidal lumen, dendritic Kupffer macrophages.",
+    clinical: "Kupffer cell hyperactivation in endotoxemia / sepsis generates high levels of TNF-alpha, IL-1, and reactive oxygen species, driving systemic inflammatory response syndrome (SIRS) and acute liver injury."
+  },
+  "Hepatic_Space_Of_Disse_Stellate": {
+    ta2: "Spatium perisinusoideum Disse / Cellula stellata hepatica (TA2: 2958)",
+    system: "System_Digestive",
+    sysLabel: "Perisinusoidal Space of Disse & Hepatic Stellate Cells",
+    func: "Subendothelial compartment separating sinusoidal endothelium from hepatocyte basolateral microvillar membranes, facilitating plasma filtration and lymphatic production. Houses quiescent Hepatic Stellate cells (Ito cells / lipocytes) storing 80% of total body Vitamin A in cytoplasmic lipid droplets.",
+    landmarks: "Perisinusoidal fluid cleft, hepatocyte basolateral microvilli, star-shaped Ito cell body with retinyl ester lipid inclusions.",
+    clinical: "Under chronic inflammatory stimulation (TGF-beta, PDGF), quiescent stellate cells undergo transdifferentiation into contractile, alpha-SMA-positive myofibroblasts, synthesizing copious Type I & III fibrillar collagen that obliterates the space of Disse ('capillarization of sinusoids') and drives liver cirrhosis."
+  },
+  "Hepatic_Vein_Central": {
+    ta2: "Vena centralis / Vena centrilobularis (TA2: 4325)",
+    system: "System_Cardiovascular",
+    sysLabel: "Venous Drainage / Central Draining Vein",
+    func: "Centrilobular thin-walled draining venule situated at the axis of each classical lobule; receives converging mixed sinusoidal blood via circumferential ostia and empties into sublobular veins, hepatic veins (right, middle, left), and inferior vena cava (IVC).",
+    landmarks: "Centrilobular axis, circumferential inlet ostia, thin endothelial wall with minimal supporting connective tissue.",
+    clinical: "Budd-Chiari syndrome (hepatic vein / centrilobular venular thrombosis) causes massive centrilobular sinusoidal congestion, Zone 3 ischemic necrosis, acute portal hypertension, painful hepatomegaly, and intractable ascites."
+  },
+  "Hepatic_Pathology_Cirrhosis_Nodule": {
+    ta2: "Cirrhosis hepatis / Pseudolobulus regenerativus (ICD-11: DB93 / Robbins Path)",
+    system: "System_Digestive",
+    sysLabel: "Pathology / Cirrhotic Regenerative Nodule & Jaundice",
+    func: "End-stage irreversible hepatic remodeling characterized by diffuse parenchymal nodular regeneration encircled by dense bridging fibrous bands (fibroconnective septa linking portal-to-portal and portal-to-central). Destroys sinusoidal microarchitecture, obliterates vascular outflow, and causes canalicular bile plugs (cholestatic jaundice).",
+    landmarks: "Avascular regenerative pseudolobule lacking central vein, bridging myofibroblast collagen bands, inspissated yellow-green canalicular bile thrombi, architectural distortion.",
+    clinical: "Clinova Node 02 correlation: Results in decompensated liver failure, progressive jaundice (hyperbilirubinemia due to canalicular excretion block), coagulopathy (loss of factor synthesis), hypoalbuminemia, hepatic encephalopathy (hyperammonemia), and portal hypertension."
   }
 };
 
@@ -1666,6 +1810,22 @@ function loadAnatomyModel(modelFileName = 'human_anatomy_commercial.glb') {
         controls.maxDistance = 1.2;
         controls.target.set(0.068, -0.033, 1.317);
         camera.position.set(0.068 + 0.035, -0.033 - 0.125, 1.317 + 0.020);
+        controls.update();
+      } else if (modelFileName === 'submodel_renal_nephron.glb') {
+        camera.near = 0.002;
+        camera.updateProjectionMatrix();
+        controls.minDistance = 0.01;
+        controls.maxDistance = 1.2;
+        controls.target.set(0.045, -0.015, 1.150);
+        camera.position.set(0.045 + 0.035, -0.015 - 0.125, 1.150 + 0.020);
+        controls.update();
+      } else if (modelFileName === 'submodel_hepatic_lobule.glb') {
+        camera.near = 0.002;
+        camera.updateProjectionMatrix();
+        controls.minDistance = 0.01;
+        controls.maxDistance = 1.2;
+        controls.target.set(0.048, -0.020, 1.180);
+        camera.position.set(0.048 + 0.035, -0.020 - 0.125, 1.180 + 0.020);
         controls.update();
       } else {
         camera.near = 0.05;
@@ -2930,6 +3090,11 @@ function selectOrgan(meshName, animateCamera = true) {
     focusOnMesh(mesh);
   }
   if (state.isIsolated) applyIsolation();
+
+  // Bi-directional sync with Virtual Histology Lab
+  if (window.VirtualHistology && typeof window.VirtualHistology.syncFrom3D === 'function') {
+    window.VirtualHistology.syncFrom3D(meshName);
+  }
 }
 
 // Smooth camera focus animation
@@ -3453,6 +3618,9 @@ const submodelSelect = document.getElementById('select-submodel');
 if (submodelSelect) {
   submodelSelect.addEventListener('change', (e) => {
     loadAnatomyModel(e.target.value);
+    if (window.VirtualHistology && typeof window.VirtualHistology.syncFromSubmodel === 'function') {
+      window.VirtualHistology.syncFromSubmodel(e.target.value);
+    }
   });
 }
 
@@ -3693,3 +3861,1354 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// ==============================================================================
+// VIRTUAL HISTOLOGY DUAL-VIEWPORT DRAWER & MICROSCOPIC SLIDE VIEWER (PHASE 5)
+// ==============================================================================
+
+const HISTOLOGY_DATABASE = {
+  cochlea: {
+    id: "cochlea",
+    name: "Cochlea: Organ of Corti",
+    badge: "H&E STAIN",
+    subTitle: "Organ of Corti: Mechanosensory Hair Cells, Tectorial Membrane & Tonotopic Basilar Tuning",
+    description: "Radial cross-section of the cochlear duct (scala media) within the temporal bone. Displays the mechanosensory neuroepithelium that transduces fluid pressure waves into auditory nerve impulses.",
+    stainTitle: "Hematoxylin & Eosin (H&E)",
+    stainRows: [
+      { color: "#4a2d73", label: "Nuclei / Chromatin: Deep Purple (#4a2d73)" },
+      { color: "#e07a9b", label: "Cytoplasm & Stereocilia: Eosin Pink (#e07a9b)" },
+      { color: "#f3b2bc", label: "Basilar Membrane Collagen: Pinkish-Orange" }
+    ],
+    meshTarget: "Sens_Cochlea",
+    submodel: "submodel_auditory_apparatus.glb",
+    pillTag: "COCHLEA",
+    normalPins: [
+      { id: "ihc", x: 0.36, y: 0.48, name: "Inner Hair Cell (IHC)", badge: "PRIMARY TRANSDUCER", desc: "Single row of flask-shaped sensory cells receiving ~95% of afferent auditory innervation (type I spiral ganglion neurons).", targetMesh: "Sens_Cochlea", isPath: false },
+      { id: "ohc", x: 0.58, y: 0.46, name: "Outer Hair Cells (OHC)", badge: "PRESTIN ACOUSTIC MOTOR", desc: "Three rows of cylindrical electromotile cells driven by prestin motor proteins, acting as non-linear cochlear amplifiers.", targetMesh: "Sens_Cochlea", isPath: false },
+      { id: "tect", x: 0.48, y: 0.34, name: "Tectorial Membrane", badge: "ACELLULAR MATRIX", desc: "Gelatinous ribbon rich in Type II, IX, and XI collagen and otogelin, physically anchoring stereocilia tips.", targetMesh: "Sens_Cochlea", isPath: false },
+      { id: "basilar", x: 0.50, y: 0.65, name: "Basilar Membrane", badge: "TONOTOPIC PLATFORM", desc: "Stiff and narrow at base (high frequencies ~20kHz), compliant and wide at apex (low frequencies ~20Hz).", targetMesh: "Sens_Cochlea", isPath: false },
+      { id: "tunnel", x: 0.44, y: 0.55, name: "Tunnel of Corti", badge: "PILLAR CELLS", desc: "Fluid-filled triangular space bounded by inner and outer pillar cells; contains cortilymph with low potassium.", targetMesh: "Sens_Cochlea", isPath: false }
+    ],
+    pathologyPins: [
+      { id: "lost-ohc", x: 0.58, y: 0.46, name: "Outer Hair Cell Loss", badge: "OTOTOXIC APOPTOSIS", desc: "Loss and vacuolization of OHCs secondary to acoustic trauma, cisplatin, or aminoglycosides resulting in permanent sensorineural hearing loss.", targetMesh: "Sens_Cochlea", isPath: true },
+      { id: "stereocilia-fusion", x: 0.42, y: 0.44, name: "Fused Stereocilia Stubs", badge: "CYTOSKELETAL COLLAPSE", desc: "Disruption and tip-link loss in remaining hair cells with disorganized, splayed actin core bundles.", targetMesh: "Sens_Cochlea", isPath: true },
+      { id: "ganglion-atrophy", x: 0.22, y: 0.70, name: "Secondary Ganglion Loss", badge: "NEURAL DEGENERATION", desc: "Retrograde neuronal loss within the modiolus following chronic deafferentation.", targetMesh: "Sens_Cochlea", isPath: true }
+    ]
+  },
+
+  coronary: {
+    id: "coronary",
+    name: "Coronary LAD: Atherosclerosis",
+    badge: "H&E STAIN",
+    subTitle: "Left Anterior Descending Coronary Artery: Vulnerable Fibroatheroma & Cholesterol Clefts",
+    description: "Cross-section of the proximal left anterior descending (LAD) coronary artery demonstrating eccentric fibroatheromatous plaque, luminal compromise, and deep core necrotic debris.",
+    stainTitle: "Hematoxylin & Eosin (H&E)",
+    stainRows: [
+      { color: "#4a2d73", label: "Nuclei & Calcification: Deep Violet-Blue" },
+      { color: "#e07a9b", label: "Collagen & Smooth Muscle: Eosin Pink" },
+      { color: "#ffffff", border: true, label: "Cholesterol Clefts: Empty White Lacunae" },
+      { color: "#e11d48", label: "Erythrocytes in Lumen: Red (#e11d48)" }
+    ],
+    meshTarget: "Organ_Heart",
+    submodel: "submodel_coronary_stent_bypass.glb",
+    pillTag: "LAD",
+    normalPins: [
+      { id: "endo", x: 0.50, y: 0.32, name: "Normal Endothelium", badge: "VASCULAR BARRIER", desc: "Continuous monolayer maintaining non-thrombogenic surface via nitric oxide (NO) and prostacyclin (PGI2) synthesis.", targetMesh: "Vessel_Aorta", isPath: false },
+      { id: "media", x: 0.72, y: 0.58, name: "Tunica Media", badge: "SMOOTH MUSCLE", desc: "Regular concentric rings of contractile vascular smooth muscle cells (VSMCs) maintaining vascular tone.", targetMesh: "Organ_Heart", isPath: false },
+      { id: "lumen", x: 0.50, y: 0.48, name: "Patent Lumen", badge: "UNOBSTRUCTED FLOW", desc: "Wide cylindrical lumen providing unrestricted epicardial myocardial perfusion.", targetMesh: "Organ_Heart", isPath: false }
+    ],
+    pathologyPins: [
+      { id: "cap", x: 0.50, y: 0.34, name: "Fibrous Cap", badge: "COLLAGEN SHEATH", desc: "Extracellular matrix sheath rich in Type I and III collagen; thinning cap (<65µm) indicates high risk of sudden rupture.", targetMesh: "Organ_Heart", isPath: true },
+      { id: "cleft", x: 0.50, y: 0.54, name: "Cholesterol Clefts", badge: "LIPID CORE", desc: "Biconvex needle-shaped empty spaces where crystalline cholesterol dissolved during xylene histological processing.", targetMesh: "Organ_Heart", isPath: true },
+      { id: "foam", x: 0.34, y: 0.44, name: "Foam Cell Aggregate", badge: "OX-LDL MACROPHAGE", desc: "Macrophages packed with lipid droplets, secreting metalloproteinases (MMPs) that degrade the fibrous cap.", targetMesh: "Organ_Heart", isPath: true },
+      { id: "neovasc", x: 0.66, y: 0.48, name: "Thin-Walled Neovessels", badge: "PLAQUE NEOVASCULARIZATION", desc: "Fragile, leaky capillary sprouts prone to intraplaque hemorrhage and sudden plaque expansion.", targetMesh: "Organ_Heart", isPath: true },
+      { id: "calc", x: 0.48, y: 0.68, name: "Dystrophic Calcification", badge: "BASOPHILIC DEPOSITS", desc: "Precipitated calcium phosphate within necrotic core tissue in the setting of normal serum calcium.", targetMesh: "Organ_Heart", isPath: true }
+    ]
+  },
+
+  lung: {
+    id: "lung",
+    name: "Pulmonary: Alveoli & Emphysema",
+    badge: "H&E STAIN",
+    subTitle: "Alveolar Septa, Blood-Air Barrier & Centriacinar Emphysema Destruction",
+    description: "Pulmonary parenchyma highlighting fragile 0.2 µm blood-air diffusion barriers against smoking/elastase-driven septal rupture and enlarged confluent bullae.",
+    stainTitle: "Hematoxylin & Eosin (H&E)",
+    stainRows: [
+      { color: "#4a2d73", label: "Pneumocyte Nuclei: Deep Purple" },
+      { color: "#e07a9b", label: "Alveolar Septa: Eosin Pink" },
+      { color: "#e11d48", label: "Capillary Erythrocytes: Ruby Red" },
+      { color: "#1e293b", label: "Anthracotic Pigment: Carbon Black" }
+    ],
+    meshTarget: "Organ_Lung_Left",
+    submodel: "submodel_pulmonary_alveolus.glb",
+    pillTag: "LUNG",
+    normalPins: [
+      { id: "type1", x: 0.40, y: 0.48, name: "Type I Pneumocyte", badge: "SQUAMOUS DIFFUSION BARRIER", desc: "Attenuated squamous cell covering >90% of alveolar surface. Cytoplasm is 0.2 µm thin to facilitate gas diffusion.", targetMesh: "Organ_Lung_Left", isPath: false },
+      { id: "type2", x: 0.60, y: 0.38, name: "Type II Pneumocyte", badge: "SURFACTANT SYNTHESIS", desc: "Cuboidal cell with lamellar bodies synthesizing dipalmitoylphosphatidylcholine (DPPC); acts as stem cell.", targetMesh: "Organ_Lung_Right", isPath: false },
+      { id: "capillary", x: 0.48, y: 0.64, name: "Septal Capillary Bed", badge: "MICROCIRCULATION", desc: "Continuous capillaries where red blood cells pass in single file for rapid oxygenation.", targetMesh: "Organ_Lung_Left", isPath: false },
+      { id: "dust", x: 0.28, y: 0.36, name: "Alveolar Macrophage", badge: "LUMINAL PHAGOCYTE", desc: "Scavenges inhaled dust, particulate matter, and apoptotic cellular debris in the alveolar airspace.", targetMesh: "Organ_Lung_Left", isPath: false }
+    ],
+    pathologyPins: [
+      { id: "bulla", x: 0.50, y: 0.45, name: "Emphysematous Bulla", badge: "CONFLUENT AIRSPACE", desc: "Markedly dilated empty space resulting from elastase-mediated breakdown of interalveolar septa.", targetMesh: "Organ_Lung_Left", isPath: true },
+      { id: "spur", x: 0.34, y: 0.60, name: "Clubbed Septal Spur", badge: "ELASTOLYTIC REMNANT", desc: "Free-floating ruptured alveolar wall remnant with bulbous end; hallmark of pulmonary emphysema.", targetMesh: "Organ_Lung_Left", isPath: true },
+      { id: "carbon", x: 0.68, y: 0.32, name: "Anthracotic Macrophage", badge: "PIGMENTED SMOKER CELL", desc: "Macrophage heavy with ingested tobacco smoke particulate and carbon granules.", targetMesh: "Organ_Lung_Right", isPath: true }
+    ]
+  },
+
+  kidney: {
+    id: "kidney",
+    name: "Kidney: Glomerular Tuft & KW",
+    badge: "PAS STAIN",
+    subTitle: "Glomerular Filtration Barrier & Kimmelstiel-Wilson Nodular Glomerulosclerosis",
+    description: "Renal cortex with Periodic Acid-Schiff (PAS) stain highlighting intensely magenta-positive basement membranes, mesangial matrix expansion, and diabetic nodular lesions.",
+    stainTitle: "Periodic Acid-Schiff (PAS)",
+    stainRows: [
+      { color: "#d946ef", label: "Basement Membranes (GBM): Intense Magenta (#d946ef)" },
+      { color: "#6b21a8", label: "Nuclei: Pale Hematoxylin Violet (#6b21a8)" },
+      { color: "#fae8ff", label: "Tubular Cytoplasm: Delicate Pink (#fae8ff)" }
+    ],
+    meshTarget: "Organ_Kidney_Left",
+    submodel: "human_anatomy_commercial.glb",
+    pillTag: "RENAL",
+    normalPins: [
+      { id: "gbm", x: 0.44, y: 0.40, name: "Glomerular Basement Membrane", badge: "PAS-INTENSE MAGENTA", desc: "Trilaminar filter composed of Type IV collagen and heparan sulfate proteoglycans providing charge selectivity.", targetMesh: "Organ_Kidney_Left", isPath: false },
+      { id: "podocyte", x: 0.56, y: 0.28, name: "Podocyte Pedicels", badge: "SLIT DIAPHRAGM", desc: "Interdigitating secondary foot processes spanning slit diaphragms with nephrin and podocin.", targetMesh: "Organ_Kidney_Left", isPath: false },
+      { id: "bowman", x: 0.22, y: 0.22, name: "Bowman's Capsule & Space", badge: "URINARY SPACE", desc: "Parietal layer of simple squamous cells receiving primary ultrafiltrate before entering proximal tubule.", targetMesh: "Organ_Kidney_Left", isPath: false },
+      { id: "brush", x: 0.78, y: 0.68, name: "PCT Brush Border", badge: "APICAL MICROVILLI", desc: "Dense apical microvilli staining strongly PAS-positive, executing bulk reabsorption of filtered glucose and amino acids.", targetMesh: "Organ_Kidney_Left", isPath: false }
+    ],
+    pathologyPins: [
+      { id: "kw-nodule", x: 0.48, y: 0.52, name: "Kimmelstiel-Wilson Nodule", badge: "DIABETIC NEPHROPATHY", desc: "Spherical, acellular, laminated PAS-dense mesangial nodules pathognomonic for advanced diabetic nodular glomerulosclerosis.", targetMesh: "Organ_Kidney_Left", isPath: true },
+      { id: "thick-gbm", x: 0.38, y: 0.34, name: "Thickened GBM (3-5x)", badge: "MICROVASCULAR SCLEROSIS", desc: "Non-enzymatic glycation of Type IV collagen causing diffuse basement membrane thickening and podocyte effacement.", targetMesh: "Organ_Kidney_Left", isPath: true },
+      { id: "arteriolar", x: 0.66, y: 0.68, name: "Arteriolar Hyalinosis", badge: "PROTEIN EXTRAVASATION", desc: "Hyaline accumulation involving both afferent and efferent renal arterioles characteristic of diabetes mellitus.", targetMesh: "Organ_Kidney_Right", isPath: true }
+    ]
+  },
+
+  liver: {
+    id: "liver",
+    name: "Liver: Portal Triad & Cirrhosis",
+    badge: "MASSON TRICHROME",
+    subTitle: "Hepatic Lobular Architecture, Sinusoidal Plates & Cirrhotic Bridging Fibrosis",
+    description: "Liver biopsy processed with Masson Trichrome stain (blue collagen, scarlet hepatocytes) demonstrating cirrhotic architectural destruction and bridging fibrotic septa.",
+    stainTitle: "Masson's Trichrome",
+    stainRows: [
+      { color: "#1d4ed8", label: "Collagen & Fibrous Scar: Brilliant Blue (#1d4ed8)" },
+      { color: "#dc2626", label: "Hepatocytes / Cytoplasm: Scarlet Red (#dc2626)" },
+      { color: "#0f172a", label: "Nuclei: Dark Blue-Black (#0f172a)" }
+    ],
+    meshTarget: "Organ_Liver",
+    submodel: "submodel_gastrointestinal.glb",
+    pillTag: "LIVER",
+    normalPins: [
+      { id: "hep-plate", x: 0.62, y: 0.45, name: "Hepatocyte Cords", badge: "POLYGONAL PARENCHYMA", desc: "Cords of metabolic hepatocytes radiating from portal tracts toward the central vein; glycogen and mitochondria rich.", targetMesh: "Organ_Liver", isPath: false },
+      { id: "kupffer", x: 0.52, y: 0.60, name: "Kupffer Cell", badge: "SINUSOIDAL MACROPHAGE", desc: "Resident phagocyte anchored within sinusoidal lumen clearing gut endotoxins and old erythrocytes.", targetMesh: "Organ_Liver", isPath: false },
+      { id: "bile-duct", x: 0.28, y: 0.32, name: "Bile Ductule (Triad)", badge: "CUBOIDAL CHOLANGIOCYTE", desc: "Bile ductule lined by simple cuboidal epithelium conveying bile synthesized by hepatocytes.", targetMesh: "Organ_Liver", isPath: false },
+      { id: "portal-vein", x: 0.22, y: 0.48, name: "Portal Vein Branch", badge: "NUTRIENT INFLOW", desc: "Large thin-walled venous channel delivering blood from splanchnic circulation.", targetMesh: "Organ_Liver", isPath: false }
+    ],
+    pathologyPins: [
+      { id: "bridge", x: 0.44, y: 0.50, name: "Bridging Fibrosis (Blue Scar)", badge: "ANILINE BLUE COLLAGEN", desc: "Dense broad bands of collagen connecting portal tracts to central veins, synthesized by activated hepatic stellate cells.", targetMesh: "Organ_Liver", isPath: true },
+      { id: "regen-nodule", x: 0.68, y: 0.34, name: "Regenerative Nodule", badge: "ENCAPSULATED ISLET", desc: "Parenchymal nodule of proliferating hepatocytes entrapped in fibrous bands, lacking normal central vein drainage.", targetMesh: "Organ_Liver", isPath: true },
+      { id: "duct-rxn", x: 0.34, y: 0.66, name: "Ductular Reaction", badge: "PROLIFERATING BILE DUCTS", desc: "Reactive proliferation of immature bile ductules at the interface of fibrous scars.", targetMesh: "Organ_Liver", isPath: true }
+    ]
+  }
+};
+
+class VirtualHistologyEngine {
+  constructor() {
+    this.drawer = document.getElementById('histology-drawer');
+    this.canvas = document.getElementById('histo-canvas');
+    this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+    this.pinsLayer = document.getElementById('histo-pins-layer');
+    this.popover = document.getElementById('histo-pin-popover');
+    this.splitOverlay = document.getElementById('histo-split-overlay');
+    this.splitDivider = document.getElementById('split-divider-line');
+
+    this.isOpen = false;
+    this.isMaximized = false;
+    this.activeSlideId = 'coronary';
+    this.viewMode = 'pathology'; // 'normal' | 'pathology' | 'split'
+    this.showPins = true;
+
+    // Viewport transforms
+    this.zoom = 10.0;
+    this.scale = 1.6; // derived from zoom
+    this.panX = 0;
+    this.panY = 0;
+    this.splitRatio = 0.50; // 0.0 to 1.0
+
+    this.isDraggingPan = false;
+    this.isDraggingSplit = false;
+    this.lastPointerX = 0;
+    this.lastPointerY = 0;
+    this.selectedPin = null;
+
+    if (this.drawer && this.canvas) {
+      this.initEventListeners();
+      this.renderCurrentSlide();
+      this.updateUIHeaders();
+    }
+  }
+
+  initEventListeners() {
+    // 1. Header and Dock Toggle Buttons
+    const btnHeaderToggle = document.getElementById('btn-toggle-histology');
+    const btnDockToggle = document.getElementById('btn-histology-dock');
+    const btnClose = document.getElementById('btn-histo-close');
+    const btnExpand = document.getElementById('btn-histo-expand');
+
+    const toggleDrawer = () => this.setDrawerOpen(!this.isOpen);
+    if (btnHeaderToggle) btnHeaderToggle.addEventListener('click', toggleDrawer);
+    if (btnDockToggle) btnDockToggle.addEventListener('click', toggleDrawer);
+    if (btnClose) btnClose.addEventListener('click', () => this.setDrawerOpen(false));
+    if (btnExpand) btnExpand.addEventListener('click', () => this.toggleMaximized());
+
+    // Keyboard shortcut 'H'
+    window.addEventListener('keydown', (e) => {
+      if (e.target.closest?.('input, select, textarea')) return;
+      if (e.key.toLowerCase() === 'h' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        toggleDrawer();
+      }
+    });
+
+    // 2. Slide Selector
+    const selectSlide = document.getElementById('select-histo-slide');
+    if (selectSlide) {
+      selectSlide.addEventListener('change', (e) => {
+        this.loadSlide(e.target.value);
+      });
+    }
+
+    // 3. View Mode Buttons
+    const modeButtons = document.querySelectorAll('.histo-mode-btn');
+    modeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.setViewMode(btn.dataset.mode);
+      });
+    });
+
+    // 4. Pins Toggle
+    const btnPins = document.getElementById('btn-toggle-pins');
+    if (btnPins) {
+      btnPins.addEventListener('click', () => {
+        this.showPins = !this.showPins;
+        btnPins.classList.toggle('active', this.showPins);
+        this.updatePins();
+      });
+    }
+
+    // 5. Magnification Controls
+    const magButtons = document.querySelectorAll('.histo-mag-btn');
+    const zoomSlider = document.getElementById('histo-zoom-slider');
+    const zoomReadout = document.getElementById('histo-zoom-readout');
+
+    const setMagnification = (mag) => {
+      this.zoom = parseFloat(mag);
+      // Map magnification (2 to 50) to scale (0.5 to 4.5)
+      this.scale = 0.5 + (this.zoom / 50) * 4.0;
+      if (zoomSlider) zoomSlider.value = this.zoom;
+      if (zoomReadout) zoomReadout.textContent = `${this.zoom.toFixed(1)}x`;
+
+      magButtons.forEach(b => {
+        b.classList.toggle('active', Math.abs(parseFloat(b.dataset.mag) - this.zoom) < 1.0);
+      });
+
+      this.render();
+      this.updatePins();
+    };
+
+    magButtons.forEach(btn => {
+      btn.addEventListener('click', () => setMagnification(btn.dataset.mag));
+    });
+
+    if (zoomSlider) {
+      zoomSlider.addEventListener('input', (e) => setMagnification(e.target.value));
+    }
+
+    // 6. Recenter & Sync 3D
+    const btnRecenter = document.getElementById('btn-histo-recenter');
+    if (btnRecenter) {
+      btnRecenter.addEventListener('click', () => {
+        this.panX = 0;
+        this.panY = 0;
+        setMagnification(10);
+      });
+    }
+
+    const btnSync3D = document.getElementById('btn-histo-sync3d');
+    if (btnSync3D) {
+      btnSync3D.addEventListener('click', () => {
+        const slide = HISTOLOGY_DATABASE[this.activeSlideId];
+        if (slide && typeof selectOrgan === 'function') {
+          selectOrgan(slide.meshTarget, true);
+        }
+      });
+    }
+
+    // 7. Popover Close & Sync
+    const popoverClose = document.getElementById('popover-close-btn');
+    if (popoverClose) {
+      popoverClose.addEventListener('click', () => this.hidePopover());
+    }
+
+    const popoverSync = document.getElementById('popover-sync-3d-btn');
+    if (popoverSync) {
+      popoverSync.addEventListener('click', () => {
+        if (this.selectedPin && typeof selectOrgan === 'function') {
+          selectOrgan(this.selectedPin.targetMesh, true);
+        }
+      });
+    }
+
+    // 8. Canvas Pointer Navigation (Pan & Zoom)
+    const viewport = document.getElementById('histo-viewport-container');
+    if (viewport) {
+      viewport.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.histo-pin, .histo-pin-popover, #split-divider-line')) return;
+        this.isDraggingPan = true;
+        this.lastPointerX = e.clientX;
+        this.lastPointerY = e.clientY;
+        viewport.setPointerCapture(e.pointerId);
+      });
+
+      viewport.addEventListener('pointermove', (e) => {
+        if (this.isDraggingSplit) {
+          const rect = viewport.getBoundingClientRect();
+          const relX = Math.max(0.1, Math.min(0.9, (e.clientX - rect.left) / rect.width));
+          this.splitRatio = relX;
+          if (this.splitDivider) this.splitDivider.style.left = `${(relX * 100).toFixed(1)}%`;
+          this.render();
+          this.updatePins();
+          return;
+        }
+
+        if (!this.isDraggingPan) return;
+        const dx = e.clientX - this.lastPointerX;
+        const dy = e.clientY - this.lastPointerY;
+        this.lastPointerX = e.clientX;
+        this.lastPointerY = e.clientY;
+
+        this.panX += dx;
+        this.panY += dy;
+        this.render();
+        this.updatePins();
+      });
+
+      const stopDrag = (e) => {
+        if (this.isDraggingPan) {
+          this.isDraggingPan = false;
+          try { viewport.releasePointerCapture(e.pointerId); } catch (_) {}
+        }
+        this.isDraggingSplit = false;
+      };
+      viewport.addEventListener('pointerup', stopDrag);
+      viewport.addEventListener('pointercancel', stopDrag);
+
+      // Mouse Wheel Smooth Zoom
+      viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const rect = viewport.getBoundingClientRect();
+        const cursorX = e.clientX - rect.left - rect.width / 2;
+        const cursorY = e.clientY - rect.top - rect.height / 2;
+
+        const zoomDelta = e.deltaY < 0 ? 1.14 : 0.88;
+        const oldScale = this.scale;
+        let newZoom = this.zoom * (e.deltaY < 0 ? 1.15 : 0.87);
+        newZoom = Math.max(2, Math.min(50, newZoom));
+
+        setMagnification(newZoom);
+
+        // Adjust pan to zoom into cursor point
+        const scaleRatio = this.scale / oldScale;
+        this.panX = cursorX - (cursorX - this.panX) * scaleRatio;
+        this.panY = cursorY - (cursorY - this.panY) * scaleRatio;
+        this.render();
+        this.updatePins();
+      }, { passive: false });
+    }
+
+    // 9. Split Divider Drag
+    if (this.splitDivider) {
+      this.splitDivider.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        this.isDraggingSplit = true;
+      });
+    }
+
+    // 10. Window Resize Handler
+    window.addEventListener('resize', () => {
+      if (this.isOpen) {
+        this.render();
+        this.updatePins();
+      }
+    });
+  }
+
+  setDrawerOpen(open) {
+    this.isOpen = open;
+    this.drawer.classList.toggle('is-open', open);
+
+    const btnHeader = document.getElementById('btn-toggle-histology');
+    const btnDock = document.getElementById('btn-histology-dock');
+    if (btnHeader) btnHeader.classList.toggle('is-active', open);
+    if (btnDock) btnDock.classList.toggle('active', open);
+
+    if (open) {
+      setTimeout(() => {
+        this.render();
+        this.updatePins();
+      }, 50);
+    } else {
+      this.hidePopover();
+    }
+  }
+
+  toggleMaximized() {
+    this.isMaximized = !this.isMaximized;
+    this.drawer.classList.toggle('is-maximized', this.isMaximized);
+    const btn = document.getElementById('btn-histo-expand');
+    if (btn) btn.textContent = this.isMaximized ? '❐' : '⛶';
+    setTimeout(() => {
+      this.render();
+      this.updatePins();
+    }, 150);
+  }
+
+  setViewMode(mode) {
+    this.viewMode = mode;
+    const modeBadge = document.getElementById('histo-mode-badge');
+    if (modeBadge) modeBadge.textContent = mode.toUpperCase();
+
+    if (this.splitOverlay) {
+      this.splitOverlay.style.display = mode === 'split' ? 'block' : 'none';
+      if (this.splitDivider) this.splitDivider.style.left = `${(this.splitRatio * 100).toFixed(1)}%`;
+    }
+
+    this.render();
+    this.updatePins();
+  }
+
+  loadSlide(slideId) {
+    if (!HISTOLOGY_DATABASE[slideId]) return;
+    this.activeSlideId = slideId;
+    const select = document.getElementById('select-histo-slide');
+    if (select && select.value !== slideId) select.value = slideId;
+
+    const badge = document.getElementById('badge-histo-slide');
+    if (badge) badge.textContent = HISTOLOGY_DATABASE[slideId].pillTag;
+
+    this.hidePopover();
+    this.updateUIHeaders();
+    this.renderCurrentSlide();
+    this.updatePins();
+    this.populatePinsList();
+  }
+
+  updateUIHeaders() {
+    const slide = HISTOLOGY_DATABASE[this.activeSlideId];
+    if (!slide) return;
+
+    const stainBadge = document.getElementById('histo-stain-badge');
+    const subtitle = document.getElementById('histo-slide-subtitle');
+    const panelTitle = document.getElementById('histo-panel-title');
+    const panelDesc = document.getElementById('histo-panel-desc');
+    const stainTitle = document.getElementById('stain-title-text');
+    const stainRowsWrap = document.getElementById('stain-color-rows');
+
+    if (stainBadge) stainBadge.textContent = slide.badge;
+    if (subtitle) subtitle.textContent = slide.subTitle;
+    if (panelTitle) panelTitle.textContent = slide.name;
+    if (panelDesc) panelDesc.textContent = slide.description;
+    if (stainTitle) stainTitle.textContent = slide.stainTitle;
+
+    if (stainRowsWrap && slide.stainRows) {
+      stainRowsWrap.innerHTML = slide.stainRows.map(row => `
+        <div class="stain-color-row">
+          <span class="stain-swatch" style="background:${row.color}; ${row.border ? 'border:1px solid #64748b;' : ''}"></span>
+          <span class="stain-key">${row.label}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  populatePinsList() {
+    const slide = HISTOLOGY_DATABASE[this.activeSlideId];
+    const listWrap = document.getElementById('histo-pins-list');
+    const countLabel = document.getElementById('pins-count-label');
+    if (!slide || !listWrap) return;
+
+    const pins = (this.viewMode === 'normal') 
+      ? slide.normalPins 
+      : (this.viewMode === 'pathology') 
+        ? slide.pathologyPins 
+        : [...slide.normalPins, ...slide.pathologyPins];
+
+    if (countLabel) countLabel.textContent = pins.length;
+
+    listWrap.innerHTML = pins.map(pin => `
+      <div class="histo-pin-list-item" data-pin-id="${pin.id}">
+        <span style="display:flex; align-items:center; gap:6px;">
+          <span style="width:8px; height:8px; border-radius:50%; background:${pin.isPath ? '#f43f5e' : '#00f0ff'};"></span>
+          <span>${pin.name}</span>
+        </span>
+        <span class="histo-pin-list-target">${pin.targetMesh}</span>
+      </div>
+    `).join('');
+
+    listWrap.querySelectorAll('.histo-pin-list-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const pinId = item.dataset.pinId;
+        const targetPin = pins.find(p => p.id === pinId);
+        if (targetPin) {
+          this.focusPin(targetPin);
+        }
+      });
+    });
+  }
+
+  focusPin(pin) {
+    this.selectedPin = pin;
+    if (typeof selectOrgan === 'function') {
+      selectOrgan(pin.targetMesh, true);
+    }
+    this.showPopoverForPin(pin);
+  }
+
+  showPopoverForPin(pin) {
+    if (!this.popover) return;
+    this.selectedPin = pin;
+
+    const badge = document.getElementById('popover-cell-badge');
+    const name = document.getElementById('popover-cell-name');
+    const desc = document.getElementById('popover-cell-desc');
+    const link = document.getElementById('popover-3d-link');
+
+    if (badge) {
+      badge.textContent = pin.badge;
+      badge.style.color = pin.isPath ? '#f43f5e' : '#00f0ff';
+      badge.style.background = pin.isPath ? 'rgba(244, 63, 94, 0.15)' : 'rgba(0, 240, 255, 0.12)';
+    }
+    if (name) name.textContent = pin.name;
+    if (desc) desc.textContent = pin.desc;
+    if (link) link.textContent = pin.targetMesh;
+
+    // Calculate position relative to viewport
+    const container = document.getElementById('histo-viewport-container');
+    if (container) {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      let px = (pin.x - 0.5) * w * this.scale + w / 2 + this.panX;
+      let py = (pin.y - 0.5) * h * this.scale + h / 2 + this.panY;
+
+      // Keep inside container bounds
+      const popW = 290;
+      const popH = 170;
+      px = Math.max(10, Math.min(w - popW - 10, px - popW / 2));
+      py = Math.max(10, Math.min(h - popH - 10, py - popH - 15));
+
+      this.popover.style.left = `${px}px`;
+      this.popover.style.top = `${py}px`;
+      this.popover.style.display = 'flex';
+    }
+  }
+
+  hidePopover() {
+    if (this.popover) this.popover.style.display = 'none';
+    this.selectedPin = null;
+  }
+
+  renderCurrentSlide() {
+    this.render();
+    this.populatePinsList();
+  }
+
+  render() {
+    if (!this.canvas || !this.ctx) return;
+    const container = document.getElementById('histo-viewport-container');
+    if (!container) return;
+
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    if (width <= 0 || height <= 0) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    if (this.canvas.width !== width * dpr || this.canvas.height !== height * dpr) {
+      this.canvas.width = width * dpr;
+      this.canvas.height = height * dpr;
+    }
+
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, height);
+
+    if (this.viewMode === 'normal') {
+      this.drawTissue(ctx, width, height, this.activeSlideId, false);
+    } else if (this.viewMode === 'pathology') {
+      this.drawTissue(ctx, width, height, this.activeSlideId, true);
+    } else if (this.viewMode === 'split') {
+      // Left side: Normal
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, width * this.splitRatio, height);
+      ctx.clip();
+      this.drawTissue(ctx, width, height, this.activeSlideId, false);
+      ctx.restore();
+
+      // Right side: Pathology
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(width * this.splitRatio, 0, width * (1 - this.splitRatio), height);
+      ctx.clip();
+      this.drawTissue(ctx, width, height, this.activeSlideId, true);
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
+  drawTissue(ctx, w, h, slideId, isPath) {
+    ctx.save();
+    // Center transformation with pan and scale
+    ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
+    ctx.scale(this.scale, this.scale);
+    ctx.translate(-w / 2, -h / 2);
+
+    switch (slideId) {
+      case 'cochlea':
+        this.renderCochlea(ctx, w, h, isPath);
+        break;
+      case 'coronary':
+        this.renderCoronary(ctx, w, h, isPath);
+        break;
+      case 'lung':
+        this.renderLung(ctx, w, h, isPath);
+        break;
+      case 'kidney':
+        this.renderKidney(ctx, w, h, isPath);
+        break;
+      case 'liver':
+        this.renderLiver(ctx, w, h, isPath);
+        break;
+      default:
+        this.renderCoronary(ctx, w, h, isPath);
+    }
+    ctx.restore();
+  }
+
+  // --------------------------------------------------------------------------
+  // HISTOLOGICAL TISSUE VECTOR RENDERERS
+  // --------------------------------------------------------------------------
+
+  renderCochlea(ctx, w, h, isPath) {
+    // Background endolymph fluid
+    ctx.fillStyle = isPath ? "#13091f" : "#0d1326";
+    ctx.fillRect(0, 0, w, h);
+
+    // Scala Tympani & Vestibuli partitions (perilymph)
+    const cx = w * 0.5;
+    const cy = h * 0.55;
+
+    // Basilar Membrane (eosin pink band)
+    ctx.beginPath();
+    ctx.moveTo(w * 0.2, cy + 50);
+    ctx.quadraticCurveTo(cx, cy + 60, w * 0.85, cy + 30);
+    ctx.lineWidth = isPath ? 14 : 9;
+    ctx.strokeStyle = isPath ? "#9d3a68" : "#d87295";
+    ctx.stroke();
+
+    // Tectorial Membrane (wavy gelatinous ribbon overlying sensory cells)
+    ctx.beginPath();
+    ctx.moveTo(w * 0.32, cy - 35);
+    ctx.bezierCurveTo(cx - 30, cy - 50, cx + 40, cy - 10, w * 0.72, isPath ? cy - 40 : cy + 10);
+    ctx.lineWidth = 14;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = isPath ? "rgba(224, 122, 155, 0.4)" : "rgba(224, 122, 155, 0.85)";
+    ctx.stroke();
+
+    // Tunnel of Corti (triangular pillar cell arch)
+    ctx.beginPath();
+    ctx.moveTo(cx - 35, cy + 55);
+    ctx.lineTo(cx - 5, cy + 10);
+    ctx.lineTo(cx + 25, cy + 53);
+    ctx.closePath();
+    ctx.fillStyle = isPath ? "rgba(40, 20, 60, 0.7)" : "rgba(15, 23, 42, 0.85)";
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#4a2d73";
+    ctx.stroke();
+
+    // Inner Hair Cell (1 row, flask shaped)
+    const ihcX = cx - 55;
+    const ihcY = cy + 20;
+    ctx.beginPath();
+    ctx.ellipse(ihcX, ihcY, 14, 22, -0.15, 0, Math.PI * 2);
+    ctx.fillStyle = "#e07a9b";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#4a2d73";
+    ctx.stroke();
+
+    // IHC Nucleus
+    ctx.beginPath();
+    ctx.arc(ihcX, ihcY + 8, 7, 0, Math.PI * 2);
+    ctx.fillStyle = "#4a2d73";
+    ctx.fill();
+
+    // Stereocilia tuft on IHC
+    ctx.beginPath();
+    ctx.moveTo(ihcX - 4, ihcY - 22);
+    ctx.lineTo(ihcX - 3, ihcY - (isPath ? 28 : 36));
+    ctx.moveTo(ihcX + 2, ihcY - 22);
+    ctx.lineTo(ihcX + 4, ihcY - (isPath ? 29 : 38));
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = isPath ? "#be123c" : "#f472b6";
+    ctx.stroke();
+
+    // Outer Hair Cells (3 rows)
+    for (let i = 0; i < 3; i++) {
+      const ohcX = cx + 45 + i * 28;
+      const ohcY = cy + 20 + i * 4;
+      if (isPath && i > 0) {
+        // Degenerated apoptotic ghost cells
+        ctx.beginPath();
+        ctx.ellipse(ohcX, ohcY, 9, 14, 0.25, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(74, 45, 115, 0.2)";
+        ctx.fill();
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.ellipse(ohcX, ohcY, 12, 24, 0.25, 0, Math.PI * 2);
+      ctx.fillStyle = "#e07a9b";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#4a2d73";
+      ctx.stroke();
+
+      // Nucleus
+      ctx.beginPath();
+      ctx.arc(ohcX, ohcY + 8, 6, 0, Math.PI * 2);
+      ctx.fillStyle = "#4a2d73";
+      ctx.fill();
+
+      // Stereocilia (V-shaped pattern)
+      if (!isPath) {
+        ctx.beginPath();
+        ctx.moveTo(ohcX - 5, ohcY - 23);
+        ctx.lineTo(ohcX - 8, ohcY - 36);
+        ctx.moveTo(ohcX, ohcY - 24);
+        ctx.lineTo(ohcX - 1, ohcY - 39);
+        ctx.moveTo(ohcX + 5, ohcY - 23);
+        ctx.lineTo(ohcX + 6, ohcY - 35);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#f472b6";
+        ctx.stroke();
+      }
+    }
+
+    // Spiral Ganglion (neurons on medial side)
+    for (let n = 0; n < (isPath ? 5 : 14); n++) {
+      const gx = w * 0.16 + (n % 4) * 22;
+      const gy = h * 0.65 + Math.floor(n / 4) * 24;
+      ctx.beginPath();
+      ctx.arc(gx, gy, 10, 0, Math.PI * 2);
+      ctx.fillStyle = "#e07a9b";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#4a2d73";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(gx, gy, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#39195c";
+      ctx.fill();
+    }
+  }
+
+  renderCoronary(ctx, w, h, isPath) {
+    const cx = w * 0.5;
+    const cy = h * 0.5;
+    const outerR = Math.min(w, h) * 0.42;
+
+    // Background connective tissue (adventitia)
+    ctx.fillStyle = "#0c101d";
+    ctx.fillRect(0, 0, w, h);
+
+    // Tunica Media: robust concentric bands of smooth muscle
+    ctx.beginPath();
+    ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+    ctx.fillStyle = isPath ? "#2b1222" : "#3b1528";
+    ctx.fill();
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "#4a2d73";
+    ctx.stroke();
+
+    if (!isPath) {
+      // Normal Artery: wide open patent circular lumen
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR * 0.72, 0, Math.PI * 2);
+      ctx.fillStyle = "#080c16";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#e07a9b";
+      ctx.stroke();
+
+      // Endothelial cell nuclei along perimeter
+      const count = 36;
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        const ex = cx + Math.cos(angle) * (outerR * 0.72);
+        const ey = cy + Math.sin(angle) * (outerR * 0.72);
+        ctx.beginPath();
+        ctx.ellipse(ex, ey, 5, 2.5, angle, 0, Math.PI * 2);
+        ctx.fillStyle = "#4a2d73";
+        ctx.fill();
+      }
+
+      // Red blood cells floating in lumen
+      for (let r = 0; r < 24; r++) {
+        const rAng = r * 1.37;
+        const rDist = Math.sin(r * 4.2) * (outerR * 0.55);
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(rAng) * rDist, cy + Math.sin(rAng) * rDist, 6, 0, Math.PI * 2);
+        ctx.fillStyle = "#e11d48";
+        ctx.fill();
+      }
+      return;
+    }
+
+    // PATHOLOGY: Advanced Atherosclerotic Plaque (Fibroatheroma)
+    // 1. Necrotic Lipid Core
+    ctx.beginPath();
+    ctx.ellipse(cx + 20, cy + 30, outerR * 0.65, outerR * 0.45, 0.15, 0, Math.PI * 2);
+    ctx.fillStyle = "#1e1428";
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = "#581c87";
+    ctx.stroke();
+
+    // 2. Cholesterol Clefts (Needle-like acellular white slits)
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2.5;
+    for (let c = 0; c < 30; c++) {
+      const angle = (c * 0.45) % (Math.PI * 2);
+      const rad = 25 + (c * 13) % 95;
+      const x = cx + 15 + Math.cos(angle) * rad;
+      const y = cy + 25 + Math.sin(angle) * (rad * 0.7);
+      const len = 16 + (c % 5) * 5;
+      const rot = 0.4 + (c % 4) * 0.3;
+
+      ctx.beginPath();
+      ctx.moveTo(x - Math.cos(rot) * len, y - Math.sin(rot) * len);
+      ctx.lineTo(x + Math.cos(rot) * len, y + Math.sin(rot) * len);
+      ctx.stroke();
+    }
+
+    // 3. Foam Cells (pale vacuolated bubbly lipid macrophages)
+    for (let f = 0; f < 35; f++) {
+      const fAng = (f * 0.75);
+      const fRad = 45 + (f * 9) % 110;
+      const fx = cx - 20 + Math.cos(fAng) * fRad;
+      const fy = cy + 10 + Math.sin(fAng) * (fRad * 0.6);
+
+      ctx.beginPath();
+      ctx.arc(fx, fy, 8, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(244, 151, 178, 0.45)";
+      ctx.fill();
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = "#4a2d73";
+      ctx.stroke();
+
+      // Eccentric dark nucleus
+      ctx.beginPath();
+      ctx.arc(fx + 2.5, fy + 2, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#39195c";
+      ctx.fill();
+    }
+
+    // 4. Dystrophic Calcification (deep basophilic purple granular deposits)
+    for (let k = 0; k < 18; k++) {
+      const kx = cx + 30 + Math.cos(k * 1.1) * (k * 4.5);
+      const ky = cy + 70 + Math.sin(k * 1.7) * 15;
+      ctx.beginPath();
+      ctx.arc(kx, ky, 6 + (k % 4) * 2, 0, Math.PI * 2);
+      ctx.fillStyle = "#250e3e";
+      ctx.fill();
+      ctx.strokeStyle = "#7e22ce";
+      ctx.stroke();
+    }
+
+    // 5. Fibrous Cap (dense collagen band overlying plaque)
+    ctx.beginPath();
+    ctx.ellipse(cx - 35, cy - 60, outerR * 0.55, 32, -0.25, 0, Math.PI * 2);
+    ctx.fillStyle = "#e07a9b";
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#f472b6";
+    ctx.stroke();
+
+    // 6. Severely Stenosed Residual Lumen (eccentric, 75% occlusion)
+    ctx.beginPath();
+    ctx.ellipse(cx - 70, cy - 80, outerR * 0.28, outerR * 0.18, -0.4, 0, Math.PI * 2);
+    ctx.fillStyle = "#090d18";
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = "#f43f5e";
+    ctx.stroke();
+
+    // Trapped erythrocytes in residual lumen
+    for (let b = 0; b < 12; b++) {
+      const bx = cx - 70 + (Math.sin(b * 2.1) * 22);
+      const by = cy - 80 + (Math.cos(b * 2.5) * 14);
+      ctx.beginPath();
+      ctx.arc(bx, by, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#e11d48";
+      ctx.fill();
+    }
+  }
+
+  renderLung(ctx, w, h, isPath) {
+    ctx.fillStyle = "#070b14";
+    ctx.fillRect(0, 0, w, h);
+
+    if (!isPath) {
+      // Normal Lung: Delicate honeycomb lattice of thin alveolar septa
+      const rows = 5;
+      const cols = 7;
+      const dx = w / cols;
+      const dy = h / rows;
+
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = "#e07a9b";
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const ax = c * dx + dx * 0.5 + (r % 2 ? dx * 0.25 : 0);
+          const ay = r * dy + dy * 0.5;
+
+          ctx.beginPath();
+          ctx.arc(ax, ay, dx * 0.38, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Type I Pneumocyte nuclei (flat squamous)
+          ctx.beginPath();
+          ctx.ellipse(ax + dx * 0.35, ay, 6, 2, 0.4, 0, Math.PI * 2);
+          ctx.fillStyle = "#4a2d73";
+          ctx.fill();
+
+          // Type II Pneumocyte (cuboidal, at corners)
+          if ((r + c) % 2 === 0) {
+            ctx.beginPath();
+            ctx.arc(ax - dx * 0.32, ay - dy * 0.2, 5.5, 0, Math.PI * 2);
+            ctx.fillStyle = "#e07a9b";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(ax - dx * 0.32, ay - dy * 0.2, 3, 0, Math.PI * 2);
+            ctx.fillStyle = "#39195c";
+            ctx.fill();
+          }
+
+          // Capillary red blood cells in septa
+          ctx.beginPath();
+          ctx.arc(ax, ay + dx * 0.38, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = "#e11d48";
+          ctx.fill();
+        }
+      }
+      return;
+    }
+
+    // PATHOLOGY: Centriacinar Emphysema (Septal destruction and bullae)
+    // Confluent destroyed bullae
+    ctx.fillStyle = "#060810";
+    ctx.fillRect(0, 0, w, h);
+
+    // Broken septal remnants (free floating clubbed spurs)
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "#e07a9b";
+    ctx.lineCap = "round";
+
+    const spurs = [
+      { x1: w * 0.15, y1: h * 0.2, x2: w * 0.35, y2: h * 0.38 },
+      { x1: w * 0.45, y1: h * 0.15, x2: w * 0.48, y2: h * 0.32 },
+      { x1: w * 0.82, y1: h * 0.25, x2: w * 0.65, y2: h * 0.42 },
+      { x1: w * 0.18, y1: h * 0.75, x2: w * 0.38, y2: h * 0.62 },
+      { x1: w * 0.55, y1: h * 0.85, x2: w * 0.52, y2: h * 0.65 },
+      { x1: w * 0.88, y1: h * 0.70, x2: w * 0.72, y2: h * 0.58 }
+    ];
+
+    spurs.forEach(s => {
+      ctx.beginPath();
+      ctx.moveTo(s.x1, s.y1);
+      ctx.lineTo(s.x2, s.y2);
+      ctx.stroke();
+
+      // Clubbed bulbous end of ruptured septal spur
+      ctx.beginPath();
+      ctx.arc(s.x2, s.y2, 7.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#e07a9b";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#4a2d73";
+      ctx.stroke();
+    });
+
+    // Pigmented smoker macrophages with black/brown anthracotic carbon
+    for (let m = 0; m < 16; m++) {
+      const mx = w * 0.35 + (Math.sin(m * 1.8) * w * 0.25);
+      const my = h * 0.45 + (Math.cos(m * 2.3) * h * 0.25);
+
+      ctx.beginPath();
+      ctx.arc(mx, my, 11, 0, Math.PI * 2);
+      ctx.fillStyle = "#e07a9b";
+      ctx.fill();
+      ctx.strokeStyle = "#4a2d73";
+      ctx.stroke();
+
+      // Carbon granules
+      for (let g = 0; g < 5; g++) {
+        ctx.beginPath();
+        ctx.arc(mx - 4 + g * 2, my - 3 + (g % 3) * 3, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#1e293b";
+        ctx.fill();
+      }
+    }
+  }
+
+  renderKidney(ctx, w, h, isPath) {
+    // PAS STAIN: Intense magenta basement membranes, delicate pink cytoplasm
+    ctx.fillStyle = "#0c0814";
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w * 0.5;
+    const cy = h * 0.5;
+    const r = Math.min(w, h) * 0.36;
+
+    // Bowman's Capsule (circular outer wall)
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.lineWidth = isPath ? 7 : 4;
+    ctx.strokeStyle = "#d946ef"; // PAS intense magenta
+    ctx.stroke();
+
+    // Bowman's space (clear crescent)
+    ctx.fillStyle = "#08060e";
+    ctx.fill();
+
+    // Glomerular Tuft (central lobules)
+    const tuftR = isPath ? r * 0.88 : r * 0.74;
+
+    if (!isPath) {
+      // Normal Glomerulus: delicate open capillary loops with razor-thin PAS magenta GBM
+      for (let l = 0; l < 8; l++) {
+        const ang = (l / 8) * Math.PI * 2;
+        const lx = cx + Math.cos(ang) * (tuftR * 0.5);
+        const ly = cy + Math.sin(ang) * (tuftR * 0.5);
+
+        ctx.beginPath();
+        ctx.arc(lx, ly, tuftR * 0.32, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(250, 232, 255, 0.12)";
+        ctx.fill();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = "#d946ef";
+        ctx.stroke();
+
+        // Podocyte nuclei on urinary surface
+        ctx.beginPath();
+        ctx.arc(lx + Math.cos(ang) * (tuftR * 0.34), ly + Math.sin(ang) * (tuftR * 0.34), 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#6b21a8";
+        ctx.fill();
+      }
+      return;
+    }
+
+    // PATHOLOGY: Diabetic Glomerulosclerosis (Kimmelstiel-Wilson Lesions)
+    // 1. Markedly thickened, ribbon-like GBM
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "#c026d3";
+    for (let b = 0; b < 6; b++) {
+      const bAng = (b / 6) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(bAng) * (tuftR * 0.55), cy + Math.sin(bAng) * (tuftR * 0.55), tuftR * 0.35, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // 2. Kimmelstiel-Wilson Nodules (Concentric spherical PAS-intense mesangial nodules)
+    const nodules = [
+      { x: cx - tuftR * 0.32, y: cy - tuftR * 0.25, rad: tuftR * 0.30 },
+      { x: cx + tuftR * 0.35, y: cy - tuftR * 0.20, rad: tuftR * 0.28 },
+      { x: cx - tuftR * 0.15, y: cy + tuftR * 0.35, rad: tuftR * 0.34 },
+      { x: cx + tuftR * 0.30, y: cy + tuftR * 0.30, rad: tuftR * 0.26 }
+    ];
+
+    nodules.forEach(nod => {
+      // Outer laminated ring
+      ctx.beginPath();
+      ctx.arc(nod.x, nod.y, nod.rad, 0, Math.PI * 2);
+      ctx.fillStyle = "#86198f";
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#f0abfc";
+      ctx.stroke();
+
+      // Inner dense PAS core
+      ctx.beginPath();
+      ctx.arc(nod.x, nod.y, nod.rad * 0.65, 0, Math.PI * 2);
+      ctx.fillStyle = "#a21caf";
+      ctx.fill();
+
+      // Acellular center
+      ctx.beginPath();
+      ctx.arc(nod.x, nod.y, nod.rad * 0.35, 0, Math.PI * 2);
+      ctx.fillStyle = "#d946ef";
+      ctx.fill();
+    });
+
+    // 3. Arteriolar Hyalinosis cuff at vascular pole
+    ctx.beginPath();
+    ctx.ellipse(cx + tuftR * 0.75, cy + tuftR * 0.75, 24, 15, Math.PI / 4, 0, Math.PI * 2);
+    ctx.fillStyle = "#e879f9";
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#a21caf";
+    ctx.stroke();
+  }
+
+  renderLiver(ctx, w, h, isPath) {
+    // MASSON TRICHROME: Brilliant aniline blue collagen, scarlet red hepatocytes, dark nuclei
+    ctx.fillStyle = "#0a0d18";
+    ctx.fillRect(0, 0, w, h);
+
+    if (!isPath) {
+      // Normal Liver: regular cords of red hepatocytes with delicate portal triad
+      // Hepatocyte cords (plates)
+      const count = 48;
+      for (let i = 0; i < count; i++) {
+        const hx = (i % 8) * (w / 8) + (w / 16);
+        const hy = Math.floor(i / 8) * (h / 6) + (h / 12);
+
+        ctx.beginPath();
+        ctx.arc(hx, hy, 16, 0, Math.PI * 2);
+        ctx.fillStyle = "#dc2626"; // Scarlet red
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = "#991b1b";
+        ctx.stroke();
+
+        // Nucleus (dark blue-black)
+        ctx.beginPath();
+        ctx.arc(hx, hy, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "#0f172a";
+        ctx.fill();
+
+        // Binucleated cells in normal liver
+        if (i % 5 === 0) {
+          ctx.beginPath();
+          ctx.arc(hx + 7, hy, 4, 0, Math.PI * 2);
+          ctx.fillStyle = "#0f172a";
+          ctx.fill();
+        }
+      }
+
+      // Portal Triad (small localized portal tract with minimal blue collagen)
+      const tx = w * 0.28;
+      const ty = h * 0.38;
+      ctx.beginPath();
+      ctx.ellipse(tx, ty, 45, 35, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(29, 78, 216, 0.2)";
+      ctx.fill();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = "#2563eb";
+      ctx.stroke();
+
+      // Portal vein branch
+      ctx.beginPath();
+      ctx.ellipse(tx - 12, ty, 18, 12, 0.3, 0, Math.PI * 2);
+      ctx.fillStyle = "#0f172a";
+      ctx.fill();
+      ctx.strokeStyle = "#38bdf8";
+      ctx.stroke();
+
+      // Bile ductule (cuboidal cells)
+      ctx.beginPath();
+      ctx.arc(tx + 18, ty - 8, 8, 0, Math.PI * 2);
+      ctx.fillStyle = "#dc2626";
+      ctx.fill();
+      ctx.stroke();
+      return;
+    }
+
+    // PATHOLOGY: Advanced Cirrhosis with Bridging Fibrosis (Masson Trichrome)
+    // 1. Broad Aniline Blue Collagen Bridging Septa
+    ctx.lineWidth = 28;
+    ctx.strokeStyle = "#1d4ed8"; // Brilliant aniline blue
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.45);
+    ctx.bezierCurveTo(w * 0.35, h * 0.40, w * 0.40, h * 0.65, w, h * 0.55);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(w * 0.52, 0);
+    ctx.bezierCurveTo(w * 0.45, h * 0.35, w * 0.58, h * 0.70, w * 0.48, h);
+    ctx.stroke();
+
+    // 2. Regenerative Nodules (Entrapped clonal islands of hepatocytes)
+    const nodules = [
+      { x: w * 0.25, y: h * 0.22, rx: w * 0.18, ry: h * 0.16 },
+      { x: w * 0.78, y: h * 0.25, rx: w * 0.16, ry: h * 0.18 },
+      { x: w * 0.22, y: h * 0.75, rx: w * 0.16, ry: h * 0.17 },
+      { x: w * 0.76, y: h * 0.80, rx: w * 0.18, ry: h * 0.16 }
+    ];
+
+    nodules.forEach(nod => {
+      ctx.beginPath();
+      ctx.ellipse(nod.x, nod.y, nod.rx, nod.ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "#ef4444";
+      ctx.fill();
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#1e40af"; // Encapsulating blue collagen ring
+      ctx.stroke();
+
+      // Swollen hepatocytes with fatty change vacuoles inside nodule
+      for (let c = 0; c < 12; c++) {
+        const cx = nod.x + Math.sin(c * 2.1) * (nod.rx * 0.65);
+        const cy = nod.y + Math.cos(c * 2.7) * (nod.ry * 0.65);
+        ctx.beginPath();
+        ctx.arc(cx, cy, 9, 0, Math.PI * 2);
+        ctx.fillStyle = "#dc2626";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#0f172a";
+        ctx.fill();
+      }
+    });
+
+    // 3. Proliferating Bile Ductules (Ductular reaction) within the blue scar
+    for (let d = 0; d < 8; d++) {
+      const dx = w * 0.48 + Math.sin(d * 1.5) * 25;
+      const dy = h * 0.40 + Math.cos(d * 1.8) * 45;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "#ef4444";
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "#3b82f6";
+      ctx.stroke();
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // INTERACTIVE ANNOTATION PINS SYSTEM
+  // --------------------------------------------------------------------------
+
+  updatePins() {
+    if (!this.pinsLayer) return;
+    this.pinsLayer.innerHTML = '';
+
+    if (!this.showPins) return;
+    const slide = HISTOLOGY_DATABASE[this.activeSlideId];
+    if (!slide) return;
+
+    const container = document.getElementById('histo-viewport-container');
+    if (!container) return;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+
+    const currentPins = (this.viewMode === 'normal') 
+      ? slide.normalPins 
+      : (this.viewMode === 'pathology') 
+        ? slide.pathologyPins 
+        : [...slide.normalPins, ...slide.pathologyPins];
+
+    currentPins.forEach(pin => {
+      // In split view, check if pin belongs to its visible split half
+      if (this.viewMode === 'split') {
+        if (!pin.isPath && pin.x > this.splitRatio) return;
+        if (pin.isPath && pin.x < this.splitRatio) return;
+      }
+
+      // Convert normalized coordinates (0..1) to screen coordinates
+      const screenX = (pin.x - 0.5) * w * this.scale + w / 2 + this.panX;
+      const screenY = (pin.y - 0.5) * h * this.scale + h / 2 + this.panY;
+
+      // Don't render pins if out of viewport
+      if (screenX < -20 || screenX > w + 20 || screenY < -20 || screenY > h + 20) return;
+
+      const pinEl = document.createElement('div');
+      pinEl.className = `histo-pin ${pin.isPath ? 'pin-pathology' : 'pin-normal'}`;
+      pinEl.style.left = `${screenX}px`;
+      pinEl.style.top = `${screenY}px`;
+      pinEl.dataset.pinId = pin.id;
+
+      pinEl.innerHTML = `
+        <div class="histo-pin-dot"></div>
+        <span class="histo-pin-label">${pin.name}</span>
+      `;
+
+      pinEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.focusPin(pin);
+      });
+
+      this.pinsLayer.appendChild(pinEl);
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // BIDIRECTIONAL SYNCHRONIZATION INTERFACE
+  // --------------------------------------------------------------------------
+
+  syncFrom3D(meshName) {
+    if (!meshName) return;
+    let targetSlide = null;
+
+    if (meshName.includes("Cochlea") || meshName.includes("Ear") || meshName.includes("Ossicle") || meshName.includes("Sens_")) {
+      targetSlide = "cochlea";
+    } else if (meshName.includes("Heart") || meshName.includes("Coronary") || meshName.includes("Aorta") || meshName.includes("Vessel_")) {
+      targetSlide = "coronary";
+    } else if (meshName.includes("Lung") || meshName.includes("Resp_") || meshName.includes("Trachea") || meshName.includes("Bronch")) {
+      targetSlide = "lung";
+    } else if (meshName.includes("Kidney") || meshName.includes("Renal") || meshName.includes("Uro_") || meshName.includes("Adrenal")) {
+      targetSlide = "kidney";
+    } else if (meshName.includes("Liver") || meshName.includes("Hepatic") || meshName.includes("GI_") || meshName.includes("Gallbladder")) {
+      targetSlide = "liver";
+    }
+
+    if (targetSlide && targetSlide !== this.activeSlideId) {
+      this.loadSlide(targetSlide);
+      // Pulse toggle button to notify user
+      const toggle = document.getElementById('btn-toggle-histology');
+      if (toggle) {
+        toggle.classList.add('is-active');
+        setTimeout(() => {
+          if (!this.isOpen) toggle.classList.remove('is-active');
+        }, 1200);
+      }
+    }
+  }
+
+  syncFromSubmodel(modelFile) {
+    if (!modelFile) return;
+    if (modelFile.includes("auditory")) {
+      this.loadSlide("cochlea");
+    } else if (modelFile.includes("coronary") || modelFile.includes("cardiopulmonary")) {
+      this.loadSlide("coronary");
+    } else if (modelFile.includes("pulmonary")) {
+      this.loadSlide("lung");
+    } else if (modelFile.includes("gastrointestinal")) {
+      this.loadSlide("liver");
+    }
+  }
+}
+
+// Instantiate and expose globally for bidirectional linking
+const virtualHistology = new VirtualHistologyEngine();
+window.VirtualHistology = virtualHistology;
+

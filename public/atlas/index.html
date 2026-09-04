@@ -53,6 +53,11 @@
         <span style="color: var(--text-dim);">DRACO COMPRESSION:</span>
         <span style="color: var(--emerald-green);">ACTIVE (0.88 MB)</span>
       </div>
+      <button class="btn-histo-header-toggle" id="btn-toggle-histology" title="Toggle Virtual Histology Dual-Viewport Drawer (Hot-Key: H)">
+        <span class="histo-live-dot"></span>
+        <span class="histo-btn-text">🔬 HISTOLOGY</span>
+        <span class="histo-slide-pill" id="badge-histo-slide">LAD</span>
+      </button>
     </div>
   </header>
 
@@ -65,6 +70,8 @@
         <option value="submodel_auditory_apparatus.glb">👂 Auditory Apparatus &amp; Ossicular Mechanism</option>
         <option value="submodel_coronary_stent_bypass.glb">🫀 Coronary Stent, Angioplasty &amp; CABG Bypass</option>
         <option value="submodel_pulmonary_alveolus.glb">🫁 Pulmonary Micro-Anatomy &amp; Alveolar Gas Exchange</option>
+        <option value="submodel_renal_nephron.glb">🩺 Renal Glomerulus &amp; Filtration Barrier</option>
+        <option value="submodel_hepatic_lobule.glb">🧪 Hepatic Lobule &amp; Portal Triad</option>
         <option value="submodel_cardiopulmonary.glb">🫀 Cardiopulmonary System (Thoracic)</option>
         <option value="submodel_gastrointestinal.glb">🧪 Gastrointestinal &amp; Hepatic System</option>
         <option value="submodel_musculoskeletal.glb">🦴 Musculoskeletal System</option>
@@ -674,8 +681,152 @@
       <button class="dock-btn" id="btn-pulse-mode">💓 Cardiac Pulse</button>
       <button class="dock-btn" id="btn-neural-mode">⚡ Neural Pulse</button>
       <button class="dock-btn" id="btn-autorotate">🔄 Orbit</button>
+      <button class="dock-btn" id="btn-histology-dock" title="Toggle Virtual Histology Lab Drawer (H)">🔬 Histology</button>
     </div>
   </nav>
+
+  <!-- ========================================================================= -->
+  <!-- VIRTUAL HISTOLOGY DUAL-VIEWPORT DRAWER & MICROSCOPIC SLIDE VIEWER        -->
+  <!-- ========================================================================= -->
+  <aside class="histology-drawer glass-panel" id="histology-drawer" aria-label="Virtual Histology Laboratory">
+    <!-- Top Bar / Header of Drawer -->
+    <div class="histo-header">
+      <div class="histo-title-group">
+        <div class="histo-icon-badge">🔬</div>
+        <div class="histo-titles-wrap">
+          <div class="histo-title-row">
+            <span class="histo-title">VIRTUAL HISTOLOGY LAB</span>
+            <span class="badge-tag histo-tag" id="histo-stain-badge">H&amp;E STAIN</span>
+            <span class="badge-tag histo-view-badge" id="histo-mode-badge">PATHOLOGY</span>
+          </div>
+          <div class="histo-subtitle" id="histo-slide-subtitle">Coronary LAD: Atherosclerotic Plaque with Fibrous Cap &amp; Cholesterol Clefts</div>
+        </div>
+      </div>
+
+      <div class="histo-header-actions">
+        <!-- Slide Quick Selector -->
+        <select id="select-histo-slide" class="histo-dropdown" title="Select Histology Slide">
+          <option value="cochlea">👂 Cochlea: Organ of Corti (H&amp;E)</option>
+          <option value="coronary" selected>🫀 Coronary LAD: Atherosclerosis (H&amp;E)</option>
+          <option value="lung">🫁 Pulmonary: Alveoli &amp; Emphysema (H&amp;E)</option>
+          <option value="kidney">🧪 Kidney: Glomerular Tuft &amp; KW (PAS)</option>
+          <option value="liver">🩺 Liver: Portal Triad &amp; Cirrhosis (Masson Trichrome)</option>
+        </select>
+
+        <!-- View Mode: Normal, Pathology, Split-Screen Comparison -->
+        <div class="histo-mode-group">
+          <button class="btn-mini histo-mode-btn" data-mode="normal" id="btn-histo-normal" title="Normal Physiological Histology">NORMAL</button>
+          <button class="btn-mini histo-mode-btn active" data-mode="pathology" id="btn-histo-pathology" title="Pathological Histology">PATHOLOGY</button>
+          <button class="btn-mini histo-mode-btn" data-mode="split" id="btn-histo-split" title="Dual Viewport Split-Screen Comparison">SPLIT VIEW</button>
+        </div>
+
+        <!-- Pin Annotations Toggle -->
+        <button class="btn-mini histo-tool-btn active" id="btn-toggle-pins" title="Toggle Cellular Feature Annotations">📍 PINS</button>
+
+        <!-- Drawer Resize / Minimize / Close -->
+        <button class="btn-mini histo-win-btn" id="btn-histo-expand" title="Maximize / Restore Drawer">⛶</button>
+        <button class="btn-mini histo-win-btn" id="btn-histo-close" title="Close Histology Drawer (H)">✕</button>
+      </div>
+    </div>
+
+    <!-- Histology Viewer Workspace (Dual-Viewport or Single Canvas) -->
+    <div class="histo-workspace" id="histo-workspace">
+      <!-- Slide Viewport (Canvas Microscopic Slice Viewer) -->
+      <div class="histo-viewport-container" id="histo-viewport-container">
+        <!-- Canvas for high-resolution interactive tissue rendering -->
+        <canvas id="histo-canvas" class="histo-canvas"></canvas>
+
+        <!-- Split comparison label overlays and divider -->
+        <div class="histo-split-overlay" id="histo-split-overlay" style="display: none;">
+          <div class="split-label split-left">NORMAL HISTOLOGY</div>
+          <div class="split-label split-right">PATHOLOGY SPECIMEN</div>
+          <div class="split-divider-line" id="split-divider-line"></div>
+        </div>
+
+        <!-- Interactive Cellular Feature Pins Overlay Layer -->
+        <div class="histo-pins-layer" id="histo-pins-layer"></div>
+
+        <!-- Tooltip Popover for Cell Annotation Pin -->
+        <div class="histo-pin-popover glass-panel" id="histo-pin-popover" style="display: none;">
+          <div class="popover-header">
+            <span class="popover-badge" id="popover-cell-badge">CELLULAR TARGET</span>
+            <button class="popover-close" id="popover-close-btn" title="Close">×</button>
+          </div>
+          <div class="popover-title" id="popover-cell-name">Foam Cell</div>
+          <div class="popover-desc" id="popover-cell-desc">Lipid-engorged monocyte-macrophage laden with oxidized LDL via scavenger receptors (CD36). Key driver of fatty streak progression and plaque destabilization.</div>
+          <div class="popover-correlate">
+            <span class="correlate-label">3D GROSS CORRELATE:</span>
+            <span class="correlate-link" id="popover-3d-link">Organ_Heart</span>
+            <button class="btn-mini popover-sync-btn" id="popover-sync-3d-btn">📍 FOCUS 3D</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Histology Info & Metadata Side-Card -->
+      <aside class="histo-side-panel">
+        <div class="histo-info-section">
+          <div class="histo-section-title">SPECIMEN &amp; DIAGNOSIS</div>
+          <div class="histo-info-title" id="histo-panel-title">Coronary LAD Atherosclerosis</div>
+          <p class="histo-info-text" id="histo-panel-desc">Advanced fibroatheroma with extensive subintimal lipid accumulation, necrotic core with cholesterol clefts, and fibrous cap thinning.</p>
+        </div>
+
+        <div class="histo-info-section">
+          <div class="histo-section-title">HISTOLOGICAL STAIN PROFILE</div>
+          <div class="stain-info-card" id="histo-stain-info">
+            <div class="stain-name" id="stain-title-text">Hematoxylin &amp; Eosin (H&amp;E)</div>
+            <div class="stain-color-rows" id="stain-color-rows">
+              <div class="stain-color-row">
+                <span class="stain-swatch" style="background:#4a2d73;"></span>
+                <span class="stain-key">Nuclei / DNA: Purple (#4a2d73)</span>
+              </div>
+              <div class="stain-color-row">
+                <span class="stain-swatch" style="background:#e07a9b;"></span>
+                <span class="stain-key">Cytoplasm / Protein: Pink (#e07a9b)</span>
+              </div>
+              <div class="stain-color-row">
+                <span class="stain-swatch" style="background:#ffffff; border:1px solid #64748b;"></span>
+                <span class="stain-key">Cholesterol Clefts: Clear (dissolved)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="histo-info-section" style="flex: 1; display: flex; flex-direction: column;">
+          <div class="histo-section-title">CELLULAR TARGETS (<span id="pins-count-label">5</span>)</div>
+          <div class="histo-pins-list" id="histo-pins-list">
+            <!-- Dynamically populated pin list buttons -->
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Bottom Controls Bar of Drawer -->
+    <div class="histo-footer">
+      <!-- Magnification Buttons & Zoom Slider -->
+      <div class="histo-mag-group">
+        <span class="histo-footer-label">MAGNIFICATION:</span>
+        <button class="btn-mini histo-mag-btn" data-mag="4" id="mag-4x">4x Overview</button>
+        <button class="btn-mini histo-mag-btn active" data-mag="10" id="mag-10x">10x Tissue</button>
+        <button class="btn-mini histo-mag-btn" data-mag="40" id="mag-40x">40x High-Dry</button>
+        
+        <div class="histo-slider-wrap">
+          <input type="range" min="2" max="50" value="10" class="range-slider-dock" id="histo-zoom-slider" title="Continuous Magnification Zoom">
+          <span class="histo-zoom-readout" id="histo-zoom-readout">10.0x</span>
+        </div>
+      </div>
+
+      <!-- Navigation & Pan hints -->
+      <div class="histo-nav-hints">
+        <span>🖱 Click+Drag to Pan • ⚙ Scroll to Zoom • 📍 Click Pins to Focus 3D</span>
+      </div>
+
+      <!-- Reset & Sync Actions -->
+      <div class="histo-footer-actions">
+        <button class="btn-mini" id="btn-histo-recenter" title="Recenter Microscopic Field">CENTER FIELD</button>
+        <button class="btn-mini" id="btn-histo-sync3d" title="Sync Gross 3D Viewport to Current Slide Organ">SYNC 3D ATLAS</button>
+      </div>
+    </div>
+  </aside>
 
   <!-- Main Three.js Application Logic -->
   <script type="module" src="viewer.js?v=phase2"></script>
