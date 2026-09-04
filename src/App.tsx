@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Play, Pause, FastForward, Rewind, CheckCircle, 
   BookOpen, Layers, Activity, ChevronRight,
@@ -22,13 +23,14 @@ import { Cinematic3DBodyPortal } from './components/Cinematic3DBodyPortal';
 import { BodyNavigatorHome } from './components/BodyNavigatorHome';
 import { IntroOverlay } from './components/IntroOverlay';
 import { useTheme } from './context/ThemeContext';
+import PrivacyPage from './pages/PrivacyPage';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
 export default function App() {
   const { isDark, toggleTheme } = useTheme();
-  const [isHomePage, setIsHomePage] = useState(true);
-  const [is3DPortalOpen, setIs3DPortalOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('visual');
   const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,10 +65,10 @@ export default function App() {
         e.preventDefault();
         setIsSidebarOpen(prev => !prev);
       }
-      if (e.altKey && e.key === '1') { e.preventDefault(); setActiveTab('visual'); setIs3DPortalOpen(false); }
-      if (e.altKey && e.key === '2') { e.preventDefault(); setActiveTab('wiki'); setIs3DPortalOpen(false); }
-      if (e.altKey && e.key === '3') { e.preventDefault(); setActiveTab('pyq'); setIs3DPortalOpen(false); }
-      if (e.altKey && e.key === '4') { e.preventDefault(); setActiveTab('atlas'); setIs3DPortalOpen(false); }
+      if (e.altKey && e.key === '1') { e.preventDefault(); setActiveTab('visual'); navigate('/node/thyroid'); }
+      if (e.altKey && e.key === '2') { e.preventDefault(); setActiveTab('wiki'); navigate('/node/thyroid'); }
+      if (e.altKey && e.key === '3') { e.preventDefault(); setActiveTab('pyq'); navigate('/node/thyroid'); }
+      if (e.altKey && e.key === '4') { e.preventDefault(); setActiveTab('atlas'); navigate('/node/thyroid'); }
     };
 
     window.addEventListener('keydown', handleGlobalKeyDown);
@@ -110,8 +112,8 @@ export default function App() {
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
-        onSelectCut={(cut) => { setSelectedCut(cut); setIs3DPortalOpen(false); }}
-        onSwitchTab={(tab) => { setActiveTab(tab); setIs3DPortalOpen(false); }}
+        onSelectCut={(cut) => { setSelectedCut(cut); navigate('/node/thyroid'); }}
+        onSwitchTab={(tab) => { setActiveTab(tab); navigate('/node/thyroid'); }}
       />
 
       {/* ── Top Header Navigation ── */}
@@ -130,7 +132,7 @@ export default function App() {
           </button>
 
           <div
-            onClick={() => { setIsHomePage(true); setIs3DPortalOpen(false); }}
+            onClick={() => navigate('/')}
             className="w-8 h-8 rounded-xl flex items-center justify-center shadow-sm cursor-pointer"
             style={{ background: 'transparent' }}
           >
@@ -143,7 +145,7 @@ export default function App() {
           <div>
             <div className="flex items-center gap-2">
               <span
-                onClick={() => { setIsHomePage(true); setIs3DPortalOpen(false); }}
+                onClick={() => navigate('/')}
                 className={`font-extrabold text-base tracking-tight cursor-pointer ${isDark ? 'text-white' : 'text-zinc-900'}`}
               >
                 Clinova
@@ -161,9 +163,9 @@ export default function App() {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* 3D Body Portal Switcher */}
           <button
-            onClick={() => setIs3DPortalOpen(!is3DPortalOpen)}
+            onClick={() => navigate(location.pathname === '/atlas' ? '/node/thyroid' : '/atlas')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm ${
-              is3DPortalOpen
+              location.pathname === '/atlas'
                 ? 'bg-blue-600 text-white border-blue-500 shadow-md'
                 : isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
             }`}
@@ -244,18 +246,19 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── Homepage: Body Navigator ── */}
-      {isHomePage ? (
+      {/* ── Page routing: home / atlas / privacy / node dashboard ── */}
+      {location.pathname === '/privacy' ? (
+        <PrivacyPage />
+      ) : location.pathname === '/' ? (
         <BodyNavigatorHome onEnterDashboard={(_system) => {
-          setIsHomePage(false);
-          setIs3DPortalOpen(false);
+          navigate('/node/thyroid');
         }} />
-      ) : is3DPortalOpen ? (
+      ) : location.pathname === '/atlas' ? (
         <Cinematic3DBodyPortal
           onEnterSystemOrgan={(_systemId, _organId) => {
-            setIs3DPortalOpen(false);
+            navigate('/node/thyroid');
           }}
-          onClose={() => setIs3DPortalOpen(false)}
+          onClose={() => navigate('/node/thyroid')}
         />
       ) : (
         /* ── Main App Layout (Vercel-Style 3-Column Architecture) ── */
@@ -278,7 +281,7 @@ export default function App() {
             }`}>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setIsHomePage(true)}
+                  onClick={() => navigate('/')}
                   className={`flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-bold transition-all cursor-pointer ${
                     isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-700 border-zinc-300 shadow-sm'
                   }`}
@@ -970,7 +973,7 @@ export default function App() {
     )}
 
       {/* ── Bottom Workspace Switcher Dock ── */}
-      {!is3DPortalOpen && !isHomePage && (
+      {location.pathname !== '/atlas' && location.pathname !== '/' && (
         <footer className={`fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg border-t px-4 py-2 flex items-center justify-center transition-colors duration-200 ${
           isDark ? 'bg-zinc-900/95 border-zinc-800' : 'bg-white/95 border-zinc-200 shadow-sm'
         }`}>
