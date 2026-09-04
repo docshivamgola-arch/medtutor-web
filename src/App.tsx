@@ -24,6 +24,8 @@ import { BodyNavigatorHome } from './components/BodyNavigatorHome';
 import { IntroOverlay } from './components/IntroOverlay';
 import { useTheme } from './context/ThemeContext';
 import PrivacyPage from './pages/PrivacyPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
@@ -247,7 +249,11 @@ export default function App() {
       </header>
 
       {/* ── Page routing: home / atlas / privacy / node dashboard ── */}
-      {location.pathname === '/privacy' ? (
+      {location.pathname === '/login' ? (
+        <LoginPage />
+      ) : location.pathname === '/signup' ? (
+        <SignupPage />
+      ) : location.pathname === '/privacy' ? (
         <PrivacyPage />
       ) : location.pathname === '/' ? (
         <BodyNavigatorHome onEnterDashboard={(_system) => {
