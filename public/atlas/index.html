@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Anatomy 3D | Studio Medical Visualization (TA2 Standard)</title>
+  <link rel="stylesheet" href="styles.css?v=phase2">
+  
+  <!-- Import Map for Modern Three.js r160+ and Addons -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Background Medical Grid Pattern -->
+  <div class="hud-grid-overlay"></div>
+
+  <!-- Loading Screen Overlay -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-msg">DECOMPRESSING DRACO GLTF ASSET [0.59 MB, 218K POLYS]...</div>
+  </div>
+
+  <!-- 3D WebGL Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <!-- Top Header Navigation & Status Bar -->
+  <header class="top-header glass-panel">
+    <div class="logo-area">
+      <div class="medical-cross"></div>
+      <div class="app-title">
+        <h1>HUMAN ANATOMY 3D <span class="badge-tag">TA2 CLINICAL STANDARD</span></h1>
+        <p>TERMINOLOGIA ANATOMICA • 60 FPS WEBGL 2.0 • STUDIO ASSET</p>
+      </div>
+    </div>
+
+    <div class="header-metrics">
+      <div class="metric-pill">
+        <div class="pulse-dot"></div>
+        <span id="metric-fps">60 FPS</span>
+      </div>
+      <div class="metric-pill">
+        <span style="color: var(--text-dim);">POLYGONS:</span>
+        <span id="metric-polys" style="color: var(--cyan-bright);">292,784</span>
+      </div>
+      <div class="metric-pill">
+        <span style="color: var(--text-dim);">DRACO COMPRESSION:</span>
+        <span style="color: var(--emerald-green);">ACTIVE (0.88 MB)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Left Sidebar: Medical Systems Hierarchy Manager -->
+  <aside class="left-sidebar glass-panel">
+    <div class="model-selector-group">
+      <label class="selector-label" for="select-submodel">Pedagogical Sub-Model</label>
+      <select id="select-submodel" class="model-dropdown">
+        <option value="human_anatomy_commercial.glb" selected>🌟 Master Anatomy (34 Sub-Meshes)</option>
+        <option value="submodel_auditory_apparatus.glb">👂 Auditory Apparatus &amp; Ossicular Mechanism</option>
+        <option value="submodel_cardiopulmonary.glb">🫀 Cardiopulmonary System (Thoracic)</option>
+        <option value="submodel_gastrointestinal.glb">🧪 Gastrointestinal &amp; Hepatic System</option>
+        <option value="submodel_musculoskeletal.glb">🦴 Musculoskeletal System</option>
+        <option value="submodel_neurocranium.glb">🧠 Neurocranium &amp; Axial System</option>
+      </select>
+    </div>
+
+    <div class="sidebar-title">
+      <h2>Anatomical Systems</h2>
+      <div class="quick-actions">
+        <button class="btn-mini" id="btn-show-all">ALL</button>
+        <button class="btn-mini" id="btn-hide-all">NONE</button>
+        <button class="btn-mini" id="btn-xray-toggle">X-RAY</button>
+      </div>
+    </div>
+
+    <div class="systems-scroll-list" id="systems-list">
+      <!-- 0. Fascial System (skin-fascia.glb addon — Skin_Body moved to OuterShell) -->
+      <div class="system-card" data-system="System_Integumentary">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #d48b6a; box-shadow: 0 0 6px #d48b6a;"></span>
+            <div>
+              <div class="system-name">Fascial System</div>
+              <div class="system-count">Superficial Fascia, Deep Fascia &amp; Aponeuroses</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Integumentary">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-Fascia_Superficial" style="accent-color:#e8d87a;">
+            <span>Superficial Fascia</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-Fascia_Deep" style="accent-color:#c8c0b8;">
+            <span>Deep Fascia</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 0b. Hand & Foot Anatomy (hand_foot.glb addon) -->
+      <div class="system-card" data-system="System_HandFoot">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #c8a87a; box-shadow: 0 0 6px #c8a87a;"></span>
+            <div>
+              <div class="system-name">Hand &amp; Foot Anatomy</div>
+              <div class="system-count">Bones, Forearm Muscles &amp; Tendons, Foot Tendons</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_HandFoot">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-carpal" style="accent-color:#c8a87a;">
+            <span>Carpal Bones</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-metacarpal" style="accent-color:#c8a87a;">
+            <span>Metacarpal Bones</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-phalanx-hand" style="accent-color:#c8a87a;">
+            <span>Hand Phalanges</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-forearm-musc" style="accent-color:#b84040;">
+            <span>Forearm Muscles</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-forearm-tend" style="accent-color:#d4c070;">
+            <span>Forearm Tendons</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-tarsal" style="accent-color:#c8a87a;">
+            <span>Tarsal Bones</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-metatarsal" style="accent-color:#c8a87a;">
+            <span>Metatarsal Bones</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-phalanx-foot" style="accent-color:#c8a87a;">
+            <span>Foot Phalanges</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-hf-foot-tend" style="accent-color:#b84040;">
+            <span>Foot Tendons &amp; Muscles</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 1. Outer Shell -->
+      <div class="system-card" data-system="System_OuterShell">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: var(--cyan-bright); box-shadow: 0 0 6px var(--cyan-bright);"></span>
+            <div>
+              <div class="system-name">Outer Shell (X-Ray Glass)</div>
+              <div class="system-count">Skin Body + Anatomy Panels</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_OuterShell">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="xray-slider-group">
+          <div class="slider-info">
+            <span>Glass Opacity</span>
+            <span id="label-xray-opacity">25%</span>
+          </div>
+          <input type="range" min="0" max="100" value="25" class="range-slider" id="slider-xray-opacity">
+        </div>
+      </div>
+
+      <!-- 2. Skeletal System -->
+      <div class="system-card" data-system="System_Skeletal">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: var(--bone-gold); box-shadow: 0 0 6px var(--bone-gold);"></span>
+            <div>
+              <div class="system-name">Skeletal System</div>
+              <div class="system-count">139 Individual Bones &amp; Cartilages (Head to Toe)</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Skeletal">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-skel-skull" style="accent-color:var(--bone-gold);">
+            <span>Skull Bones (23)</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-skel-spine" style="accent-color:var(--bone-gold);">
+            <span>Spine &amp; Discs</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-skel-thorax" style="accent-color:var(--bone-gold);">
+            <span>Ribs &amp; Sternum</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-skel-upperlimbs" style="accent-color:var(--bone-gold);">
+            <span>Shoulder &amp; Arms</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-skel-lowerlimbs" style="accent-color:var(--bone-gold);">
+            <span>Pelvis &amp; Legs</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 2b. Articular System (Joint Ligaments & Menisci) -->
+      <div class="system-card" data-system="System_Articular">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #38bdf8; box-shadow: 0 0 6px #38bdf8;"></span>
+            <div>
+              <div class="system-name">Articular System (Joints)</div>
+              <div class="system-count">364 Ligaments, Menisci, Labra &amp; Joint Capsules</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Articular">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-art-spine" style="accent-color:#38bdf8;">
+            <span>Spinal Ligaments</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-art-torso" style="accent-color:#38bdf8;">
+            <span>Thorax &amp; Pelvis</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-art-upper" style="accent-color:#38bdf8;">
+            <span>Upper Limb / Hand</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-art-lower" style="accent-color:#38bdf8;">
+            <span>Hip, Knee &amp; Ankle</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-art-menisci" style="accent-color:#0284c7;">
+            <span>Menisci &amp; Labra</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 3. Muscular System -->
+      <div class="system-card" data-system="System_Muscular">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #e11d48; box-shadow: 0 0 6px #e11d48;"></span>
+            <div>
+              <div class="system-name">Muscular System</div>
+              <div class="system-count">Axial &amp; Appendicular (Head, Neck, Torso &amp; Limbs)</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Muscular">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-headneck" style="accent-color:#e11d48;">
+            <span>Head &amp; Neck</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-thorax" style="accent-color:#e11d48;">
+            <span>Thorax &amp; Diaphragm</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-abdomen" style="accent-color:#e11d48;">
+            <span>Abdominal Wall</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-back" style="accent-color:#e11d48;">
+            <span>Back &amp; Erector</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-pelvis" style="accent-color:#e11d48;">
+            <span>Pelvic Floor</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-upperlimb" style="accent-color:#f43f5e;">
+            <span>Upper Limbs</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-musc-lowerlimb" style="accent-color:#f43f5e;">
+            <span>Lower Limbs</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 3. Cardiovascular System -->
+      <div class="system-card" data-system="System_Cardiovascular">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: var(--cardiac-red); box-shadow: 0 0 6px var(--cardiac-red);"></span>
+            <div>
+              <div class="system-name">Cardiovascular System</div>
+              <div class="system-count">Heart &amp; 184 Peripheral Vessels (Arteries &amp; Veins)</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Cardiovascular">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-vasc-heart" style="accent-color:var(--cardiac-red);">
+            <span>Heart &amp; Great Vessels</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-vasc-arterial" style="accent-color:#ef4444;">
+            <span>Arteries (109)</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-vasc-venous" style="accent-color:#3b82f6;">
+            <span>Veins (75)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 4. Respiratory System -->
+      <div class="system-card" data-system="System_Respiratory">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #f472b6; box-shadow: 0 0 6px #f472b6;"></span>
+            <div>
+              <div class="system-name">Respiratory System</div>
+              <div class="system-count">Larynx, Tracheobronchial Tree, Lungs &amp; Lobes</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Respiratory">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-resp-larynx" style="accent-color:#f472b6;">
+            <span>Larynx Cartilages</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-resp-airway" style="accent-color:#f472b6;">
+            <span>Trachea &amp; Bronchi</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-resp-lungs" style="accent-color:#f472b6;">
+            <span>Lungs &amp; Lobes</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 5. Nervous System -->
+      <div class="system-card" data-system="System_Nervous">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: var(--neural-violet); box-shadow: 0 0 6px var(--neural-violet);"></span>
+            <div>
+              <div class="system-name">Nervous System</div>
+              <div class="system-count">Brain &amp; 257 Peripheral Nerves (CN I–XII, Plexuses)</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Nervous">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-nerve-brain" style="accent-color:var(--neural-violet);">
+            <span>Brain &amp; Stem</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-nerve-cranial" style="accent-color:#facc15;">
+            <span>CN I–XII</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-nerve-brachial" style="accent-color:#facc15;">
+            <span>Brachial Plexus</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-nerve-lumbosacral" style="accent-color:#facc15;">
+            <span>Lumbosacral</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-nerve-sympathetic" style="accent-color:#facc15;">
+            <span>Sympathetic / Trunk</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 6. Digestive System -->
+      <div class="system-card" data-system="System_Digestive">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: var(--liver-brown); box-shadow: 0 0 6px var(--liver-brown);"></span>
+            <div>
+              <div class="system-name">Digestive System</div>
+              <div class="system-count">30 Deconstructed Visceral Segments (Esophagus to Anus)</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Digestive">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-gi-upper" style="accent-color:var(--liver-brown);">
+            <span>Esophagus &amp; Stomach</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-gi-hepatobiliary" style="accent-color:var(--liver-brown);">
+            <span>Liver (I–VIII) &amp; Biliary</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-gi-smallbowel" style="accent-color:var(--liver-brown);">
+            <span>Small Bowel (Jejunum/Ileum)</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-gi-colon" style="accent-color:var(--liver-brown);">
+            <span>Colon &amp; Appendix</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-gi-anorectal" style="accent-color:var(--liver-brown);">
+            <span>Rectum &amp; Sphincters</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 6. Renal & Urogenital System -->
+      <div class="system-card" data-system="System_Renal">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #991b1b; box-shadow: 0 0 6px #991b1b;"></span>
+            <div>
+              <div class="system-name">Renal &amp; Urogenital System</div>
+              <div class="system-count">Kidneys, Adrenals, Ureters, Bladder &amp; Reproductive</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Renal">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-uro-kidneys" style="accent-color:#991b1b;">
+            <span>Kidneys (L/R)</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-uro-adrenals" style="accent-color:#f59e0b;">
+            <span>Adrenal Glands</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-uro-urinary" style="accent-color:#991b1b;">
+            <span>Ureters &amp; Bladder</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-uro-reproductive" style="accent-color:#991b1b;">
+            <span>Reproductive Organs</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 7. Endocrine & Special Senses System -->
+      <div class="system-card" data-system="System_Endocrine">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #f59e0b; box-shadow: 0 0 6px #f59e0b;"></span>
+            <div>
+              <div class="system-name">Endocrine &amp; Special Senses</div>
+              <div class="system-count">Pituitary, Thyroid, Eyes &amp; Auditory Labyrinths</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Endocrine">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-endo-glands" style="accent-color:#f59e0b;">
+            <span>Endocrine Glands</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-sens-eyes" style="accent-color:#38bdf8;">
+            <span>Eyes &amp; Muscles</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-sens-ears" style="accent-color:#e2e8f0;">
+            <span>Inner Ear &amp; Ossicles</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 8. Lymphatic & Immune System -->
+      <div class="system-card" data-system="System_Lymphatic">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+            <div>
+              <div class="system-name">Lymphatic &amp; Immune System</div>
+              <div class="system-count">Spleen, Tonsils, Thoracic Duct &amp; 240+ Regional Nodes</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Lymphatic">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-lymph-organs" style="accent-color:#22c55e;">
+            <span>Spleen &amp; Tonsils</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-lymph-ducts" style="accent-color:#22c55e;">
+            <span>Thoracic Duct &amp; Chyli</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-lymph-nodes" style="accent-color:#16a34a;">
+            <span>Regional Nodes (Cervical, Axillary, Inguinal)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 9. Deep Fascial Compartments -->
+      <div class="system-card" data-system="System_Fascia">
+        <div class="system-header">
+          <label class="system-label">
+            <span class="system-dot" style="background: #94a3b8; box-shadow: 0 0 6px #94a3b8;"></span>
+            <div>
+              <div class="system-name">Deep Fascia &amp; Aponeuroses</div>
+              <div class="system-count">Galea, Rectus Sheaths, Thoracolumbar &amp; Retinacula</div>
+            </div>
+          </label>
+          <label class="switch">
+            <input type="checkbox" checked id="toggle-System_Fascia">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="system-sub-toggles" style="padding: 6px 12px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-fascia-headneck" style="accent-color:#94a3b8;">
+            <span>Epicranial &amp; Cervical</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-fascia-trunk" style="accent-color:#94a3b8;">
+            <span>Rectus Sheath &amp; Thoracolumbar</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-fascia-upper" style="accent-color:#94a3b8;">
+            <span>Brachial &amp; Palmar Aponeurosis</span>
+          </label>
+          <label style="font-size:10px; opacity:0.75; display:flex; align-items:center; gap:4px; cursor:pointer;">
+            <input type="checkbox" checked id="sub-fascia-lower" style="accent-color:#94a3b8;">
+            <span>Fascia Lata &amp; Plantar Aponeurosis</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right Sidebar: Interactive Diagnostic Anatomical Inspector Card -->
+  <aside class="right-sidebar glass-panel" id="inspector-card">
+    <div class="inspector-header">
+      <div class="inspector-system-tag" id="insp-system">SYSTEM_CARDIOVASCULAR</div>
+      <div class="inspector-title" id="insp-name">Organ_Heart</div>
+      <div class="inspector-latin" id="insp-latin">Cor (TA2: 3951)</div>
+    </div>
+
+    <div class="inspector-body">
+      <div class="info-block">
+        <div class="info-label">Physiological Function</div>
+        <div id="insp-function">Muscular double-pump driving systemic circulation (LV -> Aorta) and pulmonary circulation (RV -> Pulmonary Trunk). Synchronized atrioventricular electrophysiology.</div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-label">Key Anatomical Landmarks</div>
+        <div id="insp-landmarks">4 Chambers (RA, RV, LA, LV), Interventricular Sulcus, Coronary Sinus, Auricular Appendages, Oblique Pericardial Sinus.</div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-label">Clinical & Diagnostic Pearls</div>
+        <div id="insp-clinical">Ausculatory cardiac apex located at 5th left intercostal space along midclavicular line. Coronary artery disease site.</div>
+      </div>
+    </div>
+
+    <div class="inspector-actions">
+      <button class="btn-action" id="btn-focus-organ">🎯 FOCUS ORGAN</button>
+      <button class="btn-action btn-secondary" id="btn-isolate-organ">🔍 ISOLATE</button>
+      <button class="btn-action btn-danger" id="btn-hide-selected">HIDE SELECTED</button>
+      <button class="btn-action btn-secondary" id="btn-restore-hidden">RESTORE HIDDEN</button>
+    </div>
+  </aside>
+
+  <!-- Bottom Bar: Camera Presets & Illumination Modes Dock -->
+  <nav class="bottom-dock glass-panel">
+    <div class="dock-group">
+      <button class="dock-btn active" data-view="anterior">Front</button>
+      <button class="dock-btn" data-view="posterior">Back</button>
+      <button class="dock-btn" data-view="lateral-left">Left</button>
+      <button class="dock-btn" data-view="lateral-right">Right</button>
+      <button class="dock-btn" data-view="superior">Top</button>
+      <button class="dock-btn" data-view="cardiac">Cardiac</button>
+      <button class="dock-btn" data-view="cranial">Cranial</button>
+      <button class="dock-btn" data-view="reset">Reset</button>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <div class="dock-group" style="gap: 8px;">
+      <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--cyan-bright); font-weight: 700;">EXPLODED:</span>
+      <input type="range" min="0" max="100" value="0" class="range-slider-dock" id="slider-explode">
+      <span id="label-explode" style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted); width: 32px;">0%</span>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <div class="dock-group" style="gap: 8px;">
+      <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--cyan-bright); font-weight: 700;">SECTION:</span>
+      <select id="select-clip-plane" class="clip-dropdown">
+        <option value="none" selected>Off</option>
+        <option value="sagittal">Sagittal (X)</option>
+        <option value="coronal">Coronal (Z)</option>
+        <option value="transverse">Transverse (Y)</option>
+      </select>
+      <input type="range" min="-100" max="100" value="0" class="range-slider-dock" id="slider-clip-depth" disabled style="opacity: 0.35;">
+      <button class="btn-mini" id="btn-clip-flip" title="Invert Cut Direction" disabled style="opacity: 0.35;">FLIP</button>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <div class="dock-group pan-controls" aria-label="Pan model view">
+      <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--cyan-bright); font-weight: 700;">PAN:</span>
+      <button class="btn-mini pan-btn" id="btn-pan-left" title="Move view left">←</button>
+      <div class="pan-vertical">
+        <button class="btn-mini pan-btn" id="btn-pan-up" title="Move view up">↑</button>
+        <button class="btn-mini pan-btn" id="btn-pan-down" title="Move view down">↓</button>
+      </div>
+      <button class="btn-mini pan-btn" id="btn-pan-right" title="Move view right">→</button>
+      <button class="btn-mini" id="btn-pan-reset" title="Recenter view">CENTER</button>
+    </div>
+
+    <div class="dock-separator"></div>
+
+    <div class="dock-group">
+      <button class="dock-btn" id="btn-pulse-mode">💓 Cardiac Pulse</button>
+      <button class="dock-btn" id="btn-neural-mode">⚡ Neural Pulse</button>
+      <button class="dock-btn" id="btn-autorotate">🔄 Orbit</button>
+    </div>
+  </nav>
+
+  <!-- Main Three.js Application Logic -->
+  <script type="module" src="viewer.js?v=phase2"></script>
+</body>
+</html>
