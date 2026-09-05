@@ -1912,13 +1912,12 @@ function loadSkinFasciaModel() {
         child.userData.centroid = center;
 
         if (child.name === 'Skin_Body') {
-          // Route full-body skin envelope into System_OuterShell so it acts as
-          // the X-ray glass shell for the entire body including extremities.
-          // The Anatomy_* panels only cover core body — Skin_Body fills that gap.
-          child.material.transparent = true;
-          child.material.depthWrite = false;
-          child.material.opacity = state.xrayOpacity;
-          child.renderOrder = 99;
+          // Solid skin-tone surface — no longer an X-ray glass shell.
+          child.material.transparent = false;
+          child.material.depthWrite = true;
+          child.material.opacity = 1.0;
+          child.material.color = new THREE.Color('#D4A574');
+          child.renderOrder = 0;
           state.materials.set(child.name, child.material.clone());
           state.systemMeshes["System_OuterShell"].push(child);
           child.visible = state.systemVisibility["System_OuterShell"];
@@ -2722,6 +2721,61 @@ function isPrimaryPickMesh(mesh) {
   return true;
 }
 
+// ── Hover label helpers ──────────────────────────────────────────────────────
+const hoverLabel = document.getElementById('hover-label');
+const pinnedContainer = document.getElementById('pinned-labels-container');
+
+function labelText(meshName) {
+  return meshName.replace(/_/g, ' ').toUpperCase();
+}
+
+function showHoverLabel(meshName, cx, cy) {
+  hoverLabel.textContent = labelText(meshName);
+  hoverLabel.style.left = cx + 'px';
+  hoverLabel.style.top = cy + 'px';
+  hoverLabel.hidden = false;
+}
+
+function moveHoverLabel(cx, cy) {
+  hoverLabel.style.left = cx + 'px';
+  hoverLabel.style.top = cy + 'px';
+}
+
+function hideHoverLabel() {
+  hoverLabel.hidden = true;
+}
+
+function pinLabel(mesh) {
+  // Project mesh centroid to screen
+  const box = new THREE.Box3().setFromObject(mesh);
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  const projected = center.clone().project(camera);
+  const x = (projected.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-projected.y * 0.5 + 0.5) * window.innerHeight;
+
+  // Replace existing pin for same mesh
+  const existing = pinnedContainer.querySelector(`[data-mesh="${CSS.escape(mesh.name)}"]`);
+  if (existing) existing.remove();
+
+  const label = document.createElement('div');
+  label.className = 'pinned-label';
+  label.dataset.mesh = mesh.name;
+  label.textContent = labelText(mesh.name);
+  label.style.left = x + 'px';
+  label.style.top = y + 'px';
+  label.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectOrgan(mesh.name, true);
+  });
+  pinnedContainer.appendChild(label);
+}
+
+function clearAllPinnedLabels() {
+  pinnedContainer.innerHTML = '';
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 function onPointerMove(event) {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -2730,11 +2784,10 @@ function onPointerMove(event) {
 
   raycaster.setFromCamera(mouse, camera);
   const meshList = Array.from(state.meshes.values()).filter(m => m.visible && !state.hiddenMeshes.has(m.name));
-  
+
   // Prioritize internal organs over outer shell for precise hover
   const internalMeshes = meshList.filter(isPrimaryPickMesh);
   let intersects = raycaster.intersectObjects(internalMeshes, false);
-  
   if (intersects.length === 0) {
     intersects = raycaster.intersectObjects(meshList, false);
   }
@@ -2745,12 +2798,13 @@ function onPointerMove(event) {
       resetHover();
       state.hoveredMesh = topHit;
       document.body.style.cursor = 'pointer';
-      
-      // Subtle emissive highlight on hover
       if (state.hoveredMesh.material && state.hoveredMesh.material.emissive) {
         state.hoveredMesh.material.emissive.set(0x00f0ff);
         state.hoveredMesh.material.emissiveIntensity = 0.6;
       }
+      showHoverLabel(state.hoveredMesh.name, event.clientX, event.clientY);
+    } else {
+      moveHoverLabel(event.clientX, event.clientY);
     }
   } else {
     resetHover();
@@ -2767,19 +2821,24 @@ function resetHover() {
     state.hoveredMesh = null;
     document.body.style.cursor = 'default';
   }
+  hideHoverLabel();
 }
 
 function onPointerClick(event) {
-  // Avoid clicks on HUD overlays
   if (event.target.closest('.glass-panel')) return;
+  if (event.target.closest('.pinned-label')) return;
 
   if (state.hoveredMesh) {
-    selectOrgan(state.hoveredMesh.name, true);
+    pinLabel(state.hoveredMesh);
   }
 }
 
 window.addEventListener('pointermove', onPointerMove);
 window.addEventListener('click', onPointerClick);
+window.addEventListener('dblclick', (event) => {
+  if (event.target.closest('.glass-panel')) return;
+  clearAllPinnedLabels();
+});
 
 // Dynamic clinical resolver for systematic naming patterns
 function getAnatomyInfo(meshName) {
@@ -3441,21 +3500,6 @@ function updateAllSystemCardSummaries() {
   document.querySelectorAll('.system-card').forEach(updateSystemCardSummary);
 }
 
-// X-Ray Opacity Slider
-const xraySlider = document.getElementById('slider-xray-opacity');
-const xrayLabel = document.getElementById('label-xray-opacity');
-if (xraySlider) {
-  xraySlider.addEventListener('input', (e) => {
-    const val = parseInt(e.target.value) / 100;
-    state.xrayOpacity = val;
-    xrayLabel.textContent = `${e.target.value}%`;
-    const shellMeshes = state.systemMeshes["System_OuterShell"] || [];
-    shellMeshes.forEach(m => {
-      if (m.material) m.material.opacity = val;
-    });
-  });
-}
-
 // Quick Actions
 document.getElementById('btn-show-all').addEventListener('click', () => {
   Object.keys(state.systemVisibility).forEach(k => {
@@ -3475,13 +3519,10 @@ document.getElementById('btn-hide-all').addEventListener('click', () => {
   updateAllSystemCardSummaries();
 });
 
-document.getElementById('btn-xray-toggle').addEventListener('click', () => {
-  const shellToggle = document.getElementById('toggle-System_OuterShell');
-  if (shellToggle) {
-    shellToggle.checked = !shellToggle.checked;
-    setSystemVisibility('System_OuterShell', shellToggle.checked);
-    updateAllSystemCardSummaries();
-  }
+// Explore mode: collapse sidebars for a clean 3D canvas
+document.getElementById('btn-explore-toggle').addEventListener('click', () => {
+  document.body.classList.toggle('explore-mode');
+  document.getElementById('btn-explore-toggle').classList.toggle('active');
 });
 
 // Inspector Actions
@@ -3489,7 +3530,7 @@ function restoreMeshMaterial(mesh) {
   const orig = state.materials.get(mesh.name);
   if (!mesh.material || !orig) return;
   mesh.material.transparent = orig.transparent;
-  mesh.material.opacity = mesh.name.startsWith("Anatomy_") || mesh.name === "Skin_Body" ? state.xrayOpacity : orig.opacity;
+  mesh.material.opacity = mesh.name.startsWith("Anatomy_") ? state.xrayOpacity : orig.opacity;
   if (mesh.material.emissive && orig.emissive) {
     mesh.material.emissive.copy(orig.emissive);
     mesh.material.emissiveIntensity = orig.emissiveIntensity || 0;

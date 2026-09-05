@@ -84,7 +84,7 @@
       <div class="quick-actions">
         <button class="btn-mini" id="btn-show-all">ALL</button>
         <button class="btn-mini" id="btn-hide-all">NONE</button>
-        <button class="btn-mini" id="btn-xray-toggle">X-RAY</button>
+        <button class="btn-mini" id="btn-explore-toggle">EXPLORE</button>
       </div>
     </div>
 
@@ -175,23 +175,16 @@
       <div class="system-card" data-system="System_OuterShell">
         <div class="system-header">
           <label class="system-label">
-            <span class="system-dot" style="background: var(--cyan-bright); box-shadow: 0 0 6px var(--cyan-bright);"></span>
+            <span class="system-dot" style="background: #D4A574; box-shadow: 0 0 6px #D4A574;"></span>
             <div>
-              <div class="system-name">Outer Shell (X-Ray Glass)</div>
-              <div class="system-count">Skin Body + Anatomy Panels</div>
+              <div class="system-name">Outer Shell (Skin)</div>
+              <div class="system-count">Skin Body Envelope</div>
             </div>
           </label>
           <label class="switch">
             <input type="checkbox" checked id="toggle-System_OuterShell">
             <span class="slider"></span>
           </label>
-        </div>
-        <div class="xray-slider-group">
-          <div class="slider-info">
-            <span>Glass Opacity</span>
-            <span id="label-xray-opacity">25%</span>
-          </div>
-          <input type="range" min="0" max="100" value="25" class="range-slider" id="slider-xray-opacity">
         </div>
       </div>
 
@@ -829,6 +822,63 @@
   </aside>
 
   <!-- Main Three.js Application Logic -->
+  <!-- Hover label overlay (pointer-events: none, follows cursor) -->
+  <div id="hover-label" class="hover-label" hidden></div>
+  <!-- Pinned labels container (click to open detail panel) -->
+  <div id="pinned-labels-container"></div>
+
+  <style>
+    .hover-label {
+      position: fixed;
+      pointer-events: none;
+      z-index: 200;
+      background: rgba(8, 16, 24, 0.88);
+      color: #2bb8a8;
+      border: 1px solid rgba(43, 184, 168, 0.55);
+      padding: 4px 13px;
+      border-radius: 18px;
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      transform: translate(-50%, -160%);
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+    }
+    .pinned-label {
+      position: fixed;
+      z-index: 200;
+      background: rgba(43, 184, 168, 0.18);
+      color: #7ef0e4;
+      border: 1px solid rgba(43, 184, 168, 0.75);
+      padding: 4px 13px;
+      border-radius: 18px;
+      font-size: 11px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      cursor: pointer;
+      transform: translate(-50%, -160%);
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+      transition: background 0.15s;
+    }
+    .pinned-label:hover {
+      background: rgba(43, 184, 168, 0.45);
+      color: #fff;
+    }
+    /* Explore mode: collapse both sidebars */
+    body.explore-mode .left-sidebar,
+    body.explore-mode .right-sidebar {
+      display: none !important;
+    }
+    #btn-explore-toggle.active {
+      background: rgba(43, 184, 168, 0.35);
+      color: #2bb8a8;
+      border-color: rgba(43, 184, 168, 0.7);
+    }
+  </style>
+
   <script type="module" src="viewer.js?v=phase2"></script>
 </body>
 </html>
