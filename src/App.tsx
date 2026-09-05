@@ -178,7 +178,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <span
                 onClick={() => navigate('/')}
-                className={`font-extrabold text-base tracking-tight cursor-pointer ${isDark ? 'text-white' : 'text-zinc-900'}`}
+                className={`font-extrabold text-base tracking-tight cursor-pointer transition-colors duration-150 hover:text-teal-400 ${isDark ? 'text-white' : 'text-zinc-900'}`}
               >
                 Clinova
               </span>
@@ -450,7 +450,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Osmosis-Style Synchronized Interactive Transcript */}
+                    {/* Synchronized Interactive Transcript */}
                     <OsmosisTranscript
                       currentCut={selectedCut as unknown as ChapterCut}
                       allCuts={cuts as unknown as ChapterCut[]}
@@ -599,7 +599,7 @@ export default function App() {
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
                           isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'
                         }`}>
-                          Amboss Smart Cards Active
+                          Smart Cards Active
                         </span>
                       </div>
                       <p className="text-xs text-zinc-400 mt-0.5">Hover or click any dotted-underline buzzword to open instant high-yield micro-cards.</p>
@@ -1006,7 +1006,7 @@ export default function App() {
               </div>
             )}
 
-            {/* ROOM 4: RADIOPAEDIA-STYLE CLINICAL ATLAS */}
+            {/* ROOM 4: CLINICAL ATLAS */}
             {activeTab === 'atlas' && (
               <RadiopaediaCaseViewer onOpenUploadModal={() => setIsCaseUploadModalOpen(true)} />
             )}

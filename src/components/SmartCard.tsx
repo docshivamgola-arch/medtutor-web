@@ -48,7 +48,7 @@ export const SmartCard: React.FC<SmartCardProps> = ({ conceptId, children, onNav
             ? 'text-blue-400 decoration-blue-500/60 hover:text-blue-300 hover:decoration-blue-400 hover:bg-blue-500/10'
             : 'text-blue-700 decoration-blue-600/70 hover:text-blue-900 hover:decoration-blue-600 hover:bg-blue-50'
         }`}
-        title="Click or hover for Amboss-style High-Yield Smart Card"
+        title="Click or hover for Clinova High-Yield Smart Card"
       >
         {children || concept.term}
       </span>

@@ -28,7 +28,7 @@ export const OsmosisTranscript: React.FC<OsmosisTranscriptProps> = ({
           <h3 className={`text-xs uppercase font-extrabold tracking-widest ${
             isDark ? 'text-zinc-200' : 'text-zinc-800'
           }`}>
-            Osmosis Synced Transcript & Timecodes
+            Video Transcript & Timecodes
           </h3>
         </div>
         <span className="text-[10px] font-mono text-zinc-400">

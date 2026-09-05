@@ -3,7 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 
 const GAP_CARDS = [
   { num: '01', title: 'No cross-organ synthesis', desc: 'Platforms teach thyroid without connecting it to pharma, patho, or surgery.' },
-  { num: '02', title: 'No Indian Amboss', desc: 'No platform cross-links wiki concepts directly to PYQ explanations the Indian way.' },
+  { num: '02', title: 'No Concept-Linked Wiki', desc: 'No platform cross-links wiki concepts directly to PYQ explanations the Indian way.' },
   { num: '03', title: 'INI-CET underserved', desc: 'AIIMS, PGI, JIPMER pattern questions are treated as an afterthought everywhere.' },
   { num: '04', title: 'No sub-3-min content', desc: 'Lectures run 60–90 min. No modular micro-cuts that fit a break between wards.' },
   { num: '05', title: '3D anatomy siloed', desc: '3D models exist but never connect to histology, physiology, or clinical cases.' },
@@ -48,7 +48,7 @@ export default function LandingPage() {
 
         {/* Sub-headline */}
         <p className={`text-base sm:text-lg max-w-2xl leading-relaxed ${subtext}`}>
-          Cross-organ synthesis. Every concept connected. The Amboss model for India — at{' '}
+          Cross-organ synthesis. Every concept connected. The cross-linked learning model for India — at{' '}
           <span className={`font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-700'}`}>₹99/month</span>.
         </p>
 

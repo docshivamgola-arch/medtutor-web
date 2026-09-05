@@ -47,7 +47,7 @@ export const RadiopaediaCaseViewer: React.FC<RadiopaediaCaseViewerProps> = ({ on
         <div>
           <div className="flex items-center gap-2">
             <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-              Radiopaedia-Style Clinical & Histology Atlas
+              Clinical & Histology Atlas
             </h2>
             <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${
               isDark ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-200'

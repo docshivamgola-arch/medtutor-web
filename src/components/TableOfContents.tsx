@@ -85,7 +85,7 @@ export const TableOfContents: React.FC = () => {
           : 'bg-white border-zinc-200 text-zinc-600 shadow-sm'
       }`}>
         <span className={`font-bold block ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
-          Amboss Smart Nodes
+          Smart Concept Nodes
         </span>
         <p className="leading-snug">
           Click or hover any underlined term in the text to see instant definitions without scrolling.
