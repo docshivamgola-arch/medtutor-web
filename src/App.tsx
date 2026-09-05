@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import type { User } from '@supabase/supabase-js';
@@ -18,17 +18,19 @@ import { SystemsSidebar } from './components/SystemsSidebar';
 import { TableOfContents } from './components/TableOfContents';
 import { RadiopaediaCaseViewer } from './components/RadiopaediaCaseViewer';
 import { OsmosisTranscript } from './components/OsmosisTranscript';
-import { Cinematic3DBodyPortal } from './components/Cinematic3DBodyPortal';
 import { IntroOverlay } from './components/IntroOverlay';
 import { useTheme } from './context/ThemeContext';
-import PrivacyPage from './pages/PrivacyPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import SettingsPage from './pages/SettingsPage';
-import LandingPage from './pages/LandingPage';
-import WikiPage from './pages/WikiPage';
-import FlashcardPage from './pages/FlashcardPage';
-import GlobalFlashcardsPage from './pages/GlobalFlashcardsPage';
+
+// Route-level code splitting — each page loads only when its route is hit
+const Cinematic3DBodyPortal = lazy(() => import('./components/Cinematic3DBodyPortal').then(m => ({ default: m.Cinematic3DBodyPortal })));
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SignupPage = lazy(() => import('./pages/SignupPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const WikiPage = lazy(() => import('./pages/WikiPage'));
+const FlashcardPage = lazy(() => import('./pages/FlashcardPage'));
+const GlobalFlashcardsPage = lazy(() => import('./pages/GlobalFlashcardsPage'));
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
@@ -279,6 +281,11 @@ export default function App() {
       </header>
 
       {/* ── Page routing: home / atlas / privacy / node dashboard ── */}
+      <Suspense fallback={
+        <div className="flex-1 flex items-center justify-center">
+          <span className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Loading…</span>
+        </div>
+      }>
       {location.pathname === '/login' ? (
         <LoginPage />
       ) : location.pathname === '/signup' ? (
@@ -1014,6 +1021,8 @@ export default function App() {
         </div>
       </div>
     )}
+
+      </Suspense>
 
       {/* ── Bottom Workspace Switcher Dock ── */}
       {location.pathname !== '/atlas' && location.pathname !== '/' && (
