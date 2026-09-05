@@ -40,10 +40,10 @@ export default function LandingPage() {
         </span>
 
         {/* Headline */}
-        <h1 className={`text-4xl sm:text-5xl font-black leading-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+        <h1 className={`text-6xl sm:text-7xl font-black leading-tight tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
           Study Medicine the
           <br />
-          <span className="text-teal-400">Way Your Organs Work</span>
+          <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">Way Your Organs Work</span>
         </h1>
 
         {/* Sub-headline */}
@@ -168,13 +168,13 @@ export default function LandingPage() {
           <div className="flex items-center gap-4">
             <a
               href="mailto:doc.shivamgola@gmail.com"
-              className={`hover:underline ${isDark ? 'hover:text-zinc-200' : 'hover:text-zinc-700'}`}
+              className="hover:underline hover:text-teal-400 transition-colors duration-150"
             >
               doc.shivamgola@gmail.com
             </a>
             <button
               onClick={() => navigate('/privacy')}
-              className={`hover:underline ${isDark ? 'hover:text-zinc-200' : 'hover:text-zinc-700'}`}
+              className="hover:underline hover:text-teal-400 transition-colors duration-150"
             >
               Privacy
             </button>

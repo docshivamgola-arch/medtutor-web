@@ -199,7 +199,7 @@ export default function App() {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm ${
               location.pathname === '/atlas'
                 ? 'bg-blue-600 text-white border-blue-500 shadow-md'
-                : isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
+                : isDark ? 'bg-zinc-800 hover:bg-zinc-700 hover:text-teal-400 text-zinc-200 border-zinc-700' : 'bg-white hover:bg-zinc-100 hover:text-teal-400 text-zinc-800 border-zinc-300'
             }`}
             title="3D Cinematic Anatomical Body Portal"
           >
@@ -1036,9 +1036,9 @@ export default function App() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as WorkspaceTab)}
                   className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    isActive 
-                      ? 'bg-blue-600 text-white shadow-sm' 
-                      : isDark ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-white'
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : isDark ? 'text-zinc-400 hover:text-teal-400 hover:bg-zinc-900 duration-150' : 'text-zinc-600 hover:text-teal-400 hover:bg-white duration-150'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
