@@ -1,0 +1,286 @@
+{
+  "nodeId": "liver",
+  "title": "Liver & Jaundice",
+  "system": "Gastroenterology",
+  "cutCount": 18,
+  "cuts": [
+    {
+      "id": "lv-001",
+      "title": "Hepatocyte Ultrastructure & Zonation",
+      "duration": 50,
+      "hook": "Covers the three metabolic zones of a hepatic lobule and how centrilobular ischemia causes zone 3 necrosis in shock.",
+      "tags": ["Anatomy", "Physiology"]
+    },
+    {
+      "id": "lv-002",
+      "title": "Portal Circulation & Portosystemic Anastomoses",
+      "duration": 55,
+      "hook": "Maps the five portosystemic anastomotic sites and explains why varices form at the gastroesophageal junction first.",
+      "tags": ["Anatomy", "Surgery"]
+    },
+    {
+      "id": "lv-003",
+      "title": "Bilirubin Metabolism: Heme to Excretion",
+      "duration": 60,
+      "hook": "Traces the step-by-step conversion of heme to biliverdin to unconjugated bilirubin and then to urobilinogen in the gut.",
+      "tags": ["Biochemistry", "Physiology"]
+    },
+    {
+      "id": "lv-004",
+      "title": "Conjugation Pathway & UDP-Glucuronyl Transferase",
+      "duration": 45,
+      "hook": "Explains how hepatocytes conjugate bilirubin with glucuronic acid via UGT1A1 and why neonatal jaundice reflects enzyme immaturity.",
+      "tags": ["Biochemistry", "Pathology"]
+    },
+    {
+      "id": "lv-005",
+      "title": "Pre-Hepatic Jaundice: Haemolytic Causes",
+      "duration": 50,
+      "hook": "Differentiates pre-hepatic jaundice by unconjugated hyperbilirubinaemia, absent bilirubinuria, and dark urine from urobilinogen excess.",
+      "tags": ["Medicine", "Pathology"]
+    },
+    {
+      "id": "lv-006",
+      "title": "Hepatic Jaundice: Parenchymal Failure",
+      "duration": 55,
+      "hook": "Covers mixed hyperbilirubinaemia in hepatocellular disease where both conjugation and excretion are impaired simultaneously.",
+      "tags": ["Medicine", "Pathology"]
+    },
+    {
+      "id": "lv-007",
+      "title": "Post-Hepatic (Obstructive) Jaundice",
+      "duration": 50,
+      "hook": "Explains how biliary obstruction causes conjugated hyperbilirubinaemia, pale stools, dark urine, and pruritus from bile salt deposition.",
+      "tags": ["Surgery", "Medicine"]
+    },
+    {
+      "id": "lv-008",
+      "title": "LFT Interpretation: Pattern Recognition",
+      "duration": 60,
+      "hook": "Teaches the hepatocellular (high ALT/AST) vs cholestatic (high ALP/GGT) LFT pattern distinction and clinical triage algorithm.",
+      "tags": ["Medicine", "Biochemistry"]
+    },
+    {
+      "id": "lv-009",
+      "title": "Viral Hepatitis A, B, C & E: Serology & Routes",
+      "duration": 65,
+      "hook": "Covers transmission routes, incubation periods, serological window periods, and chronicity risk for each hepatitis virus.",
+      "tags": ["Microbiology", "Medicine"]
+    },
+    {
+      "id": "lv-010",
+      "title": "Alcoholic Liver Disease: Spectrum & Histology",
+      "duration": 55,
+      "hook": "Traces the progression from fatty change to alcoholic hepatitis to Laennec's cirrhosis with Mallory-Denk body histology.",
+      "tags": ["Pathology", "Medicine"]
+    },
+    {
+      "id": "lv-011",
+      "title": "NAFLD & NASH: Metabolic Syndrome Link",
+      "duration": 50,
+      "hook": "Explains the two-hit hypothesis for NASH, its association with insulin resistance, and the role of ballooning hepatocyte degeneration.",
+      "tags": ["Pathology", "Medicine"]
+    },
+    {
+      "id": "lv-012",
+      "title": "Cirrhosis: Compensated vs Decompensated",
+      "duration": 60,
+      "hook": "Covers the Child-Pugh scoring system and the clinical tipping point from compensated to decompensated cirrhosis with its triggers.",
+      "tags": ["Medicine", "Surgery"]
+    },
+    {
+      "id": "lv-013",
+      "title": "Portal Hypertension: Mechanism & Complications",
+      "duration": 55,
+      "hook": "Explains sinusoidal portal hypertension pathophysiology and the clinical triad of varices, splenomegaly, and ascites.",
+      "tags": ["Physiology", "Medicine"]
+    },
+    {
+      "id": "lv-014",
+      "title": "Ascites: SAAG-Based Classification & Management",
+      "duration": 60,
+      "hook": "Uses the Serum-Ascites Albumin Gradient to distinguish portal hypertensive from non-portal ascites and outlines stepwise diuretic therapy.",
+      "tags": ["Medicine", "Pharmacology"]
+    },
+    {
+      "id": "lv-015",
+      "title": "Hepatic Encephalopathy: Ammonia & Treatment",
+      "duration": 55,
+      "hook": "Explains how gut-derived ammonia bypasses the failing liver to cause cerebral astrocyte swelling and grades HE from I to IV.",
+      "tags": ["Medicine", "Pharmacology"]
+    },
+    {
+      "id": "lv-016",
+      "title": "Hepatorenal Syndrome: Types & Diagnosis",
+      "duration": 50,
+      "hook": "Differentiates HRS-1 (acute, rapidly progressive) from HRS-2 (chronic, refractory ascites) and explains the vasoconstriction-based pathophysiology.",
+      "tags": ["Medicine", "Physiology"]
+    },
+    {
+      "id": "lv-017",
+      "title": "Hepatocellular Carcinoma: AFP, BCLC Staging",
+      "duration": 60,
+      "hook": "Covers the Barcelona Clinic Liver Cancer staging system, alpha-fetoprotein thresholds, and treatment allocation from resection to sorafenib.",
+      "tags": ["Oncology", "Surgery"]
+    },
+    {
+      "id": "lv-018",
+      "title": "Liver Transplant: MELD Score & Indications",
+      "duration": 50,
+      "hook": "Explains MELD score calculation from bilirubin, creatinine, and INR, and lists absolute indications and contraindications for orthotopic liver transplant.",
+      "tags": ["Surgery", "Medicine"]
+    }
+  ],
+  "pyqs": [
+    {
+      "id": "lv-pyq-1",
+      "year": "2023",
+      "source": "NEET-PG",
+      "question": "A 3-day-old neonate develops jaundice. Bilirubin is predominantly unconjugated. Which enzyme deficiency is responsible for physiological neonatal jaundice?",
+      "options": [
+        "Heme oxygenase",
+        "Biliverdin reductase",
+        "UDP-glucuronyl transferase (UGT1A1)",
+        "Alkaline phosphatase"
+      ],
+      "correct": 2,
+      "explanation": "Physiological neonatal jaundice is caused by transient immaturity of UDP-glucuronyl transferase (UGT1A1), the enzyme that conjugates bilirubin with glucuronic acid in hepatocytes. Unconjugated bilirubin accumulates as haemolysis of fetal RBCs combined with reduced conjugation capacity overwhelms excretion. Phototherapy converts unconjugated bilirubin to water-soluble photoisomers for excretion.",
+      "wikiSlug": "neonatal-jaundice-ugt1a1"
+    },
+    {
+      "id": "lv-pyq-2",
+      "year": "2022",
+      "source": "AIIMS",
+      "question": "A patient with liver cirrhosis has serum albumin 2.6 g/dL, bilirubin 3.1 mg/dL, PT prolonged by 5 seconds, no ascites, and no encephalopathy. What is the Child-Pugh class?",
+      "options": [
+        "Child-Pugh A (score 5-6)",
+        "Child-Pugh B (score 7-9)",
+        "Child-Pugh C (score 10-15)",
+        "Cannot be determined without platelet count"
+      ],
+      "correct": 1,
+      "explanation": "Child-Pugh scoring uses five parameters: bilirubin, albumin, PT prolongation, ascites, and encephalopathy. Here bilirubin 3.1 (score 2), albumin 2.6 (score 3), PT +5 sec (score 2), no ascites (score 1), no encephalopathy (score 1) = total 9, placing this patient in Child-Pugh class B. Class A (5-6) = compensated; Class C (10-15) = decompensated with poor prognosis.",
+      "wikiSlug": "child-pugh-score"
+    },
+    {
+      "id": "lv-pyq-3",
+      "year": "2023",
+      "source": "NEET-PG",
+      "question": "A 50-year-old man with cirrhosis presents with confusion and asterixis. Serum ammonia is elevated. Which of the following is the first-line treatment to reduce ammonia production in the colon?",
+      "options": [
+        "Neomycin",
+        "Rifaximin",
+        "Lactulose",
+        "L-ornithine L-aspartate"
+      ],
+      "correct": 2,
+      "explanation": "Lactulose is the first-line treatment for hepatic encephalopathy. It is a non-absorbable disaccharide that is metabolised by colonic bacteria to organic acids, acidifying the colon and trapping ammonia as ammonium (NH4+) which is then excreted in stool. It also acts as a cathartic to accelerate stool transit. Rifaximin is added as a second agent for recurrent HE; LOLA is adjunct therapy.",
+      "wikiSlug": "hepatic-encephalopathy-lactulose"
+    },
+    {
+      "id": "lv-pyq-4",
+      "year": "2021",
+      "source": "PGI",
+      "question": "Which of the following serological markers indicates active Hepatitis B viral replication and high infectivity?",
+      "options": [
+        "Anti-HBs antibody",
+        "Anti-HBc IgG",
+        "HBeAg (Hepatitis B e-antigen)",
+        "Anti-HBe antibody"
+      ],
+      "correct": 2,
+      "explanation": "HBeAg is a secreted protein derived from the HBV precore/core region and is a surrogate marker of active viral replication and high infectivity. Its presence in serum correlates with high HBV DNA levels. Anti-HBs indicates immunity (post-vaccination or recovery); anti-HBc IgG indicates past or chronic infection; anti-HBe marks low replicative state after seroconversion.",
+      "wikiSlug": "hepatitis-b-serology"
+    },
+    {
+      "id": "lv-pyq-5",
+      "year": "2024",
+      "source": "NEET-PG",
+      "question": "A 45-year-old man with alcoholic cirrhosis presents with new-onset ascites. Serum albumin is 2.8 g/dL and ascitic fluid albumin is 0.9 g/dL. What does the SAAG value indicate?",
+      "options": [
+        "SAAG < 1.1 g/dL suggesting exudative (non-portal) ascites",
+        "SAAG >= 1.1 g/dL confirming portal hypertensive ascites",
+        "SAAG < 1.1 g/dL suggesting tubercular peritonitis",
+        "SAAG is not interpretable without protein electrophoresis"
+      ],
+      "correct": 1,
+      "explanation": "SAAG = Serum albumin - Ascitic fluid albumin = 2.8 - 0.9 = 1.9 g/dL. A SAAG >= 1.1 g/dL indicates portal hypertension as the cause of ascites (accuracy > 97%). Causes include cirrhosis, cardiac failure, Budd-Chiari syndrome. SAAG < 1.1 g/dL suggests non-portal causes: malignancy, TB peritonitis, nephrotic syndrome, pancreatitis.",
+      "wikiSlug": "saag-ascites"
+    },
+    {
+      "id": "lv-pyq-6",
+      "year": "2022",
+      "source": "AIIMS",
+      "question": "A 28-year-old presents with hemolytic anaemia, low ceruloplasmin, Kayser-Fleischer rings, and elevated hepatic copper. Which transporter mutation causes this condition?",
+      "options": [
+        "ABCB4 (MDR3)",
+        "ATP7B (Wilson's disease copper transporter)",
+        "SLC40A1 (ferroportin)",
+        "ABCB11 (BSEP)"
+      ],
+      "correct": 1,
+      "explanation": "Wilson's disease is an autosomal recessive disorder caused by mutations in ATP7B, the hepatic copper-transporting P-type ATPase that exports copper into bile and incorporates it into ceruloplasmin. Defective ATP7B leads to copper accumulation in the liver (cirrhosis), brain (neuropsychiatric symptoms), and cornea (Kayser-Fleischer rings). Treatment: D-penicillamine or trientine as copper chelators.",
+      "wikiSlug": "wilson-disease-atp7b"
+    },
+    {
+      "id": "lv-pyq-7",
+      "year": "2023",
+      "source": "NEET-PG",
+      "question": "A 62-year-old man with hepatitis B-related cirrhosis presents with a 4 cm arterially enhancing hepatic mass with venous phase washout on contrast CT. Serum AFP is 650 ng/mL. What is the most likely diagnosis?",
+      "options": [
+        "Hepatic haemangioma",
+        "Focal nodular hyperplasia",
+        "Hepatocellular carcinoma",
+        "Cholangiocarcinoma"
+      ],
+      "correct": 2,
+      "explanation": "Hepatocellular carcinoma (HCC) characteristically shows arterial enhancement followed by portal venous washout on contrast imaging (the 'enhance-and-washout' pattern), which is pathognomonic and sufficient for diagnosis without biopsy in cirrhotic patients. AFP > 400 ng/mL in a cirrhotic patient is highly suggestive of HCC. Haemangioma shows peripheral nodular enhancement filling in; FNH shows central scar with spoke-wheel pattern.",
+      "wikiSlug": "hepatocellular-carcinoma-diagnosis"
+    },
+    {
+      "id": "lv-pyq-8",
+      "year": "2021",
+      "source": "NEET-PG",
+      "question": "Which of the following is the most common cause of oesophageal varices and variceal haemorrhage in Indian patients with portal hypertension?",
+      "options": [
+        "Budd-Chiari syndrome",
+        "Non-cirrhotic portal fibrosis (NCPF)",
+        "Alcoholic cirrhosis",
+        "Hepatitis B-related cirrhosis"
+      ],
+      "correct": 3,
+      "explanation": "In India, Hepatitis B-related cirrhosis is the most common cause of portal hypertension and oesophageal varices, unlike Western countries where alcoholic cirrhosis predominates. Hepatitis B is endemic in India and leads to chronic hepatitis, cirrhosis, and sinusoidal portal hypertension. Non-cirrhotic portal fibrosis (NCPF) is uniquely common in India as a second cause of portal hypertension but without cirrhosis.",
+      "wikiSlug": "portal-hypertension-india"
+    },
+    {
+      "id": "lv-pyq-9",
+      "year": "2024",
+      "source": "NEET-PG",
+      "question": "A cirrhotic patient develops acute kidney injury with creatinine rising to 2.8 mg/dL, no proteinuria, normal renal ultrasound, and no response to albumin infusion and stopping diuretics. What is the diagnosis?",
+      "options": [
+        "Acute tubular necrosis",
+        "Pre-renal azotaemia",
+        "Hepatorenal syndrome type 1 (HRS-AKI)",
+        "Contrast nephropathy"
+      ],
+      "correct": 2,
+      "explanation": "Hepatorenal syndrome type 1 (HRS-AKI) is a form of functional renal failure in advanced cirrhosis characterised by progressive oliguria, rising creatinine (> 2-fold or > 2.5 mg/dL in < 2 weeks), absence of proteinuria or haematuria, normal renal imaging, and failure to respond to volume resuscitation with albumin. The mechanism is splanchnic vasodilation causing renal cortical vasoconstriction. Terlipressin + albumin is the treatment.",
+      "wikiSlug": "hepatorenal-syndrome"
+    },
+    {
+      "id": "lv-pyq-10",
+      "year": "2022",
+      "source": "PGI",
+      "question": "Which of the following histological features is pathognomonic of non-alcoholic steatohepatitis (NASH) on liver biopsy and distinguishes it from simple steatosis?",
+      "options": [
+        "Macrovesicular steatosis alone",
+        "Steatosis with portal inflammation",
+        "Steatosis with hepatocyte ballooning degeneration and lobular inflammation",
+        "Periportal fibrosis with ductular reaction"
+      ],
+      "correct": 2,
+      "explanation": "NASH is defined histologically by the NASH Activity Score (NAS) requiring the presence of: macrovesicular steatosis (>= 5%), hepatocyte ballooning degeneration (indicating lipotoxic cell injury), and lobular inflammation. Simple steatosis (NAFLD grade 1) lacks ballooning or significant inflammation and carries a benign prognosis. Ballooning degeneration is the hallmark distinguishing NASH from steatosis and correlates with risk of progression to cirrhosis.",
+      "wikiSlug": "nash-histology-ballooning"
+    }
+  ]
+}
