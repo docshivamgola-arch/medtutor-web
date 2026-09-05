@@ -19,7 +19,6 @@ import { TableOfContents } from './components/TableOfContents';
 import { RadiopaediaCaseViewer } from './components/RadiopaediaCaseViewer';
 import { OsmosisTranscript } from './components/OsmosisTranscript';
 import { Cinematic3DBodyPortal } from './components/Cinematic3DBodyPortal';
-import { BodyNavigatorHome } from './components/BodyNavigatorHome';
 import { IntroOverlay } from './components/IntroOverlay';
 import { useTheme } from './context/ThemeContext';
 import PrivacyPage from './pages/PrivacyPage';
