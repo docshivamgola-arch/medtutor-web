@@ -8,12 +8,14 @@ export default function SignupPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState('');
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!consent) { setError('Please accept the Privacy Policy to continue.'); return; }
     setError('');
     setLoading(true);
     const { error: err } = await supabase.auth.signUp({ email, password });
@@ -82,21 +84,36 @@ export default function SignupPage() {
                 onChange={e => setPassword(e.target.value)}
                 className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition-colors ${input}`}
               />
+
+              {/* DPDP Act 2023 — explicit consent, not pre-ticked */}
+              <label className="flex items-start gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={e => setConsent(e.target.checked)}
+                  className="mt-0.5 accent-blue-500 shrink-0"
+                />
+                <span className={`text-xs leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                  I am 18 or older and I have read and agree to the{' '}
+                  <button
+                    type="button"
+                    onClick={() => navigate('/privacy')}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Privacy Policy
+                  </button>
+                  . I consent to collection of my email and study progress for the Clinova service.
+                </span>
+              </label>
+
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2.5 text-sm transition-colors mt-1"
+                disabled={loading || !consent}
+                className="w-full rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-semibold py-2.5 text-sm transition-colors mt-1"
               >
                 {loading ? 'Creating account…' : 'Create account'}
               </button>
             </form>
-
-            <p className={`text-xs text-center mt-4 leading-relaxed ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-              By signing up you agree to our{' '}
-              <button onClick={() => navigate('/privacy')} className="text-blue-500 hover:underline">
-                Privacy Policy
-              </button>.
-            </p>
 
             <p className={`text-xs text-center mt-3 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
               Already have an account?{' '}

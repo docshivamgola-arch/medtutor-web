@@ -1,5 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from './lib/supabase';
+import type { User } from '@supabase/supabase-js';
 import { 
   Play, Pause, FastForward, Rewind, CheckCircle, 
   BookOpen, Layers, Activity, ChevronRight,
@@ -26,6 +28,8 @@ import { useTheme } from './context/ThemeContext';
 import PrivacyPage from './pages/PrivacyPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import SettingsPage from './pages/SettingsPage';
+import LandingPage from './pages/LandingPage';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
@@ -33,6 +37,7 @@ export default function App() {
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('visual');
   const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -77,13 +82,23 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
+  // Session persistence
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Jump to specific cut from SmartCard or Transcript
   const handleNavigateToCut = (cutNumber: number) => {
     const target = THYROID_CUTS.find(c => c.cutNumber === cutNumber);
     if (target) {
       setSelectedCut(target);
       setActiveTab('visual');
-      setIs3DPortalOpen(false);
     }
   };
 
@@ -255,10 +270,10 @@ export default function App() {
         <SignupPage />
       ) : location.pathname === '/privacy' ? (
         <PrivacyPage />
+      ) : location.pathname === '/settings' ? (
+        <SettingsPage user={user} />
       ) : location.pathname === '/' ? (
-        <BodyNavigatorHome onEnterDashboard={(_system) => {
-          navigate('/node/thyroid');
-        }} />
+        <LandingPage />
       ) : location.pathname === '/atlas' ? (
         <Cinematic3DBodyPortal
           onEnterSystemOrgan={(_systemId, _organId) => {
