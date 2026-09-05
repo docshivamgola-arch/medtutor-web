@@ -123,11 +123,107 @@ export default function LandingPage() {
     return () => observer.disconnect();
   }, []);
 
+  // ── HERO CANVAS ANIMATION ──
+  const heroCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = heroCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D | null;
+    if (!ctx) return;
+
+    const setSize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    setSize();
+
+    const ro = new ResizeObserver(() => setSize());
+    ro.observe(canvas);
+
+    type CanvasNode = { x: number; y: number; vx: number; vy: number; r: number };
+    const NODE_COUNT = 18;
+    const MAX_DIST = 120;
+
+    const nodes: CanvasNode[] = Array.from({ length: NODE_COUNT }, () => ({
+      x: Math.random() * Math.max(canvas.width, 1),
+      y: Math.random() * Math.max(canvas.height, 1),
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: 2.5,
+    }));
+
+    const drawFrame = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[j].x - nodes[i].x;
+          const dy = nodes[j].y - nodes[i].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            const alpha = (1 - dist / MAX_DIST) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(43,184,168,${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (const node of nodes) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(43,184,168,0.35)';
+        ctx.fill();
+      }
+    };
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let rafId = 0;
+
+    if (prefersReduced) {
+      drawFrame();
+    } else {
+      const animate = () => {
+        for (const node of nodes) {
+          node.x += node.vx;
+          node.y += node.vy;
+          if (node.x < 0 || node.x > canvas.width) {
+            node.vx *= -1;
+            node.x = Math.max(0, Math.min(canvas.width, node.x));
+          }
+          if (node.y < 0 || node.y > canvas.height) {
+            node.vy *= -1;
+            node.y = Math.max(0, Math.min(canvas.height, node.y));
+          }
+        }
+        drawFrame();
+        rafId = requestAnimationFrame(animate);
+      };
+      rafId = requestAnimationFrame(animate);
+    }
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      ro.disconnect();
+    };
+  }, []);
+
   return (
     <div className={`min-h-screen ${bg} ${text} font-sans`}>
 
       {/* ── HERO ── */}
-      <section className="max-w-4xl mx-auto px-4 pt-20 pb-16 text-center flex flex-col items-center gap-6">
+      <div className="relative overflow-hidden">
+        <canvas
+          ref={heroCanvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 0 }}
+        />
+        <section className="max-w-4xl mx-auto px-4 pt-20 pb-16 text-center flex flex-col items-center gap-6" style={{ position: 'relative', zIndex: 1 }}>
         {/* Eyebrow */}
         <span className={`text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${
           isDark ? 'border-teal-700 text-teal-400 bg-teal-500/10' : 'border-teal-500 text-teal-600 bg-teal-50'
@@ -168,6 +264,7 @@ export default function LandingPage() {
           </button>
         </div>
       </section>
+      </div>
 
       {/* ── STAT TILES ── */}
       <section ref={statSectionRef} className="max-w-4xl mx-auto px-4 pb-10">
