@@ -73,6 +73,27 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── EXAM TRUST BAR ── */}
+      <section className="max-w-4xl mx-auto px-4 pb-12">
+        <p className={`text-center text-[10px] font-bold uppercase tracking-widest mb-4 ${subtext}`}>
+          Covering questions from
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {['AIIMS', 'PGI', 'JIPMER', 'INI-CET', 'NEET-PG'].map((exam) => (
+            <span
+              key={exam}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold border ${
+                isDark
+                  ? 'border-zinc-700 text-zinc-300 bg-zinc-800/60'
+                  : 'border-zinc-300 text-zinc-600 bg-zinc-100'
+              }`}
+            >
+              {exam}
+            </span>
+          ))}
+        </div>
+      </section>
+
       {/* ── 6 GAP CARDS ── */}
       <section className="max-w-5xl mx-auto px-4 py-14">
         <h2 className={`text-2xl font-black text-center mb-10 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
