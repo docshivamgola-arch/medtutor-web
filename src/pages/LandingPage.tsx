@@ -82,7 +82,7 @@ export default function LandingPage() {
           {GAP_CARDS.map((card) => (
             <div
               key={card.num}
-              className={`border rounded-xl p-5 flex flex-col gap-2 transition-colors ${surface} ${cardHover}`}
+              className={`border rounded-xl p-5 flex flex-col gap-2 transition-all duration-150 hover:-translate-y-1 hover:shadow-lg ${isDark ? 'hover:shadow-teal-900/40' : 'hover:shadow-teal-200/60'} ${surface} ${cardHover}`}
             >
               <span className="text-3xl font-black text-teal-400 leading-none">{card.num}</span>
               <h3 className={`font-bold text-sm ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
