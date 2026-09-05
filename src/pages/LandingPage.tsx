@@ -1,5 +1,79 @@
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+
+// ── STAT TILE DATA ──
+const STATS = [
+  { end: 18, suffix: '+', label: 'Organs Mapped', format: undefined as undefined | ((n: number) => string) },
+  {
+    end: 1200,
+    suffix: '+',
+    label: 'PYQ Questions',
+    format: (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1).replace('.0', '')}K` : String(n),
+  },
+  { end: 5, suffix: '', label: 'Exam Sources', format: undefined as undefined | ((n: number) => string) },
+];
+
+// ── COUNT-UP HOOK ──
+function useCountUp(end: number, duration: number, started: boolean): number {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!started) return;
+    let startTime: number | null = null;
+    let rafId: number;
+
+    const animate = (timestamp: number) => {
+      if (startTime === null) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      setCount(Math.round(end * progress));
+      if (progress < 1) {
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
+  }, [end, duration, started]);
+
+  return count;
+}
+
+// ── STAT TILE COMPONENT ──
+function StatTile({
+  end,
+  suffix,
+  label,
+  format,
+  started,
+  isDark,
+  subtext,
+}: {
+  end: number;
+  suffix: string;
+  label: string;
+  format?: (n: number) => string;
+  started: boolean;
+  isDark: boolean;
+  subtext: string;
+}) {
+  const count = useCountUp(end, 1200, started);
+  const display = format ? format(count) : String(count);
+
+  return (
+    <div
+      className={`flex flex-col items-center justify-center py-8 px-4 gap-1 ${
+        isDark ? 'bg-[#0F1829]' : 'bg-white'
+      }`}
+    >
+      <span className="text-4xl sm:text-5xl font-black tabular-nums tracking-tight bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
+        {display}{suffix}
+      </span>
+      <span className={`text-xs sm:text-sm font-medium ${subtext}`}>{label}</span>
+    </div>
+  );
+}
 
 const GAP_CARDS = [
   { num: '01', title: 'No cross-organ synthesis', desc: 'Platforms teach thyroid without connecting it to pharma, patho, or surgery.' },
@@ -26,6 +100,28 @@ export default function LandingPage() {
   const subtext = isDark ? 'text-zinc-400' : 'text-zinc-500';
   const surface = isDark ? 'bg-[#0F1829] border-zinc-800' : 'bg-white border-zinc-200 shadow-sm';
   const cardHover = isDark ? 'hover:border-teal-700/60' : 'hover:border-teal-400';
+
+  // ── STAT ANIMATION STATE ──
+  const statSectionRef = useRef<HTMLElement>(null);
+  const [statsStarted, setStatsStarted] = useState(false);
+
+  useEffect(() => {
+    const el = statSectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setStatsStarted(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className={`min-h-screen ${bg} ${text} font-sans`}>
@@ -74,26 +170,21 @@ export default function LandingPage() {
       </section>
 
       {/* ── STAT TILES ── */}
-      <section className="max-w-4xl mx-auto px-4 pb-10">
+      <section ref={statSectionRef} className="max-w-4xl mx-auto px-4 pb-10">
         <div className={`grid grid-cols-3 divide-x rounded-2xl border overflow-hidden ${
           isDark ? 'border-zinc-800 divide-zinc-800' : 'border-zinc-200 divide-zinc-200'
         }`}>
-          {[
-            { value: '18+', label: 'Organs Mapped' },
-            { value: '1,200+', label: 'PYQ Questions' },
-            { value: '5', label: 'Exam Sources' },
-          ].map(({ value, label }) => (
-            <div
+          {STATS.map(({ end, suffix, label, format }) => (
+            <StatTile
               key={label}
-              className={`flex flex-col items-center justify-center py-8 px-4 gap-1 ${
-                isDark ? 'bg-[#0F1829]' : 'bg-white'
-              }`}
-            >
-              <span className="text-4xl sm:text-5xl font-black tabular-nums tracking-tight bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
-                {value}
-              </span>
-              <span className={`text-xs sm:text-sm font-medium ${subtext}`}>{label}</span>
-            </div>
+              end={end}
+              suffix={suffix}
+              label={label}
+              format={format}
+              started={statsStarted}
+              isDark={isDark}
+              subtext={subtext}
+            />
           ))}
         </div>
       </section>
