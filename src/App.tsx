@@ -10,11 +10,8 @@ import {
   UploadCloud, X, PanelLeftClose, PanelLeftOpen,
   Sun, Moon, Box
 } from 'lucide-react';
-import { 
-  THYROID_CUTS, 
-  THYROID_PYQS
-} from './data/thyroidData';
 import type { ChapterCut } from './data/thyroidData';
+import { useNodeData, type NodeCut } from './hooks/useNodeData';
 import { SmartCard } from './components/SmartCard';
 import { CommandPalette } from './components/CommandPalette';
 import { SystemsSidebar } from './components/SystemsSidebar';
@@ -38,8 +35,17 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
+
+  // Derive nodeId from URL; fall back to thyroid for any unrecognised path
+  const nodeId = location.pathname.startsWith('/node/')
+    ? location.pathname.split('/')[2]
+    : 'thyroid';
+  const nodeData = useNodeData(nodeId);
+  const cuts = nodeData.cuts;
+  const pyqs = nodeData.pyqs;
+
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('visual');
-  const [selectedCut, setSelectedCut] = useState<ChapterCut>(THYROID_CUTS[0]);
+  const [selectedCut, setSelectedCut] = useState<NodeCut>(cuts[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<'1.0x' | '1.25x' | '1.5x' | '2.0x'>('1.0x');
   const [activeSubjectFilter, setActiveSubjectFilter] = useState<string>('All');
@@ -82,6 +88,12 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
+  // Reset selected cut when the node changes (user navigates to a different organ)
+  useEffect(() => {
+    setSelectedCut(cuts[0]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeId]);
+
   // Session persistence
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -95,7 +107,7 @@ export default function App() {
 
   // Jump to specific cut from SmartCard or Transcript
   const handleNavigateToCut = (cutNumber: number) => {
-    const target = THYROID_CUTS.find(c => c.cutNumber === cutNumber);
+    const target = cuts.find(c => c.cutNumber === cutNumber);
     if (target) {
       setSelectedCut(target);
       setActiveTab('visual');
@@ -104,11 +116,12 @@ export default function App() {
 
   // Filtered cuts for sidebar
   const filteredCuts = useMemo(() => {
-    return THYROID_CUTS.filter(cut => {
+    return cuts.filter(cut => {
       const matchesSubject = activeSubjectFilter === 'All' || cut.subject === activeSubjectFilter;
       return matchesSubject;
     });
-  }, [activeSubjectFilter]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSubjectFilter, nodeId]);
 
   const handleSelectOption = (questionId: string, optionIdx: number, correctIdx: number) => {
     if (selectedAnswers[questionId] !== undefined) return;
@@ -348,20 +361,20 @@ export default function App() {
                           <Activity className="w-8 h-8 animate-pulse" />
                         </div>
                         <span className="text-xs uppercase tracking-widest text-blue-400 font-bold mb-1">
-                          {selectedCut.subject} • Cut {selectedCut.cutNumber} of {THYROID_CUTS.length}
+                          {selectedCut.subject ?? nodeData.system} • Cut {(cuts.findIndex(c => c.id === selectedCut.id) + 1)} of {cuts.length}
                         </span>
                         <h2 className="text-xl sm:text-2xl font-black text-white max-w-xl">
                           {selectedCut.title}
                         </h2>
                         <p className="text-xs sm:text-sm text-zinc-300 mt-2 max-w-md line-clamp-2">
-                          {selectedCut.visualSummary}
+                          {selectedCut.visualSummary ?? selectedCut.hook}
                         </p>
                       </div>
 
                       {/* Video Top Controls */}
                       <div className="relative z-10 flex items-center justify-between">
                         <span className="text-[11px] font-mono font-bold bg-zinc-900 text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-700/60">
-                          {selectedCut.timecode}
+                          {selectedCut.timecode ?? `${selectedCut.durationSec ?? selectedCut.duration ?? 0}s`}
                         </span>
                         <div className="flex items-center gap-2">
                           {(['1.0x', '1.25x', '1.5x', '2.0x'] as const).map(speed => (
@@ -383,34 +396,34 @@ export default function App() {
                       {/* Video Bottom Playback Bar */}
                       <div className="relative z-10 flex flex-col gap-2">
                         <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden cursor-pointer">
-                          <div 
+                          <div
                             className="h-full bg-blue-600 transition-all duration-300"
-                            style={{ width: `${(selectedCut.cutNumber / THYROID_CUTS.length) * 100}%` }}
+                            style={{ width: `${((cuts.findIndex(c => c.id === selectedCut.id) + 1) / cuts.length) * 100}%` }}
                           />
                         </div>
 
                         <div className="flex items-center justify-between pt-1">
                           <div className="flex items-center gap-3">
-                            <button 
+                            <button
                               onClick={() => {
-                                const prevIdx = Math.max(0, selectedCut.cutNumber - 2);
-                                setSelectedCut(THYROID_CUTS[prevIdx]);
+                                const curIdx = cuts.findIndex(c => c.id === selectedCut.id);
+                                setSelectedCut(cuts[Math.max(0, curIdx - 1)]);
                               }}
                               className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
                               title="Previous Cut"
                             >
                               <Rewind className="w-4 h-4" />
                             </button>
-                            <button 
+                            <button
                               onClick={() => setIsPlaying(!isPlaying)}
                               className="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center font-bold transition-transform active:scale-95 shadow-sm cursor-pointer"
                             >
                               {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
                             </button>
-                            <button 
+                            <button
                               onClick={() => {
-                                const nextIdx = Math.min(THYROID_CUTS.length - 1, selectedCut.cutNumber);
-                                setSelectedCut(THYROID_CUTS[nextIdx]);
+                                const curIdx = cuts.findIndex(c => c.id === selectedCut.id);
+                                setSelectedCut(cuts[Math.min(cuts.length - 1, curIdx + 1)]);
                               }}
                               className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
                               title="Next Cut"
@@ -423,17 +436,17 @@ export default function App() {
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-zinc-400 font-medium">Modular Beat {selectedCut.cutNumber}/{THYROID_CUTS.length}</span>
+                            <span className="text-[11px] text-zinc-400 font-medium">Modular Beat {cuts.findIndex(c => c.id === selectedCut.id) + 1}/{cuts.length}</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Osmosis-Style Synchronized Interactive Transcript */}
-                    <OsmosisTranscript 
-                      currentCut={selectedCut}
-                      allCuts={THYROID_CUTS}
-                      onSelectCut={(c) => setSelectedCut(c)}
+                    <OsmosisTranscript
+                      currentCut={selectedCut as unknown as ChapterCut}
+                      allCuts={cuts as unknown as ChapterCut[]}
+                      onSelectCut={(c) => setSelectedCut(c as unknown as NodeCut)}
                     />
 
                     {/* Dynamic Live Concept Card */}
@@ -444,7 +457,7 @@ export default function App() {
                         <div className="flex items-center gap-2">
                           <Sparkles className="w-4 h-4 text-blue-500" />
                           <h3 className={`text-sm font-bold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
-                            Live High-Yield Micro-Card ({selectedCut.subject})
+                            Live High-Yield Micro-Card ({selectedCut.subject ?? nodeData.system})
                           </h3>
                         </div>
                         <span className="text-[11px] text-zinc-400 font-mono">
@@ -453,11 +466,11 @@ export default function App() {
                       </div>
 
                       <p className={`text-sm leading-relaxed font-normal ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                        {selectedCut.coreConcept}
+                        {selectedCut.coreConcept ?? selectedCut.hook}
                       </p>
 
                       <div className="grid grid-cols-1 gap-2 pt-1">
-                        {selectedCut.highYieldBullets.map((bullet, idx) => (
+                        {(selectedCut.highYieldBullets ?? selectedCut.tags ?? []).map((bullet, idx) => (
                           <div key={idx} className={`flex items-start gap-2 border rounded-lg p-2.5 text-xs ${
                             isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-800'
                           }`}>
@@ -885,21 +898,22 @@ export default function App() {
                 }`}>
                   <div>
                     <h2 className={`text-lg font-black ${isDark ? 'text-white' : 'text-zinc-900'}`}>NEET-PG & INI-CET Question Bank</h2>
-                    <p className="text-xs text-zinc-400">Interactive clinical vignettes mapped directly to this thyroid node with Smart Card explanations.</p>
+                    <p className="text-xs text-zinc-400">Interactive clinical vignettes mapped to this node with Smart Card explanations.</p>
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-zinc-400 block">Score</span>
                     <span className="text-lg font-black text-blue-500 font-mono">
-                      {score} / {THYROID_PYQS.length}
+                      {score} / {pyqs.length}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-6">
-                  {THYROID_PYQS.map((q, qIndex) => {
+                  {pyqs.map((q, qIndex) => {
                     const userAnswer = selectedAnswers[q.id];
                     const isAnswered = userAnswer !== undefined;
-                    const isCorrect = isAnswered && userAnswer === q.correctIndex;
+                    const correctIdx = q.correctIndex ?? q.correct ?? 0;
+                    const isCorrect = isAnswered && userAnswer === correctIdx;
 
                     return (
                       <div 
@@ -911,9 +925,9 @@ export default function App() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                              {q.exam} {q.year}
+                              {q.exam ?? q.source} {q.year}
                             </span>
-                            <span className="text-xs text-zinc-400">{q.subjectTag}</span>
+                            <span className="text-xs text-zinc-400">{q.subjectTag ?? q.wikiSlug}</span>
                           </div>
                           <span className="text-xs font-mono text-zinc-400">Q{qIndex + 1}</span>
                         </div>
@@ -929,7 +943,7 @@ export default function App() {
                               : 'bg-zinc-50 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300 text-zinc-800 shadow-none';
                             
                             if (isAnswered) {
-                              if (optIdx === q.correctIndex) {
+                              if (optIdx === correctIdx) {
                                 btnStyle = isDark 
                                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300 font-semibold'
                                   : 'bg-emerald-50 border-emerald-500 text-emerald-900 font-semibold shadow-sm';
@@ -948,7 +962,7 @@ export default function App() {
                               <button
                                 key={optIdx}
                                 disabled={isAnswered}
-                                onClick={() => handleSelectOption(q.id, optIdx, q.correctIndex)}
+                                onClick={() => handleSelectOption(q.id, optIdx, correctIdx)}
                                 className={`text-left px-4 py-3 rounded-lg border text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer disabled:cursor-default ${btnStyle}`}
                               >
                                 <span>{String.fromCharCode(65 + optIdx)}. {opt}</span>
