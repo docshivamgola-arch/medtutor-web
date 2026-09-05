@@ -27,6 +27,9 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import SettingsPage from './pages/SettingsPage';
 import LandingPage from './pages/LandingPage';
+import WikiPage from './pages/WikiPage';
+import FlashcardPage from './pages/FlashcardPage';
+import GlobalFlashcardsPage from './pages/GlobalFlashcardsPage';
 
 type WorkspaceTab = 'visual' | 'wiki' | 'pyq' | 'atlas';
 
@@ -294,6 +297,12 @@ export default function App() {
           }}
           onClose={() => navigate('/node/thyroid')}
         />
+      ) : location.pathname === '/flashcards' ? (
+        <GlobalFlashcardsPage user={user} />
+      ) : location.pathname.startsWith('/node/') && location.pathname.endsWith('/wiki') ? (
+        <WikiPage nodeId={nodeId} />
+      ) : location.pathname.startsWith('/node/') && location.pathname.endsWith('/flashcards') ? (
+        <FlashcardPage nodeId={nodeId} user={user} />
       ) : (
         /* ── Main App Layout (Vercel-Style 3-Column Architecture) ── */
         <div className="flex-1 flex overflow-hidden">
