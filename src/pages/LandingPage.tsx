@@ -73,6 +73,31 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── STAT TILES ── */}
+      <section className="max-w-4xl mx-auto px-4 pb-10">
+        <div className={`grid grid-cols-3 divide-x rounded-2xl border overflow-hidden ${
+          isDark ? 'border-zinc-800 divide-zinc-800' : 'border-zinc-200 divide-zinc-200'
+        }`}>
+          {[
+            { value: '18+', label: 'Organs Mapped' },
+            { value: '1,200+', label: 'PYQ Questions' },
+            { value: '5', label: 'Exam Sources' },
+          ].map(({ value, label }) => (
+            <div
+              key={label}
+              className={`flex flex-col items-center justify-center py-8 px-4 gap-1 ${
+                isDark ? 'bg-[#0F1829]' : 'bg-white'
+              }`}
+            >
+              <span className="text-4xl sm:text-5xl font-black tabular-nums tracking-tight bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
+                {value}
+              </span>
+              <span className={`text-xs sm:text-sm font-medium ${subtext}`}>{label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── EXAM TRUST BAR ── */}
       <section className="max-w-4xl mx-auto px-4 pb-12">
         <p className={`text-center text-[10px] font-bold uppercase tracking-widest mb-4 ${subtext}`}>
