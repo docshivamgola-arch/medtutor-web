@@ -231,6 +231,59 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── ZIGZAG PROBLEM / SOLUTION ── */}
+      <section className="max-w-5xl mx-auto px-4 py-16">
+        <h2 className={`text-2xl font-black text-center mb-14 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+          How Clinova is different
+        </h2>
+        {[
+          {
+            problem: 'You study thyroid for 3 hours and forget it in 3 days.',
+            solution: 'Spaced repetition SRS serves you the exact cards due today — nothing more.',
+            icon: '🔁',
+          },
+          {
+            problem: 'PYQ explanations are scattered across 5 different books.',
+            solution: 'Every PYQ is linked to the wiki node it tests. One click from question to concept.',
+            icon: '🔗',
+          },
+          {
+            problem: '3D anatomy models exist but never connect to clinical context.',
+            solution: 'Each organ in the 3D atlas opens the linked concept node — anatomy meets patho.',
+            icon: '🧠',
+          },
+        ].map(({ problem, solution, icon }, i) => {
+          const isEven = i % 2 === 0;
+          return (
+            <div
+              key={i}
+              className={`flex flex-col ${isEven ? 'sm:flex-row' : 'sm:flex-row-reverse'} items-center gap-8 mb-12 last:mb-0`}
+            >
+              {/* Problem side */}
+              <div className={`flex-1 rounded-2xl border p-6 ${isDark ? 'bg-[#0F1829] border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
+                <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-rose-400' : 'text-rose-500'}`}>
+                  The Problem
+                </p>
+                <p className={`text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>{problem}</p>
+              </div>
+
+              {/* Icon divider */}
+              <div className="shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-xl bg-teal-500/15 border border-teal-500/30">
+                {icon}
+              </div>
+
+              {/* Solution side */}
+              <div className={`flex-1 rounded-2xl border p-6 ${isDark ? 'bg-teal-950/20 border-teal-700/40' : 'bg-teal-50 border-teal-200'}`}>
+                <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-teal-400' : 'text-teal-600'}`}>
+                  Clinova's Answer
+                </p>
+                <p className={`text-sm leading-relaxed ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>{solution}</p>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+
       {/* ── 3D ATLAS CALLOUT ── */}
       <section className="max-w-5xl mx-auto px-4 py-6">
         <div className={`border rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6 ${
